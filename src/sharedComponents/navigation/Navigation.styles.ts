@@ -31,5 +31,67 @@ const StyledNavigationList = styled.ul<NavigationStylesProps>`
     }
 `
 
-export default StyledNavigationList
+
+const StyledCategoryTrigger = styled.button<NavigationStylesProps>`
+    --_indicator-rotation: 225deg;
+    --_indicator-size: 2px;
+    background: inherit;
+    border: inherit;
+    font: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+    color: ${props => props.linkColor || "inherit"};
+    padding: 0.5rem 1rem;
+    min-inline-size: 15rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    &:hover {
+        background-color: ${props => props.hoverBgColor || "hsla(0 0% 0% / 0.10)"};
+    }
+
+    & > span:last-child {
+        display: inline-block;
+        transform: rotate(var(--_indicator-rotation));
+        transition: transform 200ms ease-in-out;
+        aspect-ratio: 1 / 1;
+        border-inline-start: var(--_indicator-size) solid currentColor;
+        border-block-end: var(--_indicator-size) solid currentColor;
+        inline-size: 0.7rem;
+    }
+    
+
+    &[aria-expanded="true"] {
+        --_indicator-rotation: 315deg;
+    }
+`;
+
+
+const StyledList = styled.ul`
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    transition: grid-template-rows 200ms ease-in-out , opacity 200ms ease-in-out;
+    
+    .list-wrapper {
+        overflow-block: hidden;
+    }
+    
+    .nav-item {
+        text-indent: 1.2rem;
+    }
+
+    &[aria-expanded="true"] {
+        grid-template-rows: 1fr;
+        opacity: 1;
+    }
+
+`; 
+
+export { StyledCategoryTrigger, StyledNavigationList, StyledList }
     

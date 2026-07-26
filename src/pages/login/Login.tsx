@@ -9,8 +9,8 @@ import {
 } from "./Login.styles"
 import useLogin from "./useLogin"
 import Footer from "../../sharedComponents/Footer"
-import logo from "../../assets/images/logo.svg"
 import Render from "../../sharedComponents/Render"
+import Logo from "../../sharedComponents/logo/Logo"
 
 type LoginProps = {
     pageForm?: "login" | "forgot-password" | "create-account",
@@ -42,7 +42,7 @@ const Login = ({ pageForm = "login", errorMessage }: LoginProps) => {
         <StyledLogin>
             <div className="left-column">
                 <StyledLoginSection as="header">
-                    <img src={logo} alt="Logo" />
+                    <Logo />
                 </StyledLoginSection>
                 <main>
                     <Render if={hasError}>

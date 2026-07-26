@@ -1,20 +1,34 @@
-import StyledNavigationList from "./Navigation.styles"
-import useNavigation from "./useNavigation"
+import { StyledNavigationList } from "./Navigation.styles"
+import NavigationItem from "./NavigationItem"
+import NavigationCategory from "./NavigationCategory"
+import { NavigationContextProvider, useNavigation } from "./NavigationContext"
 
-const Navigation = () => {
-    const { getLinks } = useNavigation()
-    const links = getLinks()
-
+const NavigationContent = () => {
+    const { getLinks } = useNavigation();
+    const links = getLinks();
+    
     return (
         <nav>
             <StyledNavigationList>
-                {links.map((link) => (
-                    <li className="nav-item" key={link.name}>
-                        <a href={link.path}>{link.name}</a>
-                    </li>
+                {links.map((item) => (
+                    <>
+                        {item.path !== undefined ? (
+                            <NavigationItem key={item.name} obj={{ name: item.name, path: item.path }} />
+                        ) : item.itemList !== undefined && (
+                            <NavigationCategory key={item.name} obj={{ name: item.name, itemList: item.itemList }} />
+                        )}
+                    </>
                 ))}
             </StyledNavigationList>
         </nav>
+    )
+}
+
+const Navigation = () => {
+    return (
+        <NavigationContextProvider>
+            <NavigationContent />
+        </NavigationContextProvider>
     )
 }
 

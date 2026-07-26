@@ -1,4 +1,4 @@
-# Login Application - Project Documentation
+ # Login Application - Project Documentation
 
 ## Overview
 
@@ -26,7 +26,6 @@ src/
 ├── assets/
 │   ├── globalStyles.ts         # CSS variables and reset styles
 │   └── images/
-│       └── logo.svg            # Brand logo
 ├── auth/
 │   ├── AuthContext.tsx         # Authentication context provider
 │   ├── AuthProvider.tsx        # Context wrapper component
