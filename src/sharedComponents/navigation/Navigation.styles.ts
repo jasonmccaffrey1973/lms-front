@@ -35,6 +35,7 @@ const StyledNavigationList = styled.ul<NavigationStylesProps>`
 const StyledCategoryTrigger = styled.button<NavigationStylesProps>`
     --_indicator-rotation: 225deg;
     --_indicator-size: 2px;
+    --_transition-duration: 200ms;
     background: inherit;
     border: inherit;
     font: inherit;
@@ -54,7 +55,7 @@ const StyledCategoryTrigger = styled.button<NavigationStylesProps>`
     & > span:last-child {
         display: inline-block;
         transform: rotate(var(--_indicator-rotation));
-        transition: transform 200ms ease-in-out;
+        transition: transform var(--_transition-duration) ease-in-out;
         aspect-ratio: 1 / 1;
         border-inline-start: var(--_indicator-size) solid currentColor;
         border-block-end: var(--_indicator-size) solid currentColor;
@@ -69,6 +70,7 @@ const StyledCategoryTrigger = styled.button<NavigationStylesProps>`
 
 
 const StyledList = styled.ul`
+    --_transition-duration: 300ms;
     display: grid;
     grid-template-rows: 0fr;
     opacity: 0;
@@ -76,7 +78,7 @@ const StyledList = styled.ul`
     padding: 0;
     margin: 0;
     font-size: inherit;
-    transition: grid-template-rows 200ms ease-in-out , opacity 200ms ease-in-out;
+    transition: grid-template-rows var(--_transition-duration) ease-in-out , opacity var(--_transition-duration) ease-in-out;
     
     .list-wrapper {
         overflow-block: hidden;

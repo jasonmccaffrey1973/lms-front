@@ -52,8 +52,9 @@ const NavigationContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const closeAllCategories = () => setOpenCategories([])
 
 /** ----------------------------------------------------------------------------------------- *
- * @param title 
- * @returns void  
+ * @param title - The title of the category to toggle.
+ * Toggles the open/closed state of a navigation category. If the category is open, 
+ * it will be closed; if it is closed, it will be opened.
  ** ----------------------------------------------------------------------------------------- */
     const toggleCategory = (title: string) => (openCategories.includes(title)) ? closeCategory(title) : openCategory(title)
 
@@ -86,6 +87,7 @@ const NavigationContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                 { name: "Reports", path: "/dashboard/reports" },
                 { name: "Settings", path: "/dashboard/settings" }
             ] },
+            { name: "Test Item", path: "/test" },
         ];
     };
     

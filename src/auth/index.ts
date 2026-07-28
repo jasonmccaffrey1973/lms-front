@@ -1,3 +1,5 @@
 export { AuthProvider } from "./AuthProvider"
 export { useAuth } from "./UseAuth"
-export type { AuthContextType } from "./AuthContext"
+export type { AuthContextType } from "./AuthContext"    
+export { ApolloProvider, useApollo } from "./ApolloContext.tsx"
+export type { ApolloConfig, ApolloState } from "./ApolloContext.tsx"
