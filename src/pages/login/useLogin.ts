@@ -1,81 +1,31 @@
 import type { ComponentProps } from "react"
 import { useState } from "react"
+import { useApolloClient } from "@apollo/client/react"
+import { useLogin as useLoginMutation, useRegister as useRegisterMutation } from "../../queries/useLoginQueries"
+import { ME_GQL } from "../../queries/authQueries.ts"
 import { useAuth } from "../../auth"
 import { useNavigate } from "react-router-dom"
 
-const GRAPHQL_HTTP_URL = import.meta.env.VITE_GRAPHQL_HTTP_URL
-
-type GraphQLError = {
-    message?: string
+type LoginUser = {
+    id?: string
+    username?: string
+    email?: string
 }
 
 type LoginMutationResponse = {
-    data?: {
-        login?: {
-            token?: string
-            user?: {
-                id?: string
-                username?: string
-                email?: string
-            }
-        }
+    login?: {
+        token?: string
+        user?: LoginUser
     }
-    errors?: GraphQLError[]
 }
 
 type RegisterMutationResponse = {
-    data?: {
-        register?: {
-            token?: string
-            user?: {
-                id?: string
-                username?: string
-                email?: string
-            }
-        }
+    register?: {
+        token?: string
+        user?: LoginUser
     }
-    errors?: GraphQLError[]
 }
 
-const LOGIN_MUTATION = `
-mutation Login($login: String!, $password: String!, $deviceName: String) {
-    login(login: $login, password: $password, device_name: $deviceName) {
-    token
-    user {
-      id
-      username
-      email
-    }
-  }
-}
-`
-
-const REGISTER_MUTATION = `
-mutation Register(
-    $name: String!
-    $username: String!
-    $email: String!
-    $password: String!
-    $passwordConfirmation: String!
-    $deviceName: String
-) {
-    register(
-        name: $name
-        username: $username
-        email: $email
-        password: $password
-        password_confirmation: $passwordConfirmation
-        device_name: $deviceName
-    ) {
-        token
-        user {
-            id
-            username
-            email
-        }
-    }
-}
-`
 
 const getFieldValue = (formData: FormData, key: string) => {
     const value = formData.get(key)
@@ -97,25 +47,24 @@ const useLogin = (initialErrorMessage?: string) => {
     const [hasError, setHasError] = useState(Boolean(initialErrorMessage))
     const [errorMsg, setErrorMsg] = useState(initialErrorMessage || "")
     const { setToken, logout } = useAuth()
-        const navigate = useNavigate()
+    const navigate = useNavigate()
+    const apolloClient = useApolloClient()
+    const { login: performLogin } = useLoginMutation()
+    const { register: performRegister } = useRegisterMutation()
 
     const verifyTokenAndNavigate = async (token: string, failureMsg: string) => {
         try {
-            const verifyResp = await fetch(GRAPHQL_HTTP_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
+            const verifyResp = await apolloClient.query({
+                query: ME_GQL,
+                fetchPolicy: "no-cache",
+                context: {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 },
-                body: JSON.stringify({ query: `query Me { me { id username email } }` }),
             })
 
-            if (!verifyResp.ok) {
-                throw new Error(`Token verification failed (${verifyResp.status})`)
-            }
-
-            const verifyPayload = await verifyResp.json()
-            const me = verifyPayload?.data?.me
+            const me = verifyResp.data?.me
             if (!me) {
                 throw new Error("Token verification returned no user")
             }
@@ -147,10 +96,10 @@ const useLogin = (initialErrorMessage?: string) => {
     const handleLoginSubmit: NonNullable<ComponentProps<"form">["onSubmit"]> = (e) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
-        const login = getFieldValue(formData, "username")
+        const loginValue = getFieldValue(formData, "username")
         const password = getFieldValue(formData, "password")
 
-        if (!login || !password) {
+        if (!loginValue || !password) {
             setHasError(true)
             setErrorMsg("Username/email and password are required.")
             return
@@ -158,36 +107,23 @@ const useLogin = (initialErrorMessage?: string) => {
 
         void (async () => {
             try {
-                const response = await fetch(GRAPHQL_HTTP_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
+                const response = await performLogin({
+                    variables: {
+                        login: loginValue,
+                        password,
+                        deviceName: "web-client",
                     },
-                    body: JSON.stringify({
-                        query: LOGIN_MUTATION,
-                        variables: {
-                            login,
-                            password,
-                            deviceName: "web-client",
-                        },
-                    }),
+                    errorPolicy: "all",
                 })
 
-                if (!response.ok) {
+                if (response.error) {
                     setHasError(true)
-                    setErrorMsg(`Login request failed (${response.status}).`)
+                    setErrorMsg(response.error.message || "Login failed.")
                     return
                 }
 
-                const payload = await response.json() as LoginMutationResponse
-
-                if (payload.errors?.length) {
-                    setHasError(true)
-                    setErrorMsg(payload.errors[0]?.message || "Login failed.")
-                    return
-                }
-
-                const token = payload.data?.login?.token
+                const payload = response.data as LoginMutationResponse | undefined
+                const token = payload?.login?.token
                 if (!token) {
                     setHasError(true)
                     setErrorMsg("Login failed: token was not returned by the server.")
@@ -203,7 +139,7 @@ const useLogin = (initialErrorMessage?: string) => {
                 }
                 console.log("Login successful", {
                     token,
-                    user: payload.data?.login?.user,
+                    user: payload?.login?.user,
                 })
             }
             catch (err) {
@@ -251,39 +187,26 @@ const useLogin = (initialErrorMessage?: string) => {
 
         void (async () => {
             try {
-                const response = await fetch(GRAPHQL_HTTP_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
+                const response = await performRegister({
+                    variables: {
+                        name: username,
+                        username,
+                        email,
+                        password,
+                        passwordConfirmation,
+                        deviceName: "web-client",
                     },
-                    body: JSON.stringify({
-                        query: REGISTER_MUTATION,
-                        variables: {
-                            name: username,
-                            username,
-                            email,
-                            password,
-                            passwordConfirmation,
-                            deviceName: "web-client",
-                        },
-                    }),
+                    errorPolicy: "all",
                 })
 
-                if (!response.ok) {
+                if (response.error) {
                     setHasError(true)
-                    setErrorMsg(`Create account request failed (${response.status}).`)
+                    setErrorMsg(response.error.message || "Create account failed.")
                     return
                 }
 
-                const payload = await response.json() as RegisterMutationResponse
-
-                if (payload.errors?.length) {
-                    setHasError(true)
-                    setErrorMsg(payload.errors[0]?.message || "Create account failed.")
-                    return
-                }
-
-                const token = payload.data?.register?.token
+                const payload = response.data as RegisterMutationResponse | undefined
+                const token = payload?.register?.token
                 if (!token) {
                     setHasError(true)
                     setErrorMsg("Create account failed: token was not returned by the server.")
@@ -299,7 +222,7 @@ const useLogin = (initialErrorMessage?: string) => {
                 }
                 console.log("Registration successful", {
                     token,
-                    user: payload.data?.register?.user,
+                    user: payload?.register?.user,
                 })
             }
             catch (err) {
