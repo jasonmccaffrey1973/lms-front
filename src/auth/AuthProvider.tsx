@@ -1,26 +1,13 @@
 import React, { useState } from "react"
 import { AuthContext } from "./AuthContext"
+import { getAuthToken, setAuthToken } from "./tokenStore"
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setTokenState] = useState<string | null>(() => {
-    try {
-      return localStorage.getItem("auth_token")
-    } catch {
-      return null
-    }
-  })
+  const [token, setTokenState] = useState<string | null>(() => getAuthToken())
 
   const setToken = (t: string | null, persist = false) => {
+    setAuthToken(t, persist)
     setTokenState(t)
-    try {
-      if (persist && t) {
-        localStorage.setItem("auth_token", t)
-      } else {
-        localStorage.removeItem("auth_token")
-      }
-    } catch {
-      // ignore storage errors
-    }
   }
 
   const logout = () => setToken(null, false)

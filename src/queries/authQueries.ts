@@ -3,9 +3,9 @@ import type { TypedDocumentNode } from "@apollo/client"
 
 export type MeQueryData = {
   me?: {
-    id?: string
-    username?: string
-    email?: string
+    id: string
+    username: string
+    email: string
   }
 }
 

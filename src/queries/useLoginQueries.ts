@@ -1,6 +1,42 @@
 import { useMutation } from "@apollo/client/react"
 
 import { gql } from "@apollo/client"
+import type { TypedDocumentNode } from "@apollo/client"
+
+export type AuthUser = {
+  id: string
+  username: string
+  email: string
+}
+
+export type LoginMutationData = {
+  login?: {
+    token: string
+    user: AuthUser
+  }
+}
+
+export type LoginMutationVariables = {
+  login: string
+  password: string
+  deviceName?: string | null
+}
+
+export type RegisterMutationData = {
+  register?: {
+    token: string
+    user: AuthUser
+  }
+}
+
+export type RegisterMutationVariables = {
+  name: string
+  username: string
+  email: string
+  password: string
+  passwordConfirmation: string
+  deviceName?: string | null
+}
 
 const LOGIN_GQL = gql`
   mutation Login($login: String!, $password: String!, $deviceName: String) {
@@ -13,7 +49,7 @@ const LOGIN_GQL = gql`
       }
     }
   }
-`
+` as TypedDocumentNode<LoginMutationData, LoginMutationVariables>
 
 const REGISTER_GQL = gql`
   mutation Register(
@@ -40,9 +76,9 @@ const REGISTER_GQL = gql`
       }
     }
   }
-`
+` as TypedDocumentNode<RegisterMutationData, RegisterMutationVariables>
 
-export function useLogin() {
+export function useLoginMutation() {
   const [login, { loading: isLoggingIn, error: loginError }] = useMutation(LOGIN_GQL)
   
   return {
@@ -52,7 +88,7 @@ export function useLogin() {
   }
 }
 
-export function useRegister() {
+export function useRegisterMutation() {
   const [register, { loading: isCreatingAccount, error: registerError }] = useMutation(REGISTER_GQL)
   
   return {

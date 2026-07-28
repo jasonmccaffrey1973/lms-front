@@ -1,29 +1,55 @@
 import type { ComponentProps } from "react"
 import { useState } from "react"
 import { useApolloClient } from "@apollo/client/react"
-import { useLogin as useLoginMutation, useRegister as useRegisterMutation } from "../../queries/useLoginQueries"
+import { useLoginMutation, useRegisterMutation } from "../../queries/useLoginQueries"
 import { ME_GQL } from "../../queries/authQueries.ts"
 import { useAuth } from "../../auth"
 import { useNavigate } from "react-router-dom"
 
-type LoginUser = {
-    id?: string
-    username?: string
-    email?: string
+const isObjectRecord = (value: unknown): value is Record<string, unknown> => {
+    return typeof value === "object" && value !== null
 }
 
-type LoginMutationResponse = {
-    login?: {
-        token?: string
-        user?: LoginUser
+const readStatusCode = (value: unknown): number | undefined => {
+    if (!isObjectRecord(value)) {
+        return undefined
     }
+
+    const statusCode = value.statusCode
+    if (typeof statusCode === "number") {
+        return statusCode
+    }
+
+    return undefined
 }
 
-type RegisterMutationResponse = {
-    register?: {
-        token?: string
-        user?: LoginUser
+const isUnauthorizedError = (error: unknown) => {
+    const directStatus = readStatusCode(error)
+    if (directStatus === 401) {
+        return true
     }
+
+    if (isObjectRecord(error)) {
+        const networkStatus = readStatusCode(error.networkError)
+        if (networkStatus === 401) {
+            return true
+        }
+
+        const causeStatus = readStatusCode(error.cause)
+        if (causeStatus === 401) {
+            return true
+        }
+
+        const message = error.message
+        if (typeof message === "string") {
+            const normalized = message.toLowerCase()
+            if (normalized.includes("unauthorized") || normalized.includes("401")) {
+                return true
+            }
+        }
+    }
+
+    return false
 }
 
 
@@ -52,16 +78,11 @@ const useLogin = (initialErrorMessage?: string) => {
     const { login: performLogin } = useLoginMutation()
     const { register: performRegister } = useRegisterMutation()
 
-    const verifyTokenAndNavigate = async (token: string, failureMsg: string) => {
+    const verifyTokenAndNavigate = async (failureMsg: string) => {
         try {
             const verifyResp = await apolloClient.query({
                 query: ME_GQL,
                 fetchPolicy: "no-cache",
-                context: {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
             })
 
             const me = verifyResp.data?.me
@@ -74,8 +95,14 @@ const useLogin = (initialErrorMessage?: string) => {
         }
         catch (err) {
             logout()
+            void apolloClient.clearStore().catch(() => undefined)
             setHasError(true)
-            setErrorMsg(failureMsg?.toString() || "")
+            if (isUnauthorizedError(err)) {
+                setErrorMsg("Session validation failed. Please sign in again.")
+            }
+            else {
+                setErrorMsg(failureMsg?.toString() || "")
+            }
             console.error("Token verification failed:", err)
             return false
         }
@@ -122,8 +149,7 @@ const useLogin = (initialErrorMessage?: string) => {
                     return
                 }
 
-                const payload = response.data as LoginMutationResponse | undefined
-                const token = payload?.login?.token
+                const token = response.data?.login?.token
                 if (!token) {
                     setHasError(true)
                     setErrorMsg("Login failed: token was not returned by the server.")
@@ -134,12 +160,12 @@ const useLogin = (initialErrorMessage?: string) => {
                 // set token in memory and persist to localStorage
                 setToken(token, true)
                 // verify token by requesting current user, then redirect
-                if (!(await verifyTokenAndNavigate(token, "Login failed: token validation failed."))) {
+                if (!(await verifyTokenAndNavigate("Login failed: token validation failed."))) {
                     return
                 }
                 console.log("Login successful", {
                     token,
-                    user: payload?.login?.user,
+                    user: response.data?.login?.user,
                 })
             }
             catch (err) {
@@ -205,8 +231,7 @@ const useLogin = (initialErrorMessage?: string) => {
                     return
                 }
 
-                const payload = response.data as RegisterMutationResponse | undefined
-                const token = payload?.register?.token
+                const token = response.data?.register?.token
                 if (!token) {
                     setHasError(true)
                     setErrorMsg("Create account failed: token was not returned by the server.")
@@ -217,12 +242,12 @@ const useLogin = (initialErrorMessage?: string) => {
                 // set token in memory and persist to localStorage
                 setToken(token, true)
                 // verify token by requesting current user, then redirect
-                if (!(await verifyTokenAndNavigate(token, "Registration succeeded but token validation failed."))) {
+                if (!(await verifyTokenAndNavigate("Registration succeeded but token validation failed."))) {
                     return
                 }
                 console.log("Registration successful", {
                     token,
-                    user: payload?.register?.user,
+                    user: response.data?.register?.user,
                 })
             }
             catch (err) {
