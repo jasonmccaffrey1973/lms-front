@@ -6,7 +6,6 @@ import GlobalStyles from './assets/globalStyles.ts'
 import { AuthProvider } from './auth/AuthProvider'
 import { ApolloProvider } from './auth/ApolloContext.tsx'
 
-
 const getRootNode = () => document.createElement('div')
 
 const appendtoBody = (node: HTMLElement) => {

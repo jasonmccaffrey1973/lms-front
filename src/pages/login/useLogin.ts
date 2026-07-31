@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useApolloClient } from "@apollo/client/react"
 import { useLoginMutation, useRegisterMutation } from "../../queries/useLoginQueries"
 import { ME_GQL } from "../../queries/authQueries.ts"
@@ -72,11 +72,25 @@ const getFieldValue = (formData: FormData, key: string) => {
 const useLogin = (initialErrorMessage?: string) => {
     const [hasError, setHasError] = useState(Boolean(initialErrorMessage))
     const [errorMsg, setErrorMsg] = useState(initialErrorMessage || "")
+    const [isLoginSubmitting, setIsLoginSubmitting] = useState(false)
+    const isMountedRef = useRef(true)
     const { setToken, logout } = useAuth()
     const navigate = useNavigate()
     const apolloClient = useApolloClient()
     const { login: performLogin } = useLoginMutation()
     const { register: performRegister } = useRegisterMutation()
+
+    useEffect(() => {
+        return () => {
+            isMountedRef.current = false
+        }
+    }, [])
+
+    const setLoginSubmitting = (value: boolean) => {
+        if (isMountedRef.current) {
+            setIsLoginSubmitting(value)
+        }
+    }
 
     const verifyTokenAndNavigate = async (failureMsg: string) => {
         try {
@@ -122,6 +136,7 @@ const useLogin = (initialErrorMessage?: string) => {
      ** --------------------------------------------------------------------------------------- */
     const handleLoginSubmit: NonNullable<ComponentProps<"form">["onSubmit"]> = (e) => {
         e.preventDefault()
+        setLoginSubmitting(true)
         const formData = new FormData(e.currentTarget)
         const loginValue = getFieldValue(formData, "username")
         const password = getFieldValue(formData, "password")
@@ -129,6 +144,7 @@ const useLogin = (initialErrorMessage?: string) => {
         if (!loginValue || !password) {
             setHasError(true)
             setErrorMsg("Username/email and password are required.")
+            setLoginSubmitting(false)
             return
         }
 
@@ -146,6 +162,7 @@ const useLogin = (initialErrorMessage?: string) => {
                 if (response.error) {
                     setHasError(true)
                     setErrorMsg(response.error.message || "Login failed.")
+                    setLoginSubmitting(false)
                     return
                 }
 
@@ -153,6 +170,7 @@ const useLogin = (initialErrorMessage?: string) => {
                 if (!token) {
                     setHasError(true)
                     setErrorMsg("Login failed: token was not returned by the server.")
+                    setLoginSubmitting(false)
                     return
                 }
 
@@ -161,8 +179,11 @@ const useLogin = (initialErrorMessage?: string) => {
                 setToken(token, true)
                 // verify token by requesting current user, then redirect
                 if (!(await verifyTokenAndNavigate("Login failed: token validation failed."))) {
+                    setLoginSubmitting(false)
                     return
                 }
+
+                setLoginSubmitting(false)
                 console.log("Login successful", {
                     token,
                     user: response.data?.login?.user,
@@ -172,6 +193,7 @@ const useLogin = (initialErrorMessage?: string) => {
                 console.error("Login request failed:", err)
                 setHasError(true)
                 setErrorMsg("Unable to reach the server. Please try again.")
+                setLoginSubmitting(false)
             }
         })()
     }
@@ -267,6 +289,7 @@ const useLogin = (initialErrorMessage?: string) => {
         setHasError,
         setErrorMsg,
         clearError,
+        isLoginSubmitting,
         handleLoginSubmit,
         handleForgotPasswordSubmit,
         handleCreateAccountSubmit,

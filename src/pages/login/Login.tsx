@@ -8,7 +8,7 @@ import {
     StyledButtonGroup,
 } from "./Login.styles"
 import useLogin from "./useLogin"
-import Footer from "../../sharedComponents/Footer"
+import Footer from "../../sharedComponents/footer/Footer"
 import Render from "../../sharedComponents/Render"
 import Logo from "../../sharedComponents/logo/Logo"
 
@@ -20,6 +20,7 @@ type LoginProps = {
 type FormProps = {
     onSubmit: NonNullable<ComponentProps<"form">["onSubmit"]>
     clearError: () => void
+    isSubmitting?: boolean
 }
 
 
@@ -33,6 +34,7 @@ const Login = ({ pageForm = "login", errorMessage }: LoginProps) => {
         hasError,
         errorMsg,
         clearError,
+        isLoginSubmitting,
         handleLoginSubmit,
         handleForgotPasswordSubmit,
         handleCreateAccountSubmit,
@@ -64,6 +66,7 @@ const Login = ({ pageForm = "login", errorMessage }: LoginProps) => {
                         <LoginForm
                             onSubmit={handleLoginSubmit}
                             clearError={clearError}
+                            isSubmitting={isLoginSubmitting}
                         />
                     </Render>
                 </main>
@@ -79,7 +82,7 @@ const Login = ({ pageForm = "login", errorMessage }: LoginProps) => {
 /** ---------------------------------------------------------------------------------------
  * Renders the login form with username/email, password, and helper links. 
  ** --------------------------------------------------------------------------------------- */
-const LoginForm = ({ onSubmit, clearError }: FormProps) => {
+const LoginForm = ({ onSubmit, clearError, isSubmitting = false }: FormProps) => {
     return (
         <form method="post" onSubmit={onSubmit} onChange={clearError}>
             <StyledFormGroup>
@@ -92,7 +95,9 @@ const LoginForm = ({ onSubmit, clearError }: FormProps) => {
             </StyledFormGroup>
             <StyledButtonGroup>
                 <LoginLinks />
-                <button type="submit" className="btn btn-success">Login</button>
+                <button type="submit" className="btn btn-success" disabled={isSubmitting}>
+                    {isSubmitting ? "Logging in..." : "Login"}
+                </button>
             </StyledButtonGroup>
         </form>
     )

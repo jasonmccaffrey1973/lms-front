@@ -5,7 +5,6 @@ interface NavigationContextValue {
     closeCategory: (title: string) => void;
     closeAllCategories: () => void;
     focusFirstOpenCategory: () => void;
-    getLinks: () => Array<{ name: string; path?: string; itemList?: { name: string; path: string }[] }>;
     isCategoryOpen: (title: string) => boolean;
     toggleCategory: (title: string) => void;
 }
@@ -75,28 +74,11 @@ const NavigationContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     };
 
 /** ----------------------------------------------------------------------------------------- *
- * Returns navigation links.
- ** ----------------------------------------------------------------------------------------- */
-    const getLinks = () => {
-        return [
-            { name: "Home", path: "/" },
-            { name: "About", path: "/about" },
-            { name: "Contact", path: "/contact" },
-            { name: "Dashboard", itemList: [
-                { name: "Analytics", path: "/dashboard/analytics" },
-                { name: "Reports", path: "/dashboard/reports" },
-                { name: "Settings", path: "/dashboard/settings" }
-            ] },
-            { name: "Test Item", path: "/test" },
-        ];
-    };
-    
-/** ----------------------------------------------------------------------------------------- *
  * Renders the navigation context provider with the current state and functions.
  ** ----------------------------------------------------------------------------------------- */
 return React.createElement(
         NavigationContext.Provider,
-        { value: { openCategory, closeCategory, closeAllCategories, focusFirstOpenCategory, getLinks, isCategoryOpen, toggleCategory } },
+    { value: { openCategory, closeCategory, closeAllCategories, focusFirstOpenCategory, isCategoryOpen, toggleCategory } },
         children
     );
 };

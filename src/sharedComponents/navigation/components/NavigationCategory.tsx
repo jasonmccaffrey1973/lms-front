@@ -1,5 +1,5 @@
-import { useNavigation } from "./NavigationContext";
-import { StyledCategoryTrigger, StyledList } from "./Navigation.styles"
+import { useNavigation } from "../NavigationContext";
+import { StyledCategoryTrigger, StyledList } from "../Navigation.styles"
 
 const NavigationCategory = ({ obj }: { obj: { name: string; itemList: { name: string; path: string }[] } }) => {
     const { name: title, itemList } = obj;

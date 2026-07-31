@@ -11,7 +11,6 @@ const StyledNavigationList = styled.ul<NavigationStylesProps>`
     margin: 0;
 
     .nav-item {
-        padding-block: 0.125rem;
 
         &:not(:last-child) {
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -20,7 +19,7 @@ const StyledNavigationList = styled.ul<NavigationStylesProps>`
         a {
             text-decoration: none;
             color: ${props => props.linkColor || "inherit"};
-            padding: 0.5rem 1rem;
+            padding: 0.6125rem 1rem;
             min-inline-size: 15rem;
             display: block;
 
@@ -43,7 +42,7 @@ const StyledCategoryTrigger = styled.button<NavigationStylesProps>`
     justify-content: space-between;
     align-items: center;    
     color: ${props => props.linkColor || "inherit"};
-    padding: 0.5rem 1rem;
+    padding: 0.6125rem 1rem;
     min-inline-size: 15rem;
     cursor: pointer;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -86,6 +85,7 @@ const StyledList = styled.ul`
     
     .nav-item {
         text-indent: 1.2rem;
+        padding-block: 0.125rem;
     }
 
     &[aria-expanded="true"] {

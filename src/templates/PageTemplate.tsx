@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import Header from "../sharedComponents/header/Header"
-import Footer from "../sharedComponents/Footer"
-import Navigation from "../sharedComponents/navigation/Navigation"
+import Footer from "../sharedComponents/footer/Footer"
+import Navigation from "../sharedComponents/navigation/components/Navigation"
 
 
 const PageTemplate = ({ children }: { children: React.ReactNode }) => {
