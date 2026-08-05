@@ -150,8 +150,110 @@ const StyledLinksWrapper = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    text-align: right;
 `;
 
-export { StyledBackdropImage, StyledContentRibbon, StyledStatusCode, StyledMessage, StyledSearchWrapper, StyledLinksWrapper };
+/** -------------------------------------------------------------------------------
+ * Search form styled component that styles the search form, input, and button
+ * with responsive design and focus/hover effects.
+ * ------------------------------------------------------------------------------- */
+const StyledSearchErrorForm = styled.form`
+
+    --_input-border-color: hsla(0, 0%, 0%, 0.25);
+    --_input-border-color-focus: hsla(0, 0%, 0%, 0.75);
+    --_input-background-color: hsla(0, 0%, 100%, 0.75);
+
+    --_border-color: var(--_input-border-color);
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "search-label search-label"
+        "search-input search-button";
+    width: 100%;
+    max-inline-size: 20rem;
+    align-items: center;
+
+    &:focus-within {
+        outline: none;
+        --_border-color: var(--_input-border-color-focus);
+    }
+
+    label {
+        grid-area: search-label;
+        text-align: left;
+        margin: 0;
+        margin-block-end: 0.5rem;
+        font-size: clamp(1rem, 0.5vh, 1.5rem);
+        font-weight: 400;
+    }
+        
+    input {
+        grid-area: search-input;
+        width: 100%;
+        padding: 0.5rem;
+        font-size: clamp(0.75rem, 1vh, 1rem);
+        background-color: var(--_input-background-color);
+        border-block: 1px solid var(--_border-color);
+        border-inline-start: 1px solid var(--_border-color);
+        border-inline-end: 1px solid transparent;
+        border-radius: 0.25rem 0 0 0.25rem;
+
+        &:focus {
+            outline: none;
+        }
+
+    }
+    
+    button {
+        grid-area: search-button;
+        padding: 0.5rem 1rem;
+        height: 100%;
+        font-size: clamp(0.75rem, 0.5vh, 1rem);
+        background-color: var(--_input-background-color);
+        border-block: 1px solid var(--_border-color);
+        border-inline-end: 1px solid var(--_border-color);
+        border-inline-start: 1px solid transparent;
+        border-radius: 0 0.25rem 0.25rem 0;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.25s ease;
+
+        &:focus, &:hover {
+            outline: none;
+            background-color: var(--clr-primary);
+            color: hsla(0, 0%, 100%, 1.00);
+        }
+    }
+`;
+
+/** -------------------------------------------------------------------------------
+ * Error page links styled component that removes default list styling and
+ * provides a clean layout for the error page links.
+ * ------------------------------------------------------------------------------- */
+const StyledErrorPageLinks = styled.ul`
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    h3 {
+        margin: 0;
+        margin-block-end: 0.5rem;
+        font-size: clamp(1rem, 0.5vh, 1.5rem);
+        font-weight: 400;
+    }
+
+    a {
+        display: inline-block;
+        color: var(--clr-primary);
+        text-decoration: none;
+        transition: color 0.3s ease;
+        font-size: clamp(0.75rem, 1vh, 1rem);
+
+        &:hover, &:focus {
+            color: var(--clr-primary-dark);
+            text-decoration: underline;
+        }
+    }
+`;
+
+export { StyledBackdropImage, StyledContentRibbon, StyledStatusCode, StyledMessage, StyledSearchWrapper, StyledLinksWrapper, StyledSearchErrorForm, StyledErrorPageLinks };

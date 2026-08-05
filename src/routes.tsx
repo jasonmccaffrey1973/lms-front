@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import { Dashboard, Login, NotFound } from './pages';
+import { Dashboard, Login, ErrorPage } from './pages';
 import { useAuth } from "./auth"
 
 const AppRoutes = () => {
@@ -12,7 +12,7 @@ const AppRoutes = () => {
 			<Route path="/forgot-password" element={<Login pageForm="forgot-password" />} />
 			<Route path="/register" element={<Login pageForm="create-account" />} />
 			<Route path="/dashboard" element={<Dashboard />} />
-			<Route path="*" element={isAuthenticated ? <NotFound statusCode={404} /> : <Navigate to="/login" replace />} />
+			<Route path="*" element={isAuthenticated ? <ErrorPage statusCode={404} /> : <Navigate to="/login" replace />} />
 		</Routes>
 	)
 }

@@ -1,6 +1,6 @@
 
 import Dashboard from "./dashboard/Dashboard";
 import Login from "./login/Login";
-import NotFound from "./error/error";
+import ErrorPage from "./error/error";
 
-export { Dashboard, Login, NotFound };
+export { Dashboard, Login, ErrorPage };
