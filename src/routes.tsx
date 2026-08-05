@@ -12,7 +12,7 @@ const AppRoutes = () => {
 			<Route path="/forgot-password" element={<Login pageForm="forgot-password" />} />
 			<Route path="/register" element={<Login pageForm="create-account" />} />
 			<Route path="/dashboard" element={<Dashboard />} />
-			<Route path="*" element={isAuthenticated ? <NotFound /> : <Navigate to="/login" replace />} />
+			<Route path="*" element={isAuthenticated ? <NotFound statusCode={404} /> : <Navigate to="/login" replace />} />
 		</Routes>
 	)
 }
