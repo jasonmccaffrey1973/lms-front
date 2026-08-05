@@ -2,6 +2,16 @@ import styled from 'styled-components';
 import backdropErrorH from '../../assets/images/error-h.jpg';
 import backdropErrorV from '../../assets/images/error-v.jpg';
 
+
+/** ================================================================================
+ * Styled components for the Error page, including the backdrop image,
+ * content ribbon, status code, message, search wrapper, and links wrapper.
+ * ================================================================================ */
+
+/** -------------------------------------------------------------------------------
+ * Backdrop image styled component with responsive background images for horizontal
+ * and vertical orientations.
+ * ------------------------------------------------------------------------------- */
 const StyledBackdropImage = styled.div`
     --_backdrop-image: url(${backdropErrorH});
 
@@ -40,6 +50,10 @@ const StyledBackdropImage = styled.div`
         }
 `;
 
+/** -------------------------------------------------------------------------------
+ * Middle Ribbon styled component that organizes the status code, message, search,
+ * and links in a responsive grid layout.
+ * ------------------------------------------------------------------------------- */
 const StyledContentRibbon = styled.section`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -65,6 +79,10 @@ const StyledContentRibbon = styled.section`
     }
 `;
 
+/** -------------------------------------------------------------------------------
+ * Status code styled component that displays the error status code with responsive
+ * font size and alignment.
+ * ------------------------------------------------------------------------------- */
 const StyledStatusCode = styled.div`
     grid-area: status-code;
     width: 100%;
@@ -86,6 +104,10 @@ const StyledStatusCode = styled.div`
     
 `; 
 
+/** -------------------------------------------------------------------------------
+ * Message styled component that displays the error message with responsive font
+ * size and alignment.
+ * ------------------------------------------------------------------------------- */
 const StyledMessage = styled.div`
     grid-area: tagline;
     width: 100%;
@@ -106,6 +128,10 @@ const StyledMessage = styled.div`
     }
 `;
 
+/** -------------------------------------------------------------------------------
+ * Search wrapper styled component that centers the search component within its
+ * grid area.
+ * ------------------------------------------------------------------------------- */
 const StyledSearchWrapper = styled.div`
     grid-area: search;
     width: 100%;
@@ -115,6 +141,10 @@ const StyledSearchWrapper = styled.div`
     align-items: center;
 `;
 
+/** -------------------------------------------------------------------------------
+ * Links wrapper styled component that centers the links component within its
+ * grid area.
+ * ------------------------------------------------------------------------------- */
 const StyledLinksWrapper = styled.div`
     grid-area: common-links;
     width: 100%;
