@@ -1,6 +1,10 @@
 import styled from 'styled-components';
-import backdropErrorH from '../../assets/images/error-h.jpg';
-import backdropErrorV from '../../assets/images/error-v.jpg';
+
+type StyledBackdropImageProps = {
+    $horizontalImage: string;
+    $verticalImage: string;
+};
+
 
 
 /** ================================================================================
@@ -12,8 +16,7 @@ import backdropErrorV from '../../assets/images/error-v.jpg';
  * Backdrop image styled component with responsive background images for horizontal
  * and vertical orientations.
  * ------------------------------------------------------------------------------- */
-const StyledBackdropImage = styled.div`
-    --_backdrop-image: url(${backdropErrorH});
+const StyledBackdropImage = styled.div<StyledBackdropImageProps>`
 
     display: flex;
     flex-direction: column;
@@ -26,7 +29,7 @@ const StyledBackdropImage = styled.div`
         content: '';
         position: absolute;
         inset: 0;
-        background-image: var(--_backdrop-image);
+        background-image: url(${({ $horizontalImage }) => $horizontalImage});
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -46,8 +49,10 @@ const StyledBackdropImage = styled.div`
     }
 
     @media (orientation: portrait) {
-            --_backdrop-image: url(${backdropErrorV});
+        &::before {
+            background-image: url(${({ $verticalImage }) => $verticalImage});
         }
+    }
 `;
 
 /** -------------------------------------------------------------------------------
@@ -56,18 +61,25 @@ const StyledBackdropImage = styled.div`
  * ------------------------------------------------------------------------------- */
 const StyledContentRibbon = styled.section`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 1rem;
+    grid-template-columns: 1fr 1.5fr 1fr;
     grid-template-areas:
         "status-code search common-links"
-        "tagline search common-links";
+        "tagline     search common-links";
+    column-gap: 2rem;
     justify-items: center;
     align-items: center;
     width: 100%;
     margin-block: auto;
-    padding: 0.66rem;
-    background: linear-gradient(to right, hsla(0, 0%, 100%, 1.00), hsla(0, 0%, 100%, 0.90));
+    padding: 1.5rem clamp(1rem, 3vw, 3rem);
+
+    background: linear-gradient(
+        to right,
+        hsla(0, 0%, 100%, 1.00),
+        hsla(0, 0%, 100%, 0.88)
+    );
+
     box-shadow: 0 1rem 1rem hsla(0, 0%, 0%, 0.25);
+
     z-index: 20;
 
     @media (orientation: portrait) {
@@ -75,7 +87,14 @@ const StyledContentRibbon = styled.section`
         grid-template-areas:
             "status-code"
             "tagline"
+            "search"
             "common-links";
+        row-gap: 1rem;
+        padding: 1.5rem;
+
+        .search-wrapper {
+            border-inline: none;
+        }
     }
 `;
 
@@ -84,48 +103,53 @@ const StyledContentRibbon = styled.section`
  * font size and alignment.
  * ------------------------------------------------------------------------------- */
 const StyledStatusCode = styled.div`
-    grid-area: status-code;
-    width: 100%;
-    text-align: left;
-    h1 {
-        color: var(--clr-error);
-        margin: 0;
-        font-size: clamp(2rem, 7vh, 4rem);
-        font-weight: 700;
-        opacity: 0.75;
-    }
+  grid-area: status-code;
+  width: 100%;
+  text-align: right;
 
-    @media (orientation: portrait) {
-        text-align: center;
-        h1 {
-            font-size: clamp(2rem, 5vh, 3rem);
-        }
+  h1 {
+    color: var(--clr-error);
+    margin: 0;
+    font-size: var(--font-size-3xl);
+    line-height: var(--line-height-tight);
+    font-weight: 700;
+    opacity: 0.75;
+  }
+
+  @media (orientation: portrait) {
+    text-align: center;
+
+    h1 {
+      font-size: var(--font-size-2xl);
     }
-    
-`; 
+  }
+`;
 
 /** -------------------------------------------------------------------------------
  * Message styled component that displays the error message with responsive font
  * size and alignment.
  * ------------------------------------------------------------------------------- */
 const StyledMessage = styled.div`
-    grid-area: tagline;
-    width: 100%;
-    text-align: left;
-    h2 {
-        margin: 0;
-        margin-block-start: 0.75rem;
-        font-size: clamp(1rem, 2.5vh, 1.5rem);
-        font-weight: 400;
-    }
+  grid-area: tagline;
+  width: 100%;
+  text-align: right;
 
-    @media (orientation: portrait) {
-        text-align: center;
-        h2 {
-            margin-block-start: 0.5rem;
-            font-size: clamp(1rem, 2.5vh, 1.25rem);
-        }
+  h2 {
+    margin: 0;
+    margin-block-start: 0.75rem;
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-normal);
+    font-weight: 400;
+  }
+
+  @media (orientation: portrait) {
+    text-align: center;
+
+    h2 {
+      margin-block-start: 0.5rem;
+      font-size: var(--font-size-md);      
     }
+  }
 `;
 
 /** -------------------------------------------------------------------------------
@@ -134,11 +158,25 @@ const StyledMessage = styled.div`
  * ------------------------------------------------------------------------------- */
 const StyledSearchWrapper = styled.div`
     grid-area: search;
+
     width: 100%;
     height: 100%;
+
     display: flex;
     justify-content: center;
     align-items: center;
+
+    
+    @media (orientation: portrait) {
+        border-block: 1px solid hsla(0, 0%, 0%, 0.12);
+        padding-block: 1rem;
+    }
+    
+    @media (orientation: landscape) {
+        border-inline: 1px solid hsla(0, 0%, 0%, 0.12);
+        padding-inline: 1rem;
+    }
+
 `;
 
 /** -------------------------------------------------------------------------------
@@ -151,7 +189,13 @@ const StyledLinksWrapper = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    text-align: right;
+    text-align: left;
+
+    @media (orientation: portrait) {
+        text-align: center;
+    }
+
+
 `;
 
 /** -------------------------------------------------------------------------------
@@ -185,15 +229,23 @@ const StyledSearchErrorForm = styled.form`
         text-align: left;
         margin: 0;
         margin-block-end: 0.5rem;
-        font-size: clamp(1rem, 0.5vh, 1.5rem);
+        font-size: var(--font-size-md);
+        line-height: var(--line-height-normal);
         font-weight: 400;
+
+        @media (orientation: portrait) {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        
     }
         
     input {
         grid-area: search-input;
         width: 100%;
         padding: 0.5rem;
-        font-size: clamp(0.75rem, 1vh, 1rem);
+        font-size: var(--font-size-md);
         background-color: var(--_input-background-color);
         border-block: 1px solid var(--_border-color);
         border-inline-start: 1px solid var(--_border-color);
@@ -210,7 +262,8 @@ const StyledSearchErrorForm = styled.form`
         grid-area: search-button;
         padding: 0.5rem 1rem;
         height: 100%;
-        font-size: clamp(0.75rem, 0.5vh, 1rem);
+        font-size: var(--font-size-md);
+        font-weight: 500;
         background-color: var(--_input-background-color);
         border-block: 1px solid var(--_border-color);
         border-inline-end: 1px solid var(--_border-color);
@@ -223,6 +276,14 @@ const StyledSearchErrorForm = styled.form`
             background-color: var(--clr-primary);
             color: hsla(0, 0%, 100%, 1.00);
         }
+    }
+
+    & datalist {
+        font-size: var(--font-size-md);
+        padding: 0.5rem;
+        inline-size: 100%;
+        white-space: nowrap;
+        cursor: pointer;
     }
 `;
 
@@ -238,7 +299,8 @@ const StyledErrorPageLinks = styled.ul`
     h3 {
         margin: 0;
         margin-block-end: 0.5rem;
-        font-size: clamp(1rem, 0.5vh, 1.5rem);
+        font-size: var(--font-size-lg);
+        line-height: var(--line-height-normal);
         font-weight: 400;
     }
 
@@ -247,7 +309,8 @@ const StyledErrorPageLinks = styled.ul`
         color: var(--clr-primary);
         text-decoration: none;
         transition: color 0.3s ease;
-        font-size: clamp(0.75rem, 1vh, 1rem);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-normal);
 
         &:hover, &:focus {
             color: var(--clr-primary-dark);

@@ -3,6 +3,8 @@ import {createGlobalStyle} from 'styled-components'
 const GlobalStyles = createGlobalStyle`
 
 :root {
+
+    /* COLORS */
     --clr-primary: hsl(212, 100%, 48%);
     --clr-primary-dark: hsl(212, 100%, 36%);
     --clr-primary-light: hsl(212, 100%, 64%);
@@ -22,12 +24,43 @@ const GlobalStyles = createGlobalStyle`
     --clr-warning: hsl(45, 100%, 50%);
     --clr-info: hsl(200, 100%, 50%);
     --clr-link: hsl(212, 100%, 48%);
+
+    /* TYPEFACES */
+    --font-family-base:
+    "Segoe UI",
+    Inter,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  --font-size-xs: 0.75rem; 
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;    
+  --font-size-lg: 1.25rem; 
+  --font-size-xl: 1.75rem; 
+  --font-size-2xl: 2.5rem; 
+  --font-size-3xl: 3.5rem; 
+
+  --line-height-tight: 1.15;
+  --line-height-normal: 1.5;
     
 }
 
 *, *::before, *::after {
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-family-base);
+}
+
+h1,
+h2,
+h3,
+p,
+label,
+button,
+input,
+a {
+  line-height: var(--line-height-normal);
 }
 
 body {

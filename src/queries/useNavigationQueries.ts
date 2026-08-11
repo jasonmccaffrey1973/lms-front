@@ -7,9 +7,11 @@ const USER_LINKS_GQL = gql`
       navigation(token: $token) {
         name
         path
+        visits
         itemList {
           name
           path
+          visits
         }
       }
     }
@@ -45,6 +47,7 @@ function sanitizeNavigationData(data: unknown): unknown {
 export type NavigationItem = {
   name: string;
   path?: string;
+  visits?: number;
   itemList?: NavigationItem[];
 };
 

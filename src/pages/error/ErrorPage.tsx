@@ -3,6 +3,8 @@ import { StyledBackdropImage, StyledContentRibbon, StyledStatusCode, StyledMessa
 import STATUS_CODES from "../../constants"
 import ErrorSearch from "./ErrorSearch";
 import ErrorLinks from "./ErrorLinks";
+import useErrorBackdropImages from "./useErrorBackdropImages";
+
 
 
 /** -------------------------------------------------------------------------------
@@ -10,15 +12,17 @@ import ErrorLinks from "./ErrorLinks";
  * friendly message, search component, and links component.
  * @param param0 Object containing the status code.
  * @returns JSX.Element representing the error page.
- * 
- */
+ * ------------------------------------------------------------------------------- */
 const ErrorPage = ({ statusCode }: { statusCode: number }) => {
-
 	const {  displayText, friendlyMessage } = STATUS_CODES[statusCode as keyof typeof STATUS_CODES] ?? { displayText: "404", friendlyMessage: "Page Not Found" };
+	const backdropImages = useErrorBackdropImages(statusCode);
 
 	return (
 		<PageTemplate>
-			<StyledBackdropImage>
+			<StyledBackdropImage
+				$horizontalImage={backdropImages.horizontal}
+				$verticalImage={backdropImages.vertical}
+			>
 				<StyledContentRibbon>
 					<StyledStatusCode>
 						<h1>{displayText}</h1>
