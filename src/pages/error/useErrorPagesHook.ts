@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useAuth } from "../../auth";
-import { useUserLinks, type NavigationItem } from "../../queries/useNavigationQueries";
+import { useMemo, useState } from "react";
+import { useUserLinksContext } from "../../auth";
+import type { NavigationItem } from "../../queries/useNavigationQueries";
 
 type ErrorPageLink = {
     href: string;
@@ -105,8 +105,7 @@ const buildPopularLinks = (links: ErrorPageLink[]) => {
  * @returns  An object containing methods and state for error page links and search functionality.
  ** ================================================================================ */
 const useErrorPagesHook = () => {
-    const { token } = useAuth();
-    const { data } = useUserLinks(token);
+    const { links } = useUserLinksContext();
 
     const [serchSubmitted, setSearchSubmitted] = useState(false);
 
@@ -119,23 +118,21 @@ const useErrorPagesHook = () => {
         setSearchSubmitted(false);
     };
 
-    const allLinks = () => {
-        const flattenedLinks = flattenNavigationLinks(data?.navigation);
+    const allLinks = useMemo(() => {
+        const flattenedLinks = flattenNavigationLinks(links);
 
         if (flattenedLinks.length > 0) {
             return uniqueLinksByHref(flattenedLinks);
         }
 
         return DEFAULT_ERROR_LINKS;
-    };
+    }, [links]);
 
-    const errorPageLinks = () => {
-        return buildPopularLinks(allLinks());
-    };
+    const errorPageLinks = useMemo(() => {
+        return buildPopularLinks(allLinks);
+    }, [allLinks]);
 
-    const searchSuggestions = () => {
-        return allLinks();
-    };
+    const searchSuggestions = allLinks;
 
     return {
         serchSubmitted,

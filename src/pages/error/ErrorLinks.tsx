@@ -10,7 +10,7 @@ const ErrorLinks = () => {
 		<>
 			<StyledErrorPageLinks aria-label="Error Page Links" role="navigation">
 				<h3>Popular Destinations</h3>
-				{errorPageLinks().map((link, index) => (
+				{errorPageLinks.map((link, index) => (
 					<li key={index}>
 						<Link to={link.href}>{link.label}</Link>
 					</li>

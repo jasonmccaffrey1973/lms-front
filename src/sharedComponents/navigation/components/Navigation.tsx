@@ -1,30 +1,39 @@
-import { Suspense } from "react"
+import { useMemo } from "react"
 import { StyledNavigationList } from "../Navigation.styles"
 import NavigationItem from "./NavigationItem"
 import NavigationCategory from "./NavigationCategory"
-import { NavigationContextProvider } from "../NavigationContext"
+import { NavigationContextProvider, useNavigation } from "../NavigationContext"
 import { buildNavigationRenderModel, type NavigationRenderNode } from "../navigationModel"
-import { useAuth } from "../../../auth"
-import { useUserLinksSuspense } from "../../../queries/useNavigationQueries"
+import { useUserLinksContext } from "../../../auth"
 import Loader from "../../loader/Loader"
-
-const renderNavigationNode = (node: NavigationRenderNode) => {
-    if (node.kind === "item") {
-        return <NavigationItem key={node.key} obj={node.item} />
-    }
-
-    return <NavigationCategory key={node.key} obj={node.category} />
-}
 
 const NavigationLoadingFallback = () => {
     return <Loader />
 }
 
 const NavigationContent = () => {
-    const { token } = useAuth()
-    const data = useUserLinksSuspense(token)
-    const links = data?.navigation ?? []
-    const renderModel = buildNavigationRenderModel(links)
+    const { links, loading } = useUserLinksContext()
+    const { toggleCategory, isCategoryOpen } = useNavigation()
+    const renderModel = useMemo(() => buildNavigationRenderModel(links), [links])
+
+    const renderNavigationNode = (node: NavigationRenderNode) => {
+        if (node.kind === "item") {
+            return <NavigationItem key={node.key} obj={node.item} />
+        }
+
+        return (
+            <NavigationCategory
+                key={node.key}
+                obj={node.category}
+                isOpen={isCategoryOpen(node.category.name)}
+                onToggle={toggleCategory}
+            />
+        )
+    }
+
+    if (loading) {
+        return <NavigationLoadingFallback />
+    }
     
     return (
         <nav>
@@ -38,9 +47,7 @@ const NavigationContent = () => {
 const Navigation = () => {
     return (
         <NavigationContextProvider>
-            <Suspense fallback={<NavigationLoadingFallback />}>
-                <NavigationContent />
-            </Suspense>
+            <NavigationContent />
         </NavigationContextProvider>
     )
 }

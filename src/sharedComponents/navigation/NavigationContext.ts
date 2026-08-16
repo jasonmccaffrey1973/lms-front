@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 interface NavigationContextValue {
     openCategory: (title: string) => void;
@@ -36,49 +36,62 @@ const NavigationContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
  * If the category is already open, it does nothing.
  * @param title - The title of the category to open.
  ** ----------------------------------------------------------------------------------------- */
-    const openCategory = (title: string) => setOpenCategories(prev => prev.includes(title) ? prev : [...prev, title])
+    const openCategory = useCallback((title: string) => {
+        setOpenCategories((prev) => (prev.includes(title) ? prev : [...prev, title]))
+    }, [])
 
 /** ----------------------------------------------------------------------------------------- *
  * Closes a specific navigation category by removing its title from the list of open categories.
  * If the category is not open, it does nothing.
  * @param title - The title of the category to close.
  ** ----------------------------------------------------------------------------------------- */
-    const closeCategory = (title: string) => setOpenCategories(prev => prev.filter(t => t !== title))
+    const closeCategory = useCallback((title: string) => {
+        setOpenCategories((prev) => prev.filter((t) => t !== title))
+    }, [])
 
 /** ----------------------------------------------------------------------------------------- *
  * Closes all open navigation categories by clearing the list of open categories.
  ** ----------------------------------------------------------------------------------------- */
-    const closeAllCategories = () => setOpenCategories([])
+    const closeAllCategories = useCallback(() => {
+        setOpenCategories([])
+    }, [])
 
 /** ----------------------------------------------------------------------------------------- *
  * @param title - The title of the category to toggle.
  * Toggles the open/closed state of a navigation category. If the category is open, 
  * it will be closed; if it is closed, it will be opened.
  ** ----------------------------------------------------------------------------------------- */
-    const toggleCategory = (title: string) => (openCategories.includes(title)) ? closeCategory(title) : openCategory(title)
+    const toggleCategory = useCallback((title: string) => {
+        setOpenCategories((prev) => (prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title]))
+    }, [])
 
 /** ----------------------------------------------------------------------------------------- *
  * Checks if a category is open.
  * @param title - The title of the category to check.
  * @returns True if the category is open, false otherwise.
  ** ----------------------------------------------------------------------------------------- */
-    const isCategoryOpen = (title: string) => openCategories.includes(title)
+    const isCategoryOpen = useCallback((title: string) => openCategories.includes(title), [openCategories])
 
 /** ----------------------------------------------------------------------------------------- *
  * Focuses the first open category if any are open.
  ** ----------------------------------------------------------------------------------------- */
-    const focusFirstOpenCategory = () => {
+    const focusFirstOpenCategory = useCallback(() => {
         if (openCategories.length > 0) {
             // Focus management would go here
         }
-    };
+    }, [openCategories]);
+
+    const value = useMemo(
+        () => ({ openCategory, closeCategory, closeAllCategories, focusFirstOpenCategory, isCategoryOpen, toggleCategory }),
+        [openCategory, closeCategory, closeAllCategories, focusFirstOpenCategory, isCategoryOpen, toggleCategory],
+    )
 
 /** ----------------------------------------------------------------------------------------- *
  * Renders the navigation context provider with the current state and functions.
  ** ----------------------------------------------------------------------------------------- */
 return React.createElement(
         NavigationContext.Provider,
-    { value: { openCategory, closeCategory, closeAllCategories, focusFirstOpenCategory, isCategoryOpen, toggleCategory } },
+    { value },
         children
     );
 };

@@ -1,22 +1,9 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client"
 import { setContext } from "@apollo/client/link/context"
 import { ApolloProvider as ApolloReactProvider } from "@apollo/client/react"
-import { getAuthToken } from "./tokenStore"
-
-export interface ApolloConfig {
-  endpoint: string
-  headers?: Record<string, string>
-}
-
-export interface ApolloState {
-  config: ApolloConfig | null
-  setConfig: (config: ApolloConfig) => void
-  clearConfig: () => void
-  isReady: boolean
-}
-
-const ApolloContext = createContext<ApolloState | undefined>(undefined)
+import { getAuthToken } from "../tokenStore"
+import { ApolloContext, type ApolloConfig } from "../context/ApolloContext"
 
 const buildClient = (config: ApolloConfig | null) => {
   const endpoint = config?.endpoint ?? ""
@@ -67,10 +54,4 @@ export const ApolloProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   )
 }
 
-export const useApollo = () => {
-  const context = useContext(ApolloContext)
-  if (!context) {
-    throw new Error("useApollo must be used within an ApolloProvider")
-  }
-  return context
-}
+export default ApolloProvider

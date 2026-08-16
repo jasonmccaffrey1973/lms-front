@@ -10,7 +10,7 @@ const ErrorSearch = () => {
             <label htmlFor="error-search-input">Find what You Are Looking For</label>
             <input id="error-search-input" name="search" type="search" placeholder="Search..." list="error-search-suggestions" />
             <datalist id="error-search-suggestions">
-                {searchSuggestions().map((link) => (
+                {searchSuggestions.map((link) => (
                     <option key={link.href} value={link.href}>{link.label}</option>
                 ))}
             </datalist>

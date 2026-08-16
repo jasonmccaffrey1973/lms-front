@@ -1,5 +1,3 @@
-import React from "react"
-
 interface ForgotPasswordModalProps {
   isOpen: boolean
   onClose: () => void

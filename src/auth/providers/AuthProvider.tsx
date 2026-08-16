@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { AuthContext } from "./AuthContext"
-import { getAuthToken, setAuthToken } from "./tokenStore"
+import { AuthContext } from "../context/AuthContext"
+import { getAuthToken, setAuthToken } from "../tokenStore"
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setTokenState] = useState<string | null>(() => getAuthToken())

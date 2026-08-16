@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 
 const NavigationItem = ({ obj }: { obj: { name: string; path: string } }) => {
@@ -9,4 +10,4 @@ const NavigationItem = ({ obj }: { obj: { name: string; path: string } }) => {
     )
 }
 
-export default NavigationItem
+export default memo(NavigationItem)
