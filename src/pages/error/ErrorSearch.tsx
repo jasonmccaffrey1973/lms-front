@@ -1,3 +1,4 @@
+import SearchButton from "../../sharedComponents/buttons/SearchButton/SearchButton";
 import { StyledSearchErrorForm } from "./error.styles"
 
 import useErrorPagesHook from "./useErrorPagesHook";
@@ -14,7 +15,7 @@ const ErrorSearch = () => {
                     <option key={link.href} value={link.href}>{link.label}</option>
                 ))}
             </datalist>
-            <button disabled={serchSubmitted}>Search</button>
+            <SearchButton disabled={serchSubmitted} />
         </StyledSearchErrorForm>
     )
 }

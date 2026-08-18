@@ -275,6 +275,7 @@ const StyledSearchErrorForm = styled.form`
             outline: none;
             background-color: var(--clr-primary);
             color: hsla(0, 0%, 100%, 1.00);
+            fill: hsla(0, 0%, 100%, 1.00);
         }
     }
 
