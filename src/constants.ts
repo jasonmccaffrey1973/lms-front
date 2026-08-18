@@ -68,6 +68,8 @@ const TYPEFACE_OPTIONS = [
  * Defines the available type sizes for the editor.
  *  ------------------------------------------------------------------------------------ */
 const TYPE_SIZES = [
+    { label: "9px", value: "9px" },
+    { label: "10px", value: "10px" },
     { label: "12px", value: "12px" },
     { label: "14px", value: "14px" },
     { label: "16px", value: "16px" },
@@ -110,6 +112,34 @@ const FILE_MENU_ITEMS = [
         action: "saveDocumentAs",
         group: "document",
         icon: "saveas",
+    },
+];
+
+const STYLES_MENU_ITEMS = [
+    {
+        label: "Normal",
+        value: "normal",
+        action: "setStyle",
+    },
+    {
+        label: "Heading 1",
+        value: "heading_1",
+        action: "setStyle",
+    },
+    {
+        label: "Heading 2",
+        value: "heading_2",
+        action: "setStyle",
+    },
+    {
+        label: "Heading 3",
+        value: "heading_3",
+        action: "setStyle",
+    },
+    {
+        label: "Strong",
+        value: "strong",
+        action: "setStyle",
     },
 ];
 
@@ -203,17 +233,9 @@ const HOME_MENU_ITEMS = [
         group: "text",
     },
     {
-        label: "Heading 1",
-        value: "heading_1",
-        action: "toggleHeading",
-        level: 1 as const,
-        group: "structure",
-    },
-    {
-        label: "Heading 2",
-        value: "heading_2",
-        action: "toggleHeading",
-        level: 2 as const,
+        label: "Styles",
+        elementType: "list",
+        items: STYLES_MENU_ITEMS,
         group: "structure",
     },
     {

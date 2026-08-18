@@ -324,7 +324,7 @@ const StyledErrorPageLinks = styled.ul`
         margin: 0;
         margin-block-end: 0.5rem;
         font-size: var(--font-size-lg);
-        line-block-size: var(--line-block-size-normal);
+        block-size: var(--line-block-size-normal);
         font-weight: 400;
     }
 
@@ -334,7 +334,7 @@ const StyledErrorPageLinks = styled.ul`
         text-decoration: none;
         transition: color 0.3s ease;
         font-size: var(--font-size-sm);
-        line-block-size: var(--line-block-size-normal);
+        block-size: var(--line-block-size-normal);
 
         &:hover, &:focus {
             color: var(--app-link-hover);
