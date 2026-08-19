@@ -237,8 +237,6 @@ const StyledSearchErrorForm = styled.form`
             text-align: center;
             font-weight: 600;
         }
-
-        
     }
         
     input {
