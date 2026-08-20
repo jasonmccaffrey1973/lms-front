@@ -26,13 +26,19 @@ const StyledHeader = styled.header`
         padding: 0.33rem;
         display: grid;
         border-radius: 50%;
-        background-color: var(--clr-primary);
+        background-color: hsl(from var(--clr-primary) h s l / 90%);
         place-content: center;
         font-size: 1.33rem;
         font-weight: bold;
         color: var(--clr-background-light);
         box-shadow: 0.25rem 0.25rem 0.33rem rgba(0, 0, 0, 0.15);
         transition: background-color 250ms ease-in-out;
+
+        & svg {
+            inline-size: 2rem;
+            aspect-ratio: 1 / 1;
+            fill: var(--clr-background-light);
+        }
 
         &:hover {
             cursor: pointer; 

@@ -5,6 +5,7 @@ import { useLoginMutation, useRegisterMutation } from "../../queries/useLoginQue
 import { ME_GQL } from "../../queries/authQueries.ts"
 import { useAuth } from "../../auth"
 import { useNavigate } from "react-router-dom"
+import useUserAgent from "../../hooks/useUserAgent"
 
 const isObjectRecord = (value: unknown): value is Record<string, unknown> => {
     return typeof value === "object" && value !== null
@@ -77,6 +78,7 @@ const useLogin = (initialErrorMessage?: string) => {
     const { setToken, logout } = useAuth()
     const navigate = useNavigate()
     const apolloClient = useApolloClient()
+    const { userAgentData } = useUserAgent()
     const { login: performLogin } = useLoginMutation()
     const { register: performRegister } = useRegisterMutation()
 
@@ -154,7 +156,7 @@ const useLogin = (initialErrorMessage?: string) => {
                     variables: {
                         login: loginValue,
                         password,
-                        deviceName: "web-client",
+                        deviceName: userAgentData.userAgent || "unknown-device",
                     },
                     errorPolicy: "all",
                 })
@@ -242,7 +244,7 @@ const useLogin = (initialErrorMessage?: string) => {
                         email,
                         password,
                         passwordConfirmation,
-                        deviceName: "web-client",
+                        deviceName: userAgentData.userAgent || "unknown-device",
                     },
                     errorPolicy: "all",
                 })

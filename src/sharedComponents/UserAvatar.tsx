@@ -1,20 +1,29 @@
 import { useAuth } from "../auth";
+import ProfileSVG from "./buttons/SVG/profileSVG";
+import Render from "./Render";
 
 const UserAvatar = () => {
     const { user } = useAuth();
     const { avatarUrl, firstName, lastName } = user ?? {};
 
-    const firstInitial = firstName?.[0] ?? "U";
+    const firstInitial = firstName?.[0] ?? "";
     const lastInitial = lastName?.[0] ?? "";
     const separator = lastInitial ? " | " : "";
+    const avatarSrc = avatarUrl ?? undefined;
+    const hasAvatar = Boolean(avatarSrc);
+    const hasInitials = Boolean(firstInitial || lastInitial);
 
     return (
         <div className="user-avatar">
-            {avatarUrl ? (
-                <img src={avatarUrl} alt="User Avatar" />
-            ) : (
-                <div className="default-avatar">{firstInitial}{separator}{lastInitial}</div>
-            )}
+            <Render if={hasAvatar}>
+                <img src={avatarSrc} alt="User Avatar" />
+            </Render>
+            <Render if={!hasAvatar && hasInitials}>
+                {firstInitial}{separator}{lastInitial}
+            </Render>
+            <Render if={!hasAvatar && !hasInitials}>
+                <ProfileSVG />
+            </Render>
         </div>
     );
 };

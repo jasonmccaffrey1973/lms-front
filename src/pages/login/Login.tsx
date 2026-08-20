@@ -13,7 +13,7 @@ import Render from "../../sharedComponents/Render"
 import Logo from "../../sharedComponents/logo/Logo"
 
 type LoginProps = {
-    pageForm?: "login" | "forgot-password" | "create-account",
+    pageForm?: "login" | "forgot-password" | "create-account" | "logout",
     errorMessage?: string
 }
 

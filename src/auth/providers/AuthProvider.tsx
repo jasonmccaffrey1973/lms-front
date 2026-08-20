@@ -1,7 +1,7 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 import { AuthContext, type AuthProfile } from "../context/AuthContext"
-import { getAuthToken, setAuthToken } from "../tokenStore"
-import { getAuthUser, setAuthUser } from "../userStore"
+import { getAuthToken, setAuthToken } from "../tokenStore.ts"
+import { getAuthUser, setAuthUser } from "../userStore.ts"
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setTokenState] = useState<string | null>(() => getAuthToken())
@@ -17,10 +17,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUserState(nextUser)
   }
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null, false)
     setUser(null)
-  }
+  }, [])
 
   return (
     <AuthContext.Provider value={{ token, user, isAuthenticated: Boolean(token), setToken, setUser, logout }}>
