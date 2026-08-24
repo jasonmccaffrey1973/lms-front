@@ -9,7 +9,7 @@ export const StyledLogin = styled.div`
     }
 
     color-scheme: dark light;
-    width: 100%;
+    inline-size: 100%;
     display: grid;
     grid-template-columns: minmax(0, var(--_column-width)) 1fr;
     grid-template-rows: 100vh;

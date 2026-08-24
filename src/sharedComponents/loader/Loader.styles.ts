@@ -23,7 +23,7 @@ const StyledLoader = styled.dialog`
     &::after {
         content: '';
         aspect-ratio: 1 / 1;
-        width: 50px;
+        inline-size: 50px;
         border-radius: 50%;
         border: 3px solid hsla(0 0% 100% / 0.15);
         border-top-color: hsla(0 0% 100% / 0.85);

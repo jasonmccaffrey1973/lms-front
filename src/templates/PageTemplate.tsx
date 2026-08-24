@@ -39,19 +39,7 @@ const PageTemplate = ({ children }: { children: React.ReactNode }) => {
                     {children}
                 </main>
             </section>
-            <Footer>
-                <div className="footer-content">
-                    <div className="footer-logo">
-                        Logo
-                    </div>
-                    <div className="footer-link-column">
-                        links 1
-                    </div>
-                    <div className="footer-link-column">
-                        links 2
-                    </div>
-                </div>
-            </Footer>
+            <Footer />
         </StyledPageTemplate>
     )
 }

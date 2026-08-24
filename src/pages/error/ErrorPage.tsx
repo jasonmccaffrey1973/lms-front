@@ -1,6 +1,6 @@
 import PageTemplate from "../../templates/PageTemplate"
 import { StyledBackdropImage, StyledContentRibbon, StyledStatusCode, StyledMessage, StyledSearchWrapper, StyledLinksWrapper } from "./error.styles"
-import STATUS_CODES from "../../constants"
+import { STATUS_CODES } from "../../constants"
 import ErrorSearch from "./ErrorSearch";
 import ErrorLinks from "./ErrorLinks";
 import useErrorBackdropImages from "./useErrorBackdropImages";

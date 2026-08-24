@@ -20,8 +20,8 @@ const StyledBackdropImage = styled.div<StyledBackdropImageProps>`
 
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
+    block-size: 100%;
+    inline-size: 100%;
     overflow: clip;
     position: relative;
 
@@ -43,8 +43,8 @@ const StyledBackdropImage = styled.div<StyledBackdropImageProps>`
         display: grid;
         inset: 0;
         background: linear-gradient(to top, hsla(0, 0%, 100%, 0.20), hsla(0, 0%, 100%, 0.40));
-        width: 100%;
-        height: 100%;
+        inline-size: 100%;
+        block-size: 100%;
         z-index: 10;
     }
 
@@ -68,7 +68,7 @@ const StyledContentRibbon = styled.section`
     column-gap: 2rem;
     justify-items: center;
     align-items: center;
-    width: 100%;
+    inline-size: 100%;
     margin-block: auto;
     padding: 1.5rem clamp(1rem, 3vw, 3rem);
 
@@ -104,14 +104,14 @@ const StyledContentRibbon = styled.section`
  * ------------------------------------------------------------------------------- */
 const StyledStatusCode = styled.div`
   grid-area: status-code;
-  width: 100%;
+  inline-size: 100%;
   text-align: right;
 
   h1 {
     color: var(--clr-error);
     margin: 0;
     font-size: var(--font-size-3xl);
-    line-height: var(--line-height-tight);
+    line-block-size: var(--line-block-size-tight);
     font-weight: 700;
     opacity: 0.75;
   }
@@ -131,14 +131,14 @@ const StyledStatusCode = styled.div`
  * ------------------------------------------------------------------------------- */
 const StyledMessage = styled.div`
   grid-area: tagline;
-  width: 100%;
+  inline-size: 100%;
   text-align: right;
 
   h2 {
     margin: 0;
     margin-block-start: 0.75rem;
     font-size: var(--font-size-lg);
-    line-height: var(--line-height-normal);
+    line-block-size: var(--line-block-size-normal);
     font-weight: 400;
   }
 
@@ -159,8 +159,8 @@ const StyledMessage = styled.div`
 const StyledSearchWrapper = styled.div`
     grid-area: search;
 
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
 
     display: flex;
     justify-content: center;
@@ -185,8 +185,8 @@ const StyledSearchWrapper = styled.div`
  * ------------------------------------------------------------------------------- */
 const StyledLinksWrapper = styled.div`
     grid-area: common-links;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -215,7 +215,7 @@ const StyledSearchErrorForm = styled.form`
     grid-template-areas:
         "search-label search-label"
         "search-input search-button";
-    width: 100%;
+    inline-size: 100%;
     max-inline-size: 20rem;
     align-items: center;
 
@@ -230,7 +230,7 @@ const StyledSearchErrorForm = styled.form`
         margin: 0;
         margin-block-end: 0.5rem;
         font-size: var(--font-size-md);
-        line-height: var(--line-height-normal);
+        line-block-size: var(--line-block-size-normal);
         font-weight: 400;
 
         @media (orientation: portrait) {
@@ -241,7 +241,7 @@ const StyledSearchErrorForm = styled.form`
         
     input {
         grid-area: search-input;
-        width: 100%;
+        inline-size: 100%;
         padding: 0.5rem;
         font-size: var(--font-size-md);
         background-color: var(--_input-background-color);
@@ -259,7 +259,7 @@ const StyledSearchErrorForm = styled.form`
     button {
         grid-area: search-button;
         padding: 0.5rem 1rem;
-        height: 100%;
+        block-size: 100%;
         font-size: var(--font-size-md);
         font-weight: 500;
         background-color: var(--_input-background-color);
@@ -299,7 +299,7 @@ const StyledErrorPageLinks = styled.ul`
         margin: 0;
         margin-block-end: 0.5rem;
         font-size: var(--font-size-lg);
-        line-height: var(--line-height-normal);
+        line-block-size: var(--line-block-size-normal);
         font-weight: 400;
     }
 
@@ -309,7 +309,7 @@ const StyledErrorPageLinks = styled.ul`
         text-decoration: none;
         transition: color 0.3s ease;
         font-size: var(--font-size-sm);
-        line-height: var(--line-height-normal);
+        line-block-size: var(--line-block-size-normal);
 
         &:hover, &:focus {
             color: var(--clr-primary-dark);

@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@apollo/client": "^4.2.8",
+    "@tiptap/core": "^3.30.3",
+    "@tiptap/react": "^3.30.3",
+    "@tiptap/starter-kit": "^3.30.3",
     "graphql": "^17.0.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

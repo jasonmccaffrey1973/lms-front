@@ -42,8 +42,8 @@ const GlobalStyles = createGlobalStyle`
   --font-size-2xl: 2.5rem; 
   --font-size-3xl: 3.5rem; 
 
-  --line-height-tight: 1.15;
-  --line-height-normal: 1.5;
+  --line-block-size-tight: 1.15;
+  --line-block-size-normal: 1.5;
     
 }
 
@@ -60,7 +60,7 @@ label,
 button,
 input,
 a {
-  line-height: var(--line-height-normal);
+  line-block-size: var(--line-block-size-normal);
 }
 
 body {

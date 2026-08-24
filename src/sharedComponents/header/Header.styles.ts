@@ -17,7 +17,7 @@ const StyledHeader = styled.header`
     .logo-wrapper svg {
         display: block;
         min-block-size: 2.75rem;
-        width: auto;
+        inline-size: auto;
     }
 
     .user-avatar {

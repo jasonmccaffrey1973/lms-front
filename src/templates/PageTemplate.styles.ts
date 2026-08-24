@@ -19,7 +19,7 @@ const StyledPageTemplate = styled.div`
     .header-wrapper {
         grid-area: template-header;
         display: grid;
-        width: 100%;
+        inline-size: 100%;
         grid-template-columns: 1fr;
         grid-template-areas: 'template-header';
 
@@ -49,8 +49,8 @@ const StyledPageTemplate = styled.div`
                 .hamburger-menu {
                     --_offset: 0.5rem;
                     display: block;
-                    width: 100%;
-                    height: 2px;
+                    inline-size: 100%;
+                    block-size: 2px;
                     background-color: var(--_color);
                     position: relative;
                     border-radius: 2rem;
@@ -58,8 +58,8 @@ const StyledPageTemplate = styled.div`
                     &::after {
                         content: '';
                         display: block;
-                        width: 100%;
-                        height: 2px;
+                        inline-size: 100%;
+                        block-size: 2px;
                         background-color: var(--_color);
                         position: absolute;
                         border-radius: 2rem;
@@ -120,10 +120,10 @@ const StyledPageTemplate = styled.div`
 
             @media (max-width: ${mobileBreakpoint}) {
                 position: absolute;
-                height: 100%;
+                block-size: 100%;
                 transform: translateX(-100%);
                 transition: transform 0.3s ease-in-out;
-                z-index: 1000;
+                z-index: 100;
                 background: var(--color-background, white);
                 border-inline-end: 1px solid rgba(0, 0, 0, 0.1);
                 &[aria-hidden="false"] {
@@ -134,7 +134,10 @@ const StyledPageTemplate = styled.div`
 
         main {
             position: relative;
-            z-index: 1;
+            display: flex;
+            align-items: stretch;
+            flex: 1 1 auto;
+            inline-size: 100%;
             box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
         }
     }

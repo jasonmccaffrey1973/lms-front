@@ -19,7 +19,7 @@ const StyledMenuTrigger = styled.button`
 
 const StyledMenuWrapper = styled.div`
   position: relative;
-  width: fit-content;
+  inline-size: fit-content;
 `;
 
 const StyledMenu = styled.ul`
