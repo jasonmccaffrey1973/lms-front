@@ -13,7 +13,7 @@ const StyledNavigationList = styled.ul<NavigationStylesProps>`
     .nav-item {
 
         &:not(:last-child) {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--app-border);
         }
 
         a {
@@ -24,7 +24,7 @@ const StyledNavigationList = styled.ul<NavigationStylesProps>`
             display: block;
 
             &:hover {
-                background-color: ${props => props.hoverBgColor || "hsla(0 0% 0% / 0.10)"};
+                background-color: ${props => props.hoverBgColor || "var(--app-hover)"};
             }
         }
     }
@@ -45,10 +45,10 @@ const StyledCategoryTrigger = styled.button<NavigationStylesProps>`
     padding: 0.6125rem 1rem;
     min-inline-size: 15rem;
     cursor: pointer;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--app-border);
 
     &:hover {
-        background-color: ${props => props.hoverBgColor || "hsla(0 0% 0% / 0.10)"};
+        background-color: ${props => props.hoverBgColor || "var(--app-hover)"};
     }
 
     & > span:last-child {

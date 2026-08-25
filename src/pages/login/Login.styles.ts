@@ -2,13 +2,7 @@ import styled from "styled-components"
 
 export const StyledLogin = styled.div`
     --_column-width: 60ch;
-    --_background-color: hsl(0, 0%, 94%);
-
-    @media (prefers-color-scheme: dark) {
-        --_background-color: hsl(0, 0%, 10%);
-    }
-
-    color-scheme: dark light;
+    --_background-color: var(--app-surface-muted);
     inline-size: 100%;
     display: grid;
     grid-template-columns: minmax(0, var(--_column-width)) 1fr;
@@ -22,7 +16,7 @@ export const StyledLogin = styled.div`
         grid-template-rows: auto 1fr auto;
         grid-template-areas: "header" "main" "footer";
         background-color: var(--_background-color);
-        box-shadow: 0 0 0.5rem hsla(0, 0%, 0%, 0.25);
+        box-shadow: var(--app-shadow);
 
         header,
         footer {
@@ -108,10 +102,12 @@ export const StyledFormGroup = styled.div`
     }
 
     input {
+        color: var(--app-text);
+        background: var(--app-surface);
         font-size: 1rem;
         padding-inline: 0.75rem;
         padding-block: 1.25rem;
-        border: 1px solid hsla(0, 0%, 0%, 0.1);
+        border: 1px solid var(--app-border);
         border-radius: 0.5rem;
 
         &:focus-visible {

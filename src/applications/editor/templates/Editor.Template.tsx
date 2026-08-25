@@ -10,7 +10,7 @@ interface EditorTemplateProps {
 const EditorTemplate = ({ editor }: EditorTemplateProps) => {
   return (
     <StyledEditorTemplate>
-      <Ribbon />
+      <Ribbon editor={editor} />
       <div className="editor-shell" aria-label="Lesson editor body">
         {editor ? <EditorContent editor={editor} /> : null}
       </div>

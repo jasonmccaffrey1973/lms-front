@@ -42,7 +42,7 @@ const StyledBackdropImage = styled.div<StyledBackdropImageProps>`
         position: absolute;
         display: grid;
         inset: 0;
-        background: linear-gradient(to top, hsla(0, 0%, 100%, 0.20), hsla(0, 0%, 100%, 0.40));
+          background: linear-gradient(to top, hsla(0, 0%, 0%, 0.30), hsla(0, 0%, 0%, 0.12));
         inline-size: 100%;
         block-size: 100%;
         z-index: 10;
@@ -74,11 +74,14 @@ const StyledContentRibbon = styled.section`
 
     background: linear-gradient(
         to right,
-        hsla(0, 0%, 100%, 1.00),
-        hsla(0, 0%, 100%, 0.88)
+        var(--app-surface) 0%,
+        color-mix(in srgb, var(--app-surface) 99%, transparent) 42%,
+        color-mix(in srgb, var(--app-surface) 97%, transparent) 72%,
+        color-mix(in srgb, var(--app-surface) 95%, transparent) 100%
     );
+    color: var(--app-text);
 
-    box-shadow: 0 1rem 1rem hsla(0, 0%, 0%, 0.25);
+    box-shadow: var(--app-shadow);
 
     z-index: 20;
 
@@ -113,7 +116,7 @@ const StyledStatusCode = styled.div`
     font-size: var(--font-size-3xl);
     line-block-size: var(--line-block-size-tight);
     font-weight: 700;
-    opacity: 0.75;
+        opacity: 0.92;
   }
 
   @media (orientation: portrait) {
@@ -135,6 +138,7 @@ const StyledMessage = styled.div`
   text-align: right;
 
   h2 {
+        color: var(--app-text);
     margin: 0;
     margin-block-start: 0.75rem;
     font-size: var(--font-size-lg);
@@ -168,12 +172,12 @@ const StyledSearchWrapper = styled.div`
 
     
     @media (orientation: portrait) {
-        border-block: 1px solid hsla(0, 0%, 0%, 0.12);
+        border-block: 1px solid var(--app-border);
         padding-block: 1rem;
     }
     
     @media (orientation: landscape) {
-        border-inline: 1px solid hsla(0, 0%, 0%, 0.12);
+        border-inline: 1px solid var(--app-border);
         padding-inline: 1rem;
     }
 
@@ -190,6 +194,10 @@ const StyledLinksWrapper = styled.div`
     display: flex;
     flex-direction: column;
     text-align: left;
+    background: color-mix(in srgb, var(--app-surface) 96%, transparent);
+    border: 1px solid var(--app-border);
+    border-radius: 0.35rem;
+    padding: 0.5rem 0.75rem;
 
     @media (orientation: portrait) {
         text-align: center;
@@ -204,9 +212,9 @@ const StyledLinksWrapper = styled.div`
  * ------------------------------------------------------------------------------- */
 const StyledSearchErrorForm = styled.form`
 
-    --_input-border-color: hsla(0, 0%, 0%, 0.25);
-    --_input-border-color-focus: hsla(0, 0%, 0%, 0.75);
-    --_input-background-color: hsla(0, 0%, 100%, 0.75);
+    --_input-border-color: var(--app-border);
+    --_input-border-color-focus: color-mix(in srgb, var(--editor-tab-active-border) 75%, var(--app-text) 25%);
+    --_input-background-color: var(--app-surface);
 
     --_border-color: var(--_input-border-color);
 
@@ -226,12 +234,14 @@ const StyledSearchErrorForm = styled.form`
 
     label {
         grid-area: search-label;
+        color: var(--app-text);
         text-align: left;
         margin: 0;
         margin-block-end: 0.5rem;
         font-size: var(--font-size-md);
         line-block-size: var(--line-block-size-normal);
         font-weight: 400;
+        letter-spacing: 0.02em;
 
         @media (orientation: portrait) {
             text-align: center;
@@ -241,6 +251,7 @@ const StyledSearchErrorForm = styled.form`
         
     input {
         grid-area: search-input;
+        color: var(--app-text);
         inline-size: 100%;
         padding: 0.5rem;
         font-size: var(--font-size-md);
@@ -254,6 +265,16 @@ const StyledSearchErrorForm = styled.form`
             outline: none;
         }
 
+        &:focus-visible {
+            box-shadow: 0 0 0 2px var(--editor-focus-ring);
+            z-index: 1;
+            position: relative;
+        }
+
+        &::placeholder {
+            color: color-mix(in srgb, var(--app-text-muted) 85%, var(--app-text) 15%);
+        }
+
     }
     
     button {
@@ -263,17 +284,28 @@ const StyledSearchErrorForm = styled.form`
         font-size: var(--font-size-md);
         font-weight: 500;
         background-color: var(--_input-background-color);
+        color: var(--app-text);
         border-block: 1px solid var(--_border-color);
         border-inline-end: 1px solid var(--_border-color);
         border-inline-start: 1px solid transparent;
         border-radius: 0 0.25rem 0.25rem 0;
         transition: background-color 0.3s ease, color 0.3s ease, border-color 0.25s ease;
+        
+        svg {
+            fill: currentColor;
+        }
 
         &:focus, &:hover {
             outline: none;
-            background-color: var(--clr-primary);
+            background-color: var(--clr-primary-dark);
             color: hsla(0, 0%, 100%, 1.00);
-            fill: hsla(0, 0%, 100%, 1.00);
+            border-color: var(--clr-primary-dark);
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 2px var(--editor-focus-ring);
+            z-index: 1;
+            position: relative;
         }
     }
 
@@ -296,6 +328,7 @@ const StyledErrorPageLinks = styled.ul`
     margin: 0;
 
     h3 {
+        color: var(--app-text);
         margin: 0;
         margin-block-end: 0.5rem;
         font-size: var(--font-size-lg);
@@ -305,15 +338,21 @@ const StyledErrorPageLinks = styled.ul`
 
     a {
         display: inline-block;
-        color: var(--clr-primary);
+        color: var(--app-link);
         text-decoration: none;
         transition: color 0.3s ease;
         font-size: var(--font-size-sm);
         line-block-size: var(--line-block-size-normal);
 
         &:hover, &:focus {
-            color: var(--clr-primary-dark);
+            color: var(--app-link-hover);
             text-decoration: underline;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--editor-focus-ring);
+            outline-offset: 2px;
+            border-radius: 0.2rem;
         }
     }
 `;

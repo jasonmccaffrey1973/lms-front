@@ -12,6 +12,11 @@
   "dependencies": {
     "@apollo/client": "^4.2.8",
     "@tiptap/core": "^3.30.3",
+    "@tiptap/extension-highlight": "^3.30.3",
+    "@tiptap/extension-link": "^3.30.3",
+    "@tiptap/extension-text-align": "^3.30.3",
+    "@tiptap/extension-text-style": "^3.30.3",
+    "@tiptap/extension-underline": "^3.30.3",
     "@tiptap/react": "^3.30.3",
     "@tiptap/starter-kit": "^3.30.3",
     "graphql": "^17.0.2",

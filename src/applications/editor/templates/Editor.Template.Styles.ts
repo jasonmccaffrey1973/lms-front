@@ -9,20 +9,20 @@ const StyledEditorTemplate = styled.div`
   inline-size: 100%;
   block-size: 100%;
   flex: 1 1 auto;
-  gap: 1rem;
-  background: #fff;
-  border: 1px solid #dfe3e8;
+  gap: 0.5rem;
+  background: var(--editor-surface);
+  border: 1px solid var(--editor-border-strong);
   border-radius: 0.75rem;
 
   .editor-shell {
     grid-area: template-editor-shell;
     display: flex;
     inline-size: 100%;
-    border: 1px solid #dfe3e8;
+    border: 1px solid var(--editor-border-strong);
     border-radius: 0.5rem;
-    background: #fff;
+    background: var(--editor-surface);
     overflow: hidden;
-    padding: 1rem;
+    padding: 0.75rem;
   }
 
   .editor-shell > div {
@@ -34,10 +34,12 @@ const StyledEditorTemplate = styled.div`
   .ProseMirror {
     inline-size: 100%;
     block-size: 100%;
-    padding: 1rem;
+    padding: 0.75rem;
     outline: none;
     font-size: 1rem;
     line-height: 1.6;
+    color: var(--editor-text);
+    background: var(--editor-surface);
   }
 
   .ProseMirror p {
@@ -45,7 +47,7 @@ const StyledEditorTemplate = styled.div`
   }
 
   .ProseMirror:focus {
-    box-shadow: inset 0 0 0 1px #b7c8ff;
+    box-shadow: inset 0 0 0 1px var(--editor-focus-ring);
   }
 `;
 

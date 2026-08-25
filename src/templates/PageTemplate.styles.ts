@@ -33,7 +33,7 @@ const StyledPageTemplate = styled.div`
             grid-template-areas: 'template-sidebar-menu template-header';
             
             .sidebar-menu {
-                --_color: black;
+                --_color: var(--app-text);
                 grid-area: template-sidebar-menu;
                 display: flex;
                 flex-direction: column;
@@ -76,7 +76,7 @@ const StyledPageTemplate = styled.div`
     
                 &:hover,
                 &:focus-visible {
-                    --_color: hsl(0, 0%, 50%);
+                    --_color: var(--app-text-muted);
                 }
     
                 &[aria-expanded="true"] {
@@ -124,8 +124,8 @@ const StyledPageTemplate = styled.div`
                 transform: translateX(-100%);
                 transition: transform 0.3s ease-in-out;
                 z-index: 100;
-                background: var(--color-background, white);
-                border-inline-end: 1px solid rgba(0, 0, 0, 0.1);
+                background: var(--app-surface);
+                border-inline-end: 1px solid var(--app-border);
                 &[aria-hidden="false"] {
                     transform: translateX(0);
                 }
@@ -138,7 +138,7 @@ const StyledPageTemplate = styled.div`
             align-items: stretch;
             flex: 1 1 auto;
             inline-size: 100%;
-            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+            box-shadow: inset 0 0 0 1px var(--app-border);
         }
     }
 

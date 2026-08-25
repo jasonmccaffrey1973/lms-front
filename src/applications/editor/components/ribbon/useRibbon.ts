@@ -1,25 +1,32 @@
+import type { Editor } from "@tiptap/core";
 import { useState } from "react";
-import { EDITOR_TABS } from "../../../../constants";
+import { EDITOR_TABS, type EditorTab } from "../../../../constants";
+import { executeRibbonAction, isRibbonItemActive } from "./RibbonActions";
+import type { RibbonMenuItem } from "./RibbonTypes";
 
-type EditorTab = (typeof EDITOR_TABS)[keyof typeof EDITOR_TABS]["value"];
+const DEFAULT_TAB = Object.values(EDITOR_TABS)[0]?.value as EditorTab;
 
-const defaultTab = Object.values(EDITOR_TABS)[0]?.value as EditorTab;
-
-const useRibbon = () => {
-  const [activeTab, setActiveTab] = useState<EditorTab>(defaultTab);
+const useRibbon = (editor: Editor | null) => {
+  const [activeTab, setActiveTab] = useState<EditorTab>(DEFAULT_TAB);
 
   const handleRibbonTabChange = (tab: EditorTab) => {
     setActiveTab(tab);
   };
 
-  const handleRibbonItemClick = (itemLabel: string) => {
-    console.log(`Ribbon item clicked: ${itemLabel}`);
+  const handleRibbonItemClick = (item: RibbonMenuItem) => {
+    if (!editor) {
+      return;
+    }
+
+    executeRibbonAction(editor, item);
   };
 
   return {
     activeTab,
     handleRibbonTabChange,
     handleRibbonItemClick,
+    isItemActive: (item: RibbonMenuItem) =>
+      isRibbonItemActive(editor, item),
   };
 };
 

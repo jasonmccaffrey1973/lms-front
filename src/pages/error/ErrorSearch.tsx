@@ -15,7 +15,7 @@ const ErrorSearch = () => {
                     <option key={link.href} value={link.href}>{link.label}</option>
                 ))}
             </datalist>
-            <SearchButton disabled={serchSubmitted} />
+            <SearchButton disabled={serchSubmitted} color="" />
         </StyledSearchErrorForm>
     )
 }

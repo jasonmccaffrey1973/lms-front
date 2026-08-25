@@ -1,5 +1,5 @@
 import { useAuth } from "../auth";
-import ProfileSVG from "./buttons/SVG/profileSVG";
+import ProfileSVG from "./buttons/SVG/ProfileSVG";
 import Render from "./Render";
 
 const UserAvatar = () => {

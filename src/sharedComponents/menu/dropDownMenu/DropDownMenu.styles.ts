@@ -29,11 +29,11 @@ const StyledMenu = styled.ul`
   position: absolute;
   right: 0;
   top: calc(100% + 0.25rem);
-  background-color: var(--clr-background);
-  border: 1px solid var(--clr-border, hsla(0, 0%, 0%, 0.12));
+  background-color: var(--app-surface);
+  border: 1px solid var(--app-border);
   z-index: 1000;
   min-inline-size: 15rem;
-  box-shadow: 0.25rem 0.25rem 0.33rem rgba(0, 0, 0, 0.15);
+  box-shadow: var(--app-shadow);
   transform-origin: top center;
   transform: scaleY(0);
   opacity: 0;
@@ -52,7 +52,7 @@ const StyledMenu = styled.ul`
 const StyledMenuItem = styled.a`
   display: block;
   padding: 0.33rem 0.5rem;
-  color: var(--clr-text);
+  color: var(--app-text);
   text-decoration: none;
   cursor: pointer;
 

@@ -1,5 +1,5 @@
 import { useAuth } from "../../../auth";
-import ProfileSVG from "../../buttons/SVG/profileSVG";
+import ProfileSVG from "../../buttons/SVG/ProfileSVG";
 import UserAvatar from "../../UserAvatar";
 import DropDownMenu from "../dropDownMenu/DropDownMenu";
 import useProfileMenu from "./useProfileMenu";

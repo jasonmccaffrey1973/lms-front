@@ -44,7 +44,121 @@ const GlobalStyles = createGlobalStyle`
 
   --line-block-size-tight: 1.15;
   --line-block-size-normal: 1.5;
+
+        /* APP SURFACE TOKENS (LIGHT DEFAULT) */
+        --app-bg: hsl(0, 0%, 98%);
+        --app-surface: #ffffff;
+        --app-surface-muted: hsl(0, 0%, 94%);
+        --app-border: rgba(0, 0, 0, 0.1);
+        --app-text: hsl(0, 0%, 16%);
+        --app-text-muted: rgba(0, 0, 0, 0.65);
+        --app-hover: hsla(0, 0%, 0%, 0.08);
+        --app-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.12);
+            --app-link: hsl(212, 100%, 32%);
+            --app-link-hover: hsl(212, 100%, 26%);
+
+    /* EDITOR THEME TOKENS (LIGHT DEFAULT) */
+    --editor-surface: #ffffff;
+    --editor-surface-muted: hsl(0, 0%, 94%);
+    --editor-surface-subtle: rgba(255, 255, 255, 0.2);
+    --editor-border: rgba(0, 0, 0, 0.1);
+    --editor-border-strong: #dfe3e8;
+    --editor-text: hsl(0, 0%, 16%);
+    --editor-text-muted: rgba(0, 0, 0, 0.62);
+    --editor-tab-hover: hsl(216, 26%, 93%);
+    --editor-tab-active: hsl(215, 16%, 85%);
+    --editor-tab-active-border: #2f6feb;
+    --editor-item-hover: #e0e0e0;
+    --editor-item-active-bg: rgba(47, 111, 235, 0.12);
+    --editor-item-active-border: rgba(47, 111, 235, 0.35);
+    --editor-focus-ring: #b7c8ff;
     
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --app-bg: hsl(216, 20%, 10%);
+        --app-surface: hsl(216, 20%, 14%);
+        --app-surface-muted: hsl(216, 16%, 19%);
+        --app-border: rgba(255, 255, 255, 0.14);
+        --app-text: hsl(220, 14%, 93%);
+        --app-text-muted: rgba(255, 255, 255, 0.72);
+        --app-hover: hsla(0, 0%, 100%, 0.08);
+        --app-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.4);
+            --app-link: hsl(214, 100%, 78%);
+            --app-link-hover: hsl(206, 100%, 84%);
+
+        --editor-surface: hsl(216, 20%, 14%);
+        --editor-surface-muted: hsl(216, 16%, 19%);
+        --editor-surface-subtle: rgba(255, 255, 255, 0.05);
+        --editor-border: rgba(255, 255, 255, 0.14);
+        --editor-border-strong: rgba(255, 255, 255, 0.2);
+        --editor-text: hsl(220, 14%, 93%);
+        --editor-text-muted: rgba(255, 255, 255, 0.72);
+        --editor-tab-hover: hsl(215, 16%, 24%);
+        --editor-tab-active: hsl(215, 14%, 28%);
+        --editor-tab-active-border: hsl(218, 95%, 70%);
+        --editor-item-hover: hsl(216, 13%, 26%);
+        --editor-item-active-bg: rgba(122, 162, 255, 0.2);
+        --editor-item-active-border: rgba(122, 162, 255, 0.45);
+        --editor-focus-ring: rgba(122, 162, 255, 0.75);
+    }
+}
+
+:root[data-theme='light'] {
+    --app-bg: hsl(0, 0%, 98%);
+    --app-surface: #ffffff;
+    --app-surface-muted: hsl(0, 0%, 94%);
+    --app-border: rgba(0, 0, 0, 0.1);
+    --app-text: hsl(0, 0%, 16%);
+    --app-text-muted: rgba(0, 0, 0, 0.65);
+    --app-hover: hsla(0, 0%, 0%, 0.08);
+    --app-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.12);
+        --app-link: hsl(212, 100%, 32%);
+        --app-link-hover: hsl(212, 100%, 26%);
+
+    --editor-surface: #ffffff;
+    --editor-surface-muted: hsl(0, 0%, 94%);
+    --editor-surface-subtle: rgba(255, 255, 255, 0.2);
+    --editor-border: rgba(0, 0, 0, 0.1);
+    --editor-border-strong: #dfe3e8;
+    --editor-text: hsl(0, 0%, 16%);
+    --editor-text-muted: rgba(0, 0, 0, 0.62);
+    --editor-tab-hover: hsl(216, 26%, 93%);
+    --editor-tab-active: hsl(215, 16%, 85%);
+    --editor-tab-active-border: #2f6feb;
+    --editor-item-hover: #e0e0e0;
+    --editor-item-active-bg: rgba(47, 111, 235, 0.12);
+    --editor-item-active-border: rgba(47, 111, 235, 0.35);
+    --editor-focus-ring: #b7c8ff;
+}
+
+:root[data-theme='dark'] {
+    --app-bg: hsl(216, 20%, 10%);
+    --app-surface: hsl(216, 20%, 14%);
+    --app-surface-muted: hsl(216, 16%, 19%);
+    --app-border: rgba(255, 255, 255, 0.14);
+    --app-text: hsl(220, 14%, 93%);
+    --app-text-muted: rgba(255, 255, 255, 0.72);
+    --app-hover: hsla(0, 0%, 100%, 0.08);
+    --app-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.4);
+        --app-link: hsl(214, 100%, 78%);
+        --app-link-hover: hsl(206, 100%, 84%);
+
+    --editor-surface: hsl(216, 20%, 14%);
+    --editor-surface-muted: hsl(216, 16%, 19%);
+    --editor-surface-subtle: rgba(255, 255, 255, 0.05);
+    --editor-border: rgba(255, 255, 255, 0.14);
+    --editor-border-strong: rgba(255, 255, 255, 0.2);
+    --editor-text: hsl(220, 14%, 93%);
+    --editor-text-muted: rgba(255, 255, 255, 0.72);
+    --editor-tab-hover: hsl(215, 16%, 24%);
+    --editor-tab-active: hsl(215, 14%, 28%);
+    --editor-tab-active-border: hsl(218, 95%, 70%);
+    --editor-item-hover: hsl(216, 13%, 26%);
+    --editor-item-active-bg: rgba(122, 162, 255, 0.2);
+    --editor-item-active-border: rgba(122, 162, 255, 0.45);
+    --editor-focus-ring: rgba(122, 162, 255, 0.75);
 }
 
 *, *::before, *::after {
@@ -66,6 +180,8 @@ a {
 body {
     margin: 0;
     padding: 0;
+    background: var(--app-bg);
+    color: var(--app-text);
 }
 
 .btn {

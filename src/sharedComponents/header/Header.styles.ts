@@ -6,6 +6,7 @@ const StyledHeader = styled.header`
     align-items: center;
     padding-block: 0.75rem;
     margin-inline: 1.5rem;
+    color: var(--app-text);
 
     .logo-wrapper {
         display: flex;
@@ -18,6 +19,37 @@ const StyledHeader = styled.header`
         display: block;
         min-block-size: 2.75rem;
         inline-size: auto;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .theme-select-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--app-text-muted);
+    }
+
+    .theme-select-wrapper select {
+        font-size: 0.8rem;
+        border: 1px solid var(--app-border);
+        border-radius: 0.35rem;
+        background: var(--app-surface);
+        color: var(--app-text);
+        padding: 0.3rem 0.45rem;
+    }
+
+    .theme-select-wrapper select:focus-visible {
+        outline: 2px solid var(--editor-focus-ring);
+        outline-offset: 1px;
     }
 
     .user-avatar {

@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './routes.tsx'
 import GlobalStyles from './assets/globalStyles.ts'
 import { ApolloProvider, AuthProvider, UserLinksProvider } from './auth'
+import { ThemeProvider } from './theme'
 
 const getRootNode = () => document.createElement('div')
 
@@ -16,15 +17,17 @@ appendtoBody(rootNode)
 
 createRoot(rootNode).render(
   <StrictMode>
-    <ApolloProvider>
-      <AuthProvider>
-        <UserLinksProvider>
-          <BrowserRouter>
-            <GlobalStyles />
-            <AppRoutes />
-          </BrowserRouter>
-        </UserLinksProvider>
-      </AuthProvider>
-    </ApolloProvider>
+    <ThemeProvider>
+      <ApolloProvider>
+        <AuthProvider>
+          <UserLinksProvider>
+            <BrowserRouter>
+              <GlobalStyles />
+              <AppRoutes />
+            </BrowserRouter>
+          </UserLinksProvider>
+        </AuthProvider>
+      </ApolloProvider>
+    </ThemeProvider>
   </StrictMode>,
 )
