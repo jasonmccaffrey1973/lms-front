@@ -64,4 +64,3 @@ const SVGIcon = ({ icon }: SVGIconProps) => {
 export type SVGIconName = keyof typeof PATHS;
 
 export default SVGIcon;
-export { type SVGIconProps };
