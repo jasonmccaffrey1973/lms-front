@@ -239,7 +239,7 @@ const StyledSearchErrorForm = styled.form`
         margin: 0;
         margin-block-end: 0.5rem;
         font-size: var(--font-size-md);
-        line-block-size: var(--line-block-size-normal);
+        line-height: var(--line-block-size-normal);
         font-weight: 400;
         letter-spacing: 0.02em;
 
@@ -258,15 +258,11 @@ const StyledSearchErrorForm = styled.form`
         background-color: var(--_input-background-color);
         border-block: 1px solid var(--_border-color);
         border-inline-start: 1px solid var(--_border-color);
-        border-inline-end: 1px solid transparent;
+        border-inline-end: 0px solid transparent;
         border-radius: 0.25rem 0 0 0.25rem;
+        outline: none;
 
-        &:focus {
-            outline: none;
-        }
-
-        &:focus-visible {
-            box-shadow: 0 0 0 2px var(--editor-focus-ring);
+        &:focus, &:focus-within, &:hover {
             z-index: 1;
             position: relative;
         }
@@ -287,23 +283,19 @@ const StyledSearchErrorForm = styled.form`
         color: var(--app-text);
         border-block: 1px solid var(--_border-color);
         border-inline-end: 1px solid var(--_border-color);
-        border-inline-start: 1px solid transparent;
+        border-inline-start: 0px solid transparent;
         border-radius: 0 0.25rem 0.25rem 0;
         transition: background-color 0.3s ease, color 0.3s ease, border-color 0.25s ease;
+        outline: none;
         
         svg {
             fill: currentColor;
         }
 
-        &:focus, &:hover {
-            outline: none;
+        &:focus, &:hover, &:focus-within {
             background-color: var(--clr-primary-dark);
             color: hsla(0, 0%, 100%, 1.00);
             border-color: var(--clr-primary-dark);
-        }
-
-        &:focus-visible {
-            box-shadow: 0 0 0 2px var(--editor-focus-ring);
             z-index: 1;
             position: relative;
         }

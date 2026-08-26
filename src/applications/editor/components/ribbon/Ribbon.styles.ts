@@ -145,6 +145,8 @@ const StyledEditorRibbonItem = styled.li<{ $isActive?: boolean }>`
         align-items: center;
         justify-content: center;
         gap: 0.2rem;
+        block-size: fit-content;
+        min-block-size: 2rem;
     }
 
     svg {
@@ -155,8 +157,7 @@ const StyledEditorRibbonItem = styled.li<{ $isActive?: boolean }>`
         fill: currentColor;
         opacity: 0.7;
         transition: opacity 0.15s ease;
-        block-size: 1.8rem;
-        inline-size: 1.8rem;
+        height: 2rem;
     }
 
     .ribbon-item-label {

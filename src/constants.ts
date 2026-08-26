@@ -1,9 +1,10 @@
+import type { EditorTab } from "./constants/types";
+
 /** ====================================================================================
  * Application constants for status codes and editor menu items.
  *  ==================================================================================== */
 
-type EditorTab =
-  (typeof EDITOR_TABS)[keyof typeof EDITOR_TABS]["value"];
+// Extracted to types.ts
 
 /** ------------------------------------------------------------------------------------
  * Status codes and their corresponding information.
@@ -41,13 +42,40 @@ const STATUS_CODES = {
  * Each group contains related ribbon items.
  * ------------------------------------------------------------------------------------ */
 const GROUP_ORDER = [
-  { key: "document", label: "Document" },
-  { key: "clipboard", label: "Clipboard" },
-  { key: "text", label: "Text" },
-  { key: "structure", label: "Structure" },
-  { key: "insert", label: "Insert" },
-  { key: "other", label: "More" },
+    { key: "document", label: "Document" },
+    { key: "clipboard", label: "Clipboard" },
+    { key: "text", label: "Text" },
+    { key: "structure", label: "Structure" },
+    { key: "insert", label: "Insert" },
+    { key: "layout", label: "Page Layout" },
+    { key: "review", label: "Review" },
+    { key: "view", label: "View" },
+    { key: "help", label: "Help" },
+    { key: "other", label: "More" },
 ] as const;
+
+/** ------------------------------------------------------------------------------------
+ * Defines the available typeface options for the editor.
+ * ------------------------------------------------------------------------------------ */
+const TYPEFACE_OPTIONS = [
+    { label: "Arial", value: "Arial" },
+    { label: "Times New Roman", value: "Times New Roman" },
+    { label: "Verdana", value: "Verdana" },
+];
+
+/** ------------------------------------------------------------------------------------
+ * Defines the available type sizes for the editor.
+ *  ------------------------------------------------------------------------------------ */
+const TYPE_SIZES = [
+    { label: "12px", value: "12px" },
+    { label: "14px", value: "14px" },
+    { label: "16px", value: "16px" },
+    { label: "18px", value: "18px" },
+    { label: "24px", value: "24px" },
+    { label: "32px", value: "32px" },
+    { label: "48px", value: "48px" },
+    { label: "64px", value: "64px" },
+];
 
 /** ------------------------------------------------------------------------------------
  * constants used for editor application ribbon items
@@ -58,124 +86,118 @@ const FILE_MENU_ITEMS = [
         value: "new",
         action: "newDocument",
         group: "document",
+        icon: "document",
     },
     {
         label: "Open",
         value: "open",
         action: "openDocument",
         group: "document",
+        icon: "open",
     },
     {
         label: "Save",
         value: "save",
         action: "saveDocument",
         group: "document",
+        icon: "save",
     },
     {
         label: "Save As",
         value: "save_as",
         action: "saveDocumentAs",
         group: "document",
+        icon: "saveas",
     },
 ];
 
+
+
 const HOME_MENU_ITEMS = [
     {
-        icon: "UndoSVG",
+        icon: "undo",
         label: "Undo",
         value: "undo",
         action: "undo",
         group: "clipboard",
     },
     {
-        icon: "RedoSVG",
+        icon: "redo",
         label: "Redo",
         value: "redo",
         action: "redo",
         group: "clipboard",
     },
     {
-        icon: "CopySVG",
+        icon: "copy",
         label: "Copy",
         value: "copy",
         action: "copy",
         group: "clipboard",
     },
     {
-        icon: "PasteSVG",
+        icon: "paste",
         label: "Paste",
         value: "paste",
         action: "paste",
         group: "clipboard",
     },
     {
-        icon: "BoldSVG",
+        icon: "bold",
         label: "Bold",
         value: "bold",
         action: "toggleBold",
         group: "text",
     },
     {
-        icon: "ItalicSVG",
+        icon: "italic",
         label: "Italic",
         value: "italic",
         action: "toggleItalic",
         group: "text",
     },
     {
-        icon: "UnderlineSVG",
+        icon: "underline",
         label: "Underline",
         value: "underline",
         action: "toggleUnderline",
         group: "text",
     },
     {
-        icon: "TextColorSVG",
+        icon: "textcolor",
         label: "Text Color",
         value: "text_color",
         action: "setTextColor",
         group: "text",
     },
     {
-        icon: "HighlightSVG",
+        icon: "strikethrough",
+        label: "Strike",
+        value: "strike",
+        action: "toggleStrike",
+        group: "text",
+    },
+    {
+        icon: "highlight",
         label: "Highlight",
         value: "highlight",
         action: "toggleHighlight",
         group: "text",
     },
     {
-        label: "Arial",
-        value: "font_arial",
+        label: "Typeface",
+        value: "typeface_select",
         action: "setFontFamily",
-        fontFamily: "Arial",
+        elementType: "select",
+        options: TYPEFACE_OPTIONS,
         group: "text",
     },
     {
-        label: "Georgia",
-        value: "font_georgia",
-        action: "setFontFamily",
-        fontFamily: "Georgia",
-        group: "text",
-    },
-    {
-        label: "14px",
-        value: "size_14",
+        label: "Size",
+        value: "type_size",
         action: "setFontSize",
-        fontSize: "14px",
-        group: "text",
-    },
-    {
-        label: "18px",
-        value: "size_18",
-        action: "setFontSize",
-        fontSize: "18px",
-        group: "text",
-    },
-    {
-        label: "24px",
-        value: "size_24",
-        action: "setFontSize",
-        fontSize: "24px",
+        elementType: "select",
+        options: TYPE_SIZES,
         group: "text",
     },
     {
@@ -197,79 +219,85 @@ const HOME_MENU_ITEMS = [
         value: "paragraph",
         action: "setParagraph",
         group: "structure",
+        icon: "paragraph",
     },
     {
         label: "Align Left",
         value: "align_left",
         action: "setTextAlignLeft",
         group: "structure",
+        icon: "alignleft",
     },
     {
         label: "Align Center",
         value: "align_center",
         action: "setTextAlignCenter",
         group: "structure",
+        icon: "aligncenter",
     },
     {
         label: "Align Right",
         value: "align_right",
         action: "setTextAlignRight",
         group: "structure",
+        icon: "alignright",
     },
     {
         label: "Link",
         value: "link",
         action: "toggleLink",
         group: "structure",
+        icon: "link",
     },
     {
         label: "Unlink",
         value: "unlink",
         action: "unsetLink",
         group: "structure",
+        icon: "unlink",
     },
     {
         label: "Bullets",
         value: "bullets",
         action: "toggleBulletList",
         group: "structure",
+        icon: "bulletedlist",
     },
     {
         label: "Numbered",
         value: "numbered",
         action: "toggleOrderedList",
         group: "structure",
+        icon: "numberedlist",
     },
     {
         label: "Quote",
         value: "quote",
         action: "toggleBlockquote",
         group: "structure",
+        icon: "quote",
     },
     {
         label: "Code",
         value: "code",
         action: "toggleCodeBlock",
         group: "structure",
-    },
-    {
-        icon: "StrikeThroughSVG",
-        label: "Strike",
-        value: "strike",
-        action: "toggleStrike",
-        group: "text",
+        icon: "code",
     },
     {
         label: "Divider",
         value: "divider",
         action: "setHorizontalRule",
         group: "insert",
+        icon: "divider",
+
     },
     {
         label: "Clear",
         value: "clear",
         action: "clearFormatting",
         group: "other",
+        icon: "clearformatting",
     },
 ];
 
@@ -279,24 +307,29 @@ const INSERT_MENU_ITEMS = [
         value: "divider",
         action: "setHorizontalRule",
         group: "insert",
+        icon: "divider",
     },
     {
         label: "Break",
         value: "break",
         action: "setHardBreak",
         group: "insert",
+        icon: "break",
+
     },
     {
         label: "Image",
         value: "image",
         action: "insertImage",
         group: "insert",
+        icon: "image",
     },
     {
         label: "Table",
         value: "table",
         action: "insertTable",
         group: "insert",
+        icon: "table",
     },
 ];
 
@@ -304,10 +337,16 @@ const LAYOUT_MENU_ITEMS = [
     {
         label: "Margins",
         value: "margins",
+        action: "setMargins",
+        group: "layout",
+        icon: "margins",
     },
     {
         label: "Orientation",
         value: "orientation",
+        action: "setOrientation",
+        group: "layout",
+        icon: "orientation",
     },
 ];
 
@@ -315,10 +354,16 @@ const REVIEW_MENU_ITEMS = [
     {
         label: "Spelling & Grammar",
         value: "spelling_grammar",
+        action: "checkSpellingGrammar",
+        group: "review",
+        icon: "spellcheck",
     },
     {
         label: "Track Changes",
         value: "track_changes",
+        action: "toggleTrackChanges",
+        group: "review",
+        icon: "changes",
     },
 ];
 
@@ -326,21 +371,33 @@ const VIEW_MENU_ITEMS = [
     {
         label: "Zoom",
         value: "zoom",
+        action: "setZoom",
+        group: "view",
+        icon: "zoom",
     },
     {
         label: "Full Screen",
         value: "full_screen",
+        action: "toggleFullScreen",
+        group: "view",
+        icon: "fullscreen",
     },
 ];
 
 const HELP_MENU_ITEMS = [
     {
-        label: "Documentation",
-        value: "documentation",
+        label: "Help",
+        value: "help",
+        action: "openHelp",
+        group: "help",
+        icon: "help",
     },
     {
         label: "About",
         value: "about",
+        action: "openAbout",
+        group: "help",
+        icon: "about",
     },
 ];
 

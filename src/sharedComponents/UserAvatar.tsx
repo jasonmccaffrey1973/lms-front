@@ -1,5 +1,6 @@
 import { useAuth } from "../auth";
-import ProfileSVG from "./buttons/SVG/ProfileSVG";
+
+import SVGIcon from "./buttons/SVG/SVGIcon";
 import Render from "./Render";
 
 const UserAvatar = () => {
@@ -22,7 +23,7 @@ const UserAvatar = () => {
                 {firstInitial}{separator}{lastInitial}
             </Render>
             <Render if={!hasAvatar && !hasInitials}>
-                <ProfileSVG />
+                <SVGIcon icon="profile" />
             </Render>
         </div>
     );

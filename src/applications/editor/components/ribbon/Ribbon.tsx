@@ -5,13 +5,15 @@ import EditorRibbonTab from "./components/EditorRibbonTab";
 import RibbonItem from "./components/RibbonItem";
 import TabItemsWrapper from "./components/TabItemsWrapper";
 import useRibbon from "./useRibbon";
+import type { RibbonMenuItem } from "./RibbonTypes";
+import type { SVGIconName } from "../../../../sharedComponents/buttons/SVG/SVGIcon";
 
 interface RibbonProps {
   editor: Editor | null;
 }
 
 interface VisibleItemProps {
-  icon?: string;
+  icon: SVGIconName;
   label: string;
   value: string;
   action?: string;
@@ -52,8 +54,8 @@ const Ribbon = ({ editor }: RibbonProps) => {
                     key={`${visibleTab.value}-${group.key}-${item.value}-${index}`}
                     icon={item.icon}
                     label={item.label}
-                    onClick={() => handleRibbonItemClick(item)}
-                    isActive={isItemActive(item)}
+                    onClick={() => handleRibbonItemClick(item as RibbonMenuItem)}
+                    isActive={isItemActive(item as RibbonMenuItem)}
                   />
                 ))}
               </StyledEditorRibbonGroupItems>
