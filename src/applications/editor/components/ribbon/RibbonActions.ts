@@ -1,5 +1,6 @@
 import type { Editor } from "@tiptap/core";
-import type { RibbonMenuItem, RibbonAction } from "./RibbonTypes";
+import type { RibbonMenuItem, RibbonAction, RibbonActionHandlers } from "./RibbonTypes";
+
 
 /**
  * Determines whether a ribbon item is currently active in the editor.
@@ -69,6 +70,7 @@ const isRibbonItemActive = (
 const executeRibbonAction = (
   editor: Editor,
   item: RibbonMenuItem,
+  handlers: RibbonActionHandlers,
 ): void => {
   const chain = editor.chain().focus();
 
@@ -78,19 +80,19 @@ const executeRibbonAction = (
     // -------------------------------------------------------------------------
 
     case "newDocument":
-      console.log("New document action");
+      handlers.newDocument();
       break;
 
     case "openDocument":
-      console.log("Open document action");
+      handlers.openDocument();
       break;
 
     case "saveDocument":
-      console.log("Save document action");
+      handlers.saveDocument();
       break;
 
     case "saveDocumentAs":
-      console.log("Save document as action");
+      handlers.saveDocumentAs();
       break;
 
     // -------------------------------------------------------------------------

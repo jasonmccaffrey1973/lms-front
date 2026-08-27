@@ -1,26 +1,39 @@
-import SVGIcon, { type SVGIconName } from "../../../../../sharedComponents/buttons/SVG/SVGIcon";
-import Render from "../../../../../sharedComponents/Render";
+import type { SVGIconName } from "../../../../../sharedComponents/buttons/SVG/SVGIcon";
 import { StyledEditorRibbonItem } from "../Ribbon.styles";
+import SVGIcon from "../../../../../sharedComponents/buttons/SVG/SVGIcon";
 
 interface RibbonItemProps {
-  icon: SVGIconName;
+  icon?: SVGIconName;
   label: string;
   onClick: () => void;
   isActive?: boolean;
 }
 
-const RibbonItem = ({ icon, label, onClick, isActive = false }: RibbonItemProps) => {
-
+const RibbonItem = ({
+  icon,
+  label,
+  onClick,
+  isActive = false,
+}: RibbonItemProps) => {
   return (
-    <StyledEditorRibbonItem $isActive={isActive} onClick={onClick} role="button" tabIndex={0} aria-label={label} aria-pressed={isActive}>
+    <StyledEditorRibbonItem
+      $isActive={isActive}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      aria-label={label}
+      aria-pressed={isActive}
+    >
       <div className="item-wrapper">
-        <Render if={!!icon}>
+        {icon ? (
           <SVGIcon icon={icon} />
-        </Render>
-        <Render if={!icon}>
+        ) : (
           <span className="ribbon-item-placeholder" />
-        </Render>
-        <span className="ribbon-item-label">{label}</span>
+        )}
+
+        <span className="ribbon-item-label">
+          {label}
+        </span>
       </div>
     </StyledEditorRibbonItem>
   );
