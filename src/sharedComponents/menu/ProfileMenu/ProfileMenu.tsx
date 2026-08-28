@@ -1,5 +1,5 @@
 import { useAuth } from "../../../auth";
-import SVGIcon from "../../buttons/SVG/SVGIcon";
+import SVGIcon from "../../SVG/SVGIcon";
 import UserAvatar from "../../UserAvatar";
 import DropDownMenu from "../dropDownMenu/DropDownMenu";
 import useProfileMenu from "./useProfileMenu";

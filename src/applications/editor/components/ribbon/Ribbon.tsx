@@ -6,7 +6,7 @@ import {
 } from "../../../../constants";
 
 import type { FileDialogType } from "../fileDialog/fileDialog.types";
-import type { SVGIconName } from "../../../../sharedComponents/buttons/SVG/SVGIcon";
+import type { SVGIconName } from "../../../../sharedComponents/SVG/SVGIcon";
 
 import {
   StyledEditorRibbon,

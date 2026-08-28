@@ -1,5 +1,5 @@
 import type { Level } from "@tiptap/extension-heading";
-import type { SVGIconName } from "../../../../sharedComponents/buttons/SVG/SVGIcon";
+import type { SVGIconName } from "../../../../sharedComponents/SVG/SVGIcon";
 
 type RibbonGroup =
   | "document"

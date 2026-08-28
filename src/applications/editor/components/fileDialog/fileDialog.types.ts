@@ -7,6 +7,7 @@ export type FileDialogType =
 export interface FileDialogProps {
   type: FileDialogType;
   open: boolean;
+  popover?: boolean;
   onClose: () => void;
 }
 

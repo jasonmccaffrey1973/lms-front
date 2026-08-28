@@ -1,6 +1,6 @@
 import { useAuth } from "../auth";
 
-import SVGIcon from "./buttons/SVG/SVGIcon";
+import SVGIcon from "./SVG/SVGIcon";
 import Render from "./Render";
 
 const UserAvatar = () => {

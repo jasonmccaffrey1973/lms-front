@@ -50,27 +50,12 @@ const StyledFileDialog = styled.dialog`
             overflow: hidden;
         }
 
-        .close-button {
-            grid-area: close;
-            background-color: var(--clr-error);
-            display: grid;
-            place-items: center;
-            block-size: 60%;
-            aspect-ratio: 1 / 1;
-            border-radius: 50%;
-            overflow: hidden;
-            opacity: 0.8;
-            svg {
-                block-size: 1.2rem;
-                inline-size: 1.2rem;
-                fill: var(--_header-text);
-                transition: fill 0.2s ease-in-out;
-            }
-            &:hover {
-                cursor: pointer;
-                color: var(--clr-error-hover);
-                opacity: 1;
-            }
+        .close-button svg {
+            block-size: 1.2rem;
+            inline-size: 1.2rem;
+            fill: var(--_header-text);
+            transition: fill 0.2s ease-in-out;
+            
         }
     }
 
@@ -78,7 +63,7 @@ const StyledFileDialog = styled.dialog`
         grid-area: main;
         border-block: 0.125rem solid var(--editor-border);
         display: grid;
-        grid-template-columns: minmax(10rem, 1fr) 2fr;
+        grid-template-columns: minmax(60rem, 1fr) 2fr;
         grid-template-rows: 1fr auto;
         grid-template-areas:
             "main-left main-right"
@@ -128,6 +113,7 @@ const StyledFileDialog = styled.dialog`
         .main-right {
             grid-area: main-right;
             border-inline-start: 0.1875rem solid var(--editor-border);
+            padding: 0.5rem;
         }
         .input-wrapper {
             grid-area: file-name;
@@ -148,31 +134,9 @@ const StyledFileDialog = styled.dialog`
         justify-content: flex-end;
         gap: 0.5rem;
         button {
-            padding-block: 0.25rem;
-            padding-inline: 0.5rem;
             min-block-size: 3rem;
-            min-inline-size: 6rem;
-            border: 0.125rem solid var(--editor-border);
-            border-radius: 0.5rem;
-            background-color: var(--editor-surface);
-            color: var(--_header-text);
-            font-size: 0.875rem;
+            min-inline-size: 8rem;
             font-weight: 600;
-            letter-spacing: 0.025rem;
-            text-transform: uppercase;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-            opacity: 0.8;
-            
-            &:hover {
-                cursor: pointer;
-                opacity: 1;
-            }
-        }
-        & .confirm-button {
-            background-color: var(--clr-success-dark);
-        }   
-        & .cancel-button {
-            background-color: var(--clr-error);
         }   
     }
 `;

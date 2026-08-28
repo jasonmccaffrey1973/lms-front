@@ -107,7 +107,7 @@ const buildPopularLinks = (links: ErrorPageLink[]) => {
 const useErrorPagesHook = () => {
     const { links } = useUserLinksContext();
 
-    const [serchSubmitted, setSearchSubmitted] = useState(false);
+    const [searchSubmitted, setSearchSubmitted] = useState(false);
 
     const handleSearchSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -135,7 +135,7 @@ const useErrorPagesHook = () => {
     const searchSuggestions = allLinks;
 
     return {
-        serchSubmitted,
+        searchSubmitted,
         handleSearchSubmit,
         errorPageLinks,
         searchSuggestions

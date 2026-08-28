@@ -1,6 +1,6 @@
-import type { SVGIconName } from "../../../../../sharedComponents/buttons/SVG/SVGIcon";
+import type { SVGIconName } from "../../../../../sharedComponents/SVG/SVGIcon";
 import { StyledEditorRibbonItem } from "../Ribbon.styles";
-import SVGIcon from "../../../../../sharedComponents/buttons/SVG/SVGIcon";
+import SVGIcon from "../../../../../sharedComponents/SVG/SVGIcon";
 
 interface RibbonItemProps {
   icon?: SVGIconName;

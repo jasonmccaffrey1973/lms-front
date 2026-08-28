@@ -9,6 +9,7 @@ const useFileDialog = () => {
      ** --------------------------------------------------------------------------------- */
     const [fileDialogOpen, setFileDialogOpen] = useState(false);
     const [filename, setFilename] = useState('')
+    const [searchFileName, setSearchFileName] = useState('')
     const [fileDialogType, setFileDialogType] = useState<FileDialogType>("openDocument");
 
     /** ---------------------------------------------------------------------------------
@@ -105,6 +106,8 @@ const useFileDialog = () => {
     processDialogclose,
     filename,
     setFilename,
+    searchFileName,
+    setSearchFileName,
     DIALOG_UI_ELEMENTS,
   };
 };
