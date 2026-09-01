@@ -59,7 +59,7 @@ const StyledEditorRibbonTab = styled.li<StyledEditorRibbonTabProps>`
         border-block-end: 0.125rem solid var(--editor-tab-active-border);
         box-shadow: inset 2px 2px 0 0 rgba(0, 0, 0, 0.08), inset -2px -2px 0 0 rgba(255, 255, 255, 0.05);
     }
-    `;
+`;
 
 const StyledEditorRibbonTabLabel = styled.span`
     font-weight: 600;
@@ -67,7 +67,7 @@ const StyledEditorRibbonTabLabel = styled.span`
     letter-spacing: 0.03em;
     font-size: 0.75rem;
     color: var(--editor-text);
-    `;
+`;
 
 const StyledEditorRibbonTabItemsWrapper = styled.div`
     position: relative;
@@ -79,7 +79,7 @@ const StyledEditorRibbonTabItemsWrapper = styled.div`
     margin: 0;
     background-color: ${selectedTabBackgroundColor};
     border-bottom: 1px solid var(--editor-border);
-    `;
+`;
 
 const StyledEditorRibbonGroup = styled.div`
     display: flex;
@@ -89,7 +89,7 @@ const StyledEditorRibbonGroup = styled.div`
     background: var(--editor-surface-subtle);
     border: 1px solid var(--editor-border);
     border-radius: 0.3rem;
-    `;
+`;
 
 const StyledEditorRibbonGroupLabel = styled.span`
     font-size: 0.64rem;
@@ -97,12 +97,13 @@ const StyledEditorRibbonGroupLabel = styled.span`
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--editor-text-muted);
-    `;
+`;
 
 const StyledEditorRibbonGroupItems = styled.ul`
     list-style: none;
     list-style-type: none;
     display: flex;
+    align-items: flex-end;
     gap: 0.2rem;
     padding: 0;
     margin: 0;
@@ -110,7 +111,7 @@ const StyledEditorRibbonGroupItems = styled.ul`
     &::marker {
         content: "";
     }
-    `;
+`;
 
 const StyledEditorRibbonItem = styled.li<{ $isActive?: boolean }>`
     display: flex;
@@ -164,7 +165,39 @@ const StyledEditorRibbonItem = styled.li<{ $isActive?: boolean }>`
         font-size: 0.7rem;
         line-height: 1.2;
     }
-    `;
+`;
 
-export { StyledEditorRibbon, StyledEditorRibbonTabs, StyledEditorRibbonItem, StyledEditorRibbonTab, StyledEditorRibbonTabLabel, StyledEditorRibbonTabItemsWrapper, StyledEditorRibbonGroup, StyledEditorRibbonGroupLabel, StyledEditorRibbonGroupItems };
+const StyledEditorRibbonSelectItem = styled.li`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    list-style: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0.4rem 0.2rem;
+    gap: 0.2rem;
+    color: var(--editor-text);
 
+    &::marker {
+        content: "";
+    }
+
+    .ribbon-item-label {
+        font-size: 0.7rem;
+        line-height: 1.2;
+    }
+`;
+
+export {
+    StyledEditorRibbon,
+    StyledEditorRibbonTabs,
+    StyledEditorRibbonItem,
+    StyledEditorRibbonSelectItem,
+    StyledEditorRibbonTab,
+    StyledEditorRibbonTabLabel,
+    StyledEditorRibbonTabItemsWrapper,
+    StyledEditorRibbonGroup,
+    StyledEditorRibbonGroupLabel,
+    StyledEditorRibbonGroupItems,
+};

@@ -87,10 +87,13 @@ const Ribbon = ({
               {group.items.map((item) => (
                 <RibbonItem
                   key={`${visibleTab.value}-${group.key}-${item.value}`}
+                  elementType={item.elementType}
+                  value={item.value}
                   icon={item.icon as SVGIconName | undefined}
                   label={item.label}
-                  onClick={() =>
-                    handleRibbonItemClick(item)
+                  options={item.options}
+                  action={(selectedValue) =>
+                    handleRibbonItemClick({ ...item, value: selectedValue })
                   }
                   isActive={isItemActive(item)}
                 />

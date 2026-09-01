@@ -76,6 +76,7 @@ const TYPE_SIZES = [
     { label: "32px", value: "32px" },
     { label: "48px", value: "48px" },
     { label: "64px", value: "64px" },
+    { label: "72px", value: "72px" },
 ];
 
 /** ------------------------------------------------------------------------------------
@@ -446,4 +447,4 @@ const EDITOR_TABS = {
 
 
 
-export { STATUS_CODES, EDITOR_TABS, GROUP_ORDER, type EditorTab };
+export { STATUS_CODES, EDITOR_TABS, GROUP_ORDER, TYPE_SIZES, type EditorTab };

@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import { Dashboard, Login, LogoutPage, ErrorPage } from './pages';
+import { Dashboard, Login, LogoutPage, ErrorPage, TestPage } from './pages';
 import { Editor } from './applications';
 import { useAuth } from "./auth"
 
@@ -9,6 +9,8 @@ const AppRoutes = () => {
 	return (
 		<Routes>
 			<Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />} />
+			{/* page to show components as you are building them */} 
+			<Route path="/test" element={<TestPage />} />
 			{/* LOGIN PAGES */}
 			<Route path="/login" element={<Login pageForm="login" />} />
 			<Route path="/forgot-password" element={<Login pageForm="forgot-password" />} />

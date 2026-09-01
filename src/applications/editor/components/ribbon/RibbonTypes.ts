@@ -1,12 +1,21 @@
 import type { Level } from "@tiptap/extension-heading";
 import type { SVGIconName } from "../../../../sharedComponents/SVG/SVGIcon";
 
+type SelectOption = {
+  label: string;
+  value: string;
+};
+
 type RibbonGroup =
   | "document"
   | "clipboard"
   | "text"
   | "structure"
   | "insert"
+  | "layout"
+  | "review"
+  | "view"
+  | "help"
   | "other";
 
 type RibbonAction =
@@ -41,17 +50,27 @@ type RibbonAction =
   | "insertImage"
   | "insertTable"
   | "toggleLink"
-  | "unsetLink";
+  | "unsetLink"
+  | "setMargins"
+  | "setOrientation"
+  | "checkSpellingGrammar"
+  | "toggleTrackChanges"
+  | "setZoom"
+  | "toggleFullScreen"
+  | "openHelp"
+  | "openAbout";
 
 type RibbonMenuItem = {
   label: string;
   value: string;
+  elementType?: "button" | "select" | "checkbox" | "radio" | "link" | "list";
   action?: RibbonAction;
   icon?: SVGIconName;
   level?: Level;
   fontFamily?: string;
   fontSize?: string;
   group?: RibbonGroup;
+  options?: readonly SelectOption[] | SelectOption[];
 };
 
 type RibbonActionHandlers = {
@@ -61,9 +80,4 @@ type RibbonActionHandlers = {
   saveDocumentAs: () => void;
 };
 
-export type {
-  RibbonAction,
-  RibbonGroup,
-  RibbonActionHandlers,
-  RibbonMenuItem,
-};
+export type { SelectOption, RibbonGroup, RibbonAction, RibbonMenuItem, RibbonActionHandlers };
