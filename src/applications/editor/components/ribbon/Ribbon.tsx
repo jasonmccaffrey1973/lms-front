@@ -20,7 +20,7 @@ import EditorRibbonTab from "./components/EditorRibbonTab";
 import RibbonItem from "./components/RibbonItem";
 import TabItemsWrapper from "./components/TabItemsWrapper";
 import useRibbon from "./useRibbon";
-import type { RibbonMenuItem } from "./RibbonTypes";
+import type { RibbonMenuItem } from "./Ribbon.types";
 
 interface RibbonProps {
   editor: Editor | null;
@@ -82,16 +82,16 @@ const Ribbon = ({
             <StyledEditorRibbonGroupLabel>
               {group.label}
             </StyledEditorRibbonGroupLabel>
-
             <StyledEditorRibbonGroupItems>
               {group.items.map((item) => (
                 <RibbonItem
-                  key={`${visibleTab.value}-${group.key}-${item.value}`}
+                  key={`${visibleTab.value}-${group.key}-${item.value ?? item.label}`}
                   elementType={item.elementType}
                   value={item.value}
                   icon={item.icon as SVGIconName | undefined}
                   label={item.label}
                   options={item.options}
+                  items={item.items}
                   action={(selectedValue) =>
                     handleRibbonItemClick({ ...item, value: selectedValue })
                   }

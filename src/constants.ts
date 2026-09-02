@@ -199,6 +199,7 @@ const HOME_MENU_ITEMS = [
         icon: "textcolor",
         label: "Text Color",
         value: "text_color",
+        elementType: "buttonDropdown",
         action: "setTextColor",
         group: "text",
     },
@@ -213,6 +214,7 @@ const HOME_MENU_ITEMS = [
         icon: "highlight",
         label: "Highlight",
         value: "highlight",
+        elementType: "buttonDropdown",
         action: "toggleHighlight",
         group: "text",
     },
@@ -269,6 +271,7 @@ const HOME_MENU_ITEMS = [
     {
         label: "Link",
         value: "link",
+        elementType: "buttonDropdown",
         action: "toggleLink",
         group: "structure",
         icon: "link",
@@ -308,21 +311,21 @@ const HOME_MENU_ITEMS = [
         group: "structure",
         icon: "code",
     },
-    {
-        label: "Divider",
-        value: "divider",
-        action: "setHorizontalRule",
-        group: "insert",
-        icon: "divider",
+    // {
+    //     label: "Divider",
+    //     value: "divider",
+    //     action: "setHorizontalRule",
+    //     group: "insert",
+    //     icon: "divider",
 
-    },
-    {
-        label: "Clear",
-        value: "clear",
-        action: "clearFormatting",
-        group: "other",
-        icon: "clearformatting",
-    },
+    // },
+    // {
+    //     label: "Clear",
+    //     value: "clear",
+    //     action: "clearFormatting",
+    //     group: "other",
+    //     icon: "clearformatting",
+    // },
 ];
 
 const INSERT_MENU_ITEMS = [

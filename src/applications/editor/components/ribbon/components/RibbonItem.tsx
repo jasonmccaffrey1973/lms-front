@@ -1,27 +1,55 @@
+// RibbonItem.tsx
 import { StyledEditorRibbonItem } from "../Ribbon.styles";
 import SVGIcon, { type SVGIconName } from "../../../../../sharedComponents/SVG/SVGIcon";
-import type { SelectOption } from "../RibbonTypes";
+import type { SelectOption } from "../Ribbon.types";
 import RibbonSelect from "./ribbonSelect/RibbonSelect";
+import RibbonListElement from "./ribbonListElement/RibbonListElement";
+
+import type { MenuListItemTypes } from "./ribbonListElement/RibbonListElement.types";
+import ButtonDropDown from "../../../../../sharedComponents/buttonDropDown/ButtonDropDown";
+import ColorPicker from "../../../../../sharedComponents/colorPicker/ColorPicker";
 
 export interface RibbonItemProps {
-  elementType?: "button" | "select" | "checkbox" | "radio" | "link" | "list";
-  value: string;
+  elementType?: "button" | "select" | "checkbox" | "radio" | "link" | "list" | "buttonDropdown";
+  value?: string;
   icon?: SVGIconName;
   label: string;
   action?: (val: string) => void;
   isActive?: boolean;
   options?: readonly SelectOption[] | SelectOption[];
+  items?: MenuListItemTypes[];
+  dropdownContent?: React.ReactNode;
+}
+
+const dropdownContent = ({label}: {label: string}) => {
+  switch (label) {
+    case "Text Color":
+      return <ColorPicker value="#000000" onChange={(val) => console.log(val)} />;
+    case "Highlight":
+      return <ColorPicker value="#ffff00" onChange={(val) => console.log(val)} />;
+    case "Link":
+      return (
+        <div style={{ padding: "1rem" }}>
+          <p>Link Form Placeholder</p>
+          <input type="text" placeholder="Enter URL" />
+        </div>
+      );
+    default:
+      return null;
+  }
 }
 
 const RibbonItem = ({
   elementType = "button",
-  value,
+  value = "",
   icon,
   label,
   action,
   isActive,
   options,
+  items,
 }: RibbonItemProps) => {
+  // 1. Select Dropdowns
   if (elementType === "select") {
     return (
       <RibbonSelect
@@ -33,6 +61,32 @@ const RibbonItem = ({
     );
   }
 
+  // 2. Ribbon List Element (e.g. Word Styles gallery)
+  if (elementType === "list" && items) {
+    return (
+      <RibbonListElement
+        label={label}
+        items={items}
+      />
+    );
+  }
+
+  // 3. Dropdowns with popovers (e.g. Color Picker)
+  if (elementType === "buttonDropdown" && dropdownContent({label})) {
+    return (
+      <ButtonDropDown
+        label={label}
+        icon={icon}
+        value={value}
+        isActive={isActive}
+        onPrimaryAction={(val) => action?.(val ?? "")}
+      >
+        {dropdownContent({label})}
+      </ButtonDropDown>
+    );
+  }
+
+  // 4. Default Action Button
   return (
     <StyledEditorRibbonItem
       $isActive={isActive}

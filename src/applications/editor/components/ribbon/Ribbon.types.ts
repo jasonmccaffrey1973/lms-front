@@ -1,5 +1,6 @@
 import type { Level } from "@tiptap/extension-heading";
 import type { SVGIconName } from "../../../../sharedComponents/SVG/SVGIcon";
+import type { MenuListItemTypes } from "./components/ribbonListElement/RibbonListElement.types"; 
 
 type SelectOption = {
   label: string;
@@ -37,6 +38,7 @@ type RibbonAction =
   | "toggleStrike"
   | "clearFormatting"
   | "toggleHeading"
+  | "setStyle"
   | "setParagraph"
   | "toggleBulletList"
   | "toggleOrderedList"
@@ -62,7 +64,7 @@ type RibbonAction =
 
 type RibbonMenuItem = {
   label: string;
-  value: string;
+  value?: string;
   elementType?: "button" | "select" | "checkbox" | "radio" | "link" | "list";
   action?: RibbonAction;
   icon?: SVGIconName;
@@ -71,6 +73,7 @@ type RibbonMenuItem = {
   fontSize?: string;
   group?: RibbonGroup;
   options?: readonly SelectOption[] | SelectOption[];
+  items?: MenuListItemTypes[];
 };
 
 type RibbonActionHandlers = {

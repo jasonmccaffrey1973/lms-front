@@ -1,6 +1,6 @@
 import Select from "../../../../../../sharedComponents/select/Select";
 import { StyledEditorRibbonSelectItem } from "../../Ribbon.styles";
-import type { SelectOption } from "../../RibbonTypes";
+import type { SelectOption } from "../../Ribbon.types";
 
 interface RibbonSelectProps {
   value: string;

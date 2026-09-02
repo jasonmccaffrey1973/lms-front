@@ -1,5 +1,5 @@
 import type { Editor } from "@tiptap/core";
-import type { RibbonMenuItem, RibbonAction, RibbonActionHandlers } from "./RibbonTypes";
+import type { RibbonMenuItem, RibbonAction, RibbonActionHandlers } from "./Ribbon.types";
 
 
 /**

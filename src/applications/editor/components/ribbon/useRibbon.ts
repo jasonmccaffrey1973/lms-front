@@ -12,7 +12,7 @@ import {
 } from "./RibbonActions";
 
 import type { FileDialogType } from "../fileDialog/fileDialog.types";
-import type { RibbonMenuItem } from "./RibbonTypes";
+import type { RibbonMenuItem } from "./Ribbon.types";
 
 const DEFAULT_TAB =
   Object.values(EDITOR_TABS)[0]?.value as EditorTab;
