@@ -8,6 +8,8 @@ import RibbonListElement from "./ribbonListElement/RibbonListElement";
 import type { MenuListItemTypes } from "./ribbonListElement/RibbonListElement.types";
 import ButtonDropDown from "../../../../../sharedComponents/buttonDropDown/ButtonDropDown";
 import ColorPicker from "../../../../../sharedComponents/colorPicker/ColorPicker";
+import AttachURL from "./attachURL/AttachURL";
+
 
 export interface RibbonItemProps {
   elementType?: "button" | "select" | "checkbox" | "radio" | "link" | "list" | "buttonDropdown";
@@ -28,12 +30,8 @@ const dropdownContent = ({label}: {label: string}) => {
     case "Highlight":
       return <ColorPicker value="#ffff00" onChange={(val) => console.log(val)} />;
     case "Link":
-      return (
-        <div style={{ padding: "1rem" }}>
-          <p>Link Form Placeholder</p>
-          <input type="text" placeholder="Enter URL" />
-        </div>
-      );
+      return <AttachURL action={() => console.log("Attach URL action")} recentURLs={["https://example.com", "https://another-example.com"]} />;
+      // return <Input value="" onChange={(val) => console.log(val)} placeholder="Enter URL" label="Link" />;
     default:
       return null;
   }

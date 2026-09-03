@@ -48,7 +48,7 @@ gap: 0.5rem;
 }
 .custom-color {
     grid-area: custom;
-    --_subcategory_label: "Select Custom Color";
+    --_subcategory_label: "Select Color";
     
     input[type="color"] {
         grid-column: 1 / -1;

@@ -352,6 +352,13 @@ const INSERT_MENU_ITEMS = [
         icon: "image",
     },
     {
+        label: "Video",
+        value: "video",
+        action: "insertVideo",
+        group: "insert",
+        icon: "video",
+    },
+    {
         label: "Table",
         value: "table",
         action: "insertTable",
