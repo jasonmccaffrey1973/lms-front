@@ -361,6 +361,7 @@ const INSERT_MENU_ITEMS = [
     {
         label: "Table",
         value: "table",
+        elementType: "buttonDropdown",
         action: "insertTable",
         group: "insert",
         icon: "table",

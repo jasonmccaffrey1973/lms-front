@@ -1,6 +1,8 @@
 import { type ColorPickerProps } from "./ColorPicker.types";
 import { StyledColorPicker } from "./ColorPicker.styles";
 import useColorPicker from "./useColorPicker";
+import Button from "../Button/Button";
+import SVGIcon from "../SVG/SVGIcon";
 
 const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
 
@@ -14,6 +16,13 @@ const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
 
 
     return <StyledColorPicker>
+        <div className="clear-wrapper">
+            {/* <div className="current-color" style={{ backgroundColor: currentColor }}></div> */}
+            <Button color="danger" type="button" onClick={() => handleColorClick("")}>
+                <SVGIcon icon="clearformatting" />
+                Clear
+            </Button>
+        </div>
         <div className="color-palette">
             {Object.entries(COLOR_PALETTE).map(([shade, colors]) => (
                 <div key={shade} className="shade-row">

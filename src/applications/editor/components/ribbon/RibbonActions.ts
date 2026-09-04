@@ -135,29 +135,17 @@ const executeRibbonAction = (
       chain.toggleStrike().run();
       break;
 
-    case "setTextColor": {
-      const color = window.prompt(
-        "Enter a text color (e.g. #ff0000 or red)",
-      );
-
-      if (color) {
-        chain.setColor(color).run();
+    case "setTextColor":
+      if (item.value) {
+        chain.setColor(item.value).run();
       }
-
       break;
-    }
 
-    case "toggleHighlight": {
-      const color = window.prompt(
-        "Enter a highlight color (e.g. #ffff00 or yellow)",
-      );
-
-      if (color) {
-        chain.toggleHighlight({ color }).run();
+    case "toggleHighlight":
+      if (item.value) {
+        chain.toggleHighlight({ color: item.value }).run();
       }
-
       break;
-    }
 
     case "setFontFamily":
       if (item.fontFamily) {
@@ -245,20 +233,16 @@ const executeRibbonAction = (
     // Links
     // -------------------------------------------------------------------------
 
-    case "toggleLink": {
-      const url = window.prompt("Enter a URL");
-
-      if (url) {
+    case "toggleLink":
+      if (item.value) {
         chain
           .toggleLink({
-            href: url,
+            href: item.value,
             target: "_blank",
           })
           .run();
       }
-
       break;
-    }
 
     case "unsetLink":
       chain.unsetLink().run();

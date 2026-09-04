@@ -13,20 +13,17 @@ import type { ButtonDropDownProps } from "./ButtonDropDown.types";
 const ButtonDropDown = ({
   label,
   icon,
-  value,
   isActive,
-  onPrimaryAction,
   children,
 }: ButtonDropDownProps) => {
   const { isOpen, toggleDropDown, containerRef } = useButtonDropDown();
 
   return (
     <StyledButtonDropDownWrapper ref={containerRef}>
-      <StyledSplitButtonContainer $isActive={isActive}>
+      <StyledSplitButtonContainer $isActive={isActive} onClick={toggleDropDown}>
         {/* Primary action target */}
         <StyledMainActionButton
           type="button"
-          onClick={() => onPrimaryAction?.(value)}
           aria-label={label}
         >
           {icon && <SVGIcon icon={icon} />}
@@ -36,7 +33,6 @@ const ButtonDropDown = ({
         {/* Dropdown toggle indicator */}
         <StyledCaretButton
           type="button"
-          onClick={toggleDropDown}
           $isOpen={isOpen}
           aria-label={`${label} options`}
           aria-expanded={isOpen}

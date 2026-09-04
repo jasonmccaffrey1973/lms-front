@@ -4,6 +4,7 @@ import Render from "../../../../sharedComponents/Render";
 import { StyledFileDialog } from "./FileDialog.styles";
 import type { FileDialogProps } from "./fileDialog.types";
 import useFileDialog from "./useFileDialog";
+import { useEffect } from "react";
 
 /** ====================================================================================
  * FileDialog Component
@@ -134,6 +135,17 @@ const FileDialog = ({ type, open, onClose }: FileDialogProps) => {
     
 const { DIALOG_UI_ELEMENTS, filename, setFilename, searchFileName, setSearchFileName } = useFileDialog();
 const elementData = DIALOG_UI_ELEMENTS[type];
+
+useEffect(() => {
+  const handleEsc = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  document.addEventListener('keydown', handleEsc);
+  return () => document.removeEventListener('keydown', handleEsc);
+}, [onClose]);
 
   return (
     <StyledFileDialog

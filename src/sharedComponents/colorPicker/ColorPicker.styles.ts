@@ -7,10 +7,45 @@ const StyledColorPicker = styled.div`
 inline-size: fit-content;
 display: grid;
 grid-template-areas:
+    "clear"
     "palette"
     "standard"
     "custom";
 gap: 0.5rem;
+
+.clear-wrapper {
+    --_font-size: 0.7rem;
+    grid-area: clear;
+    inline-size: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .current-color {
+        display: block;
+        block-size: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 0.25rem;        ;
+        border: 1px solid var(--editor-border, hsl(30, 6%, 88%));
+        border-radius: 0.25rem;
+        margin-inline-end: 0.5rem;
+    }
+
+    button {
+        inline-size: fit-content;
+        block-size: auto;
+        display: flex;
+        align-items: center;
+        font-size: var(--_font-size);
+        margin-inline-start: auto;
+        svg {
+            aspect-ratio: 1 / 1;
+            inline-size: calc(var(--_font-size) * 1.2);
+            margin-inline-end: 0.25rem;
+        }
+    }
+
+}  
 
 & > * {
     display: grid;
@@ -36,6 +71,7 @@ gap: 0.5rem;
         font-weight: 600;
     }
 }
+
 
 .color-palette {
     grid-area: palette;

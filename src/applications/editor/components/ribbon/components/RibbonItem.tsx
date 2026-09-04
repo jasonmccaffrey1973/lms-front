@@ -9,6 +9,7 @@ import type { MenuListItemTypes } from "./ribbonListElement/RibbonListElement.ty
 import ButtonDropDown from "../../../../../sharedComponents/buttonDropDown/ButtonDropDown";
 import ColorPicker from "../../../../../sharedComponents/colorPicker/ColorPicker";
 import AttachURL from "./attachURL/AttachURL";
+import InsertTable from "../../../../../sharedComponents/insertTable/InsertTable";
 
 
 export interface RibbonItemProps {
@@ -23,15 +24,16 @@ export interface RibbonItemProps {
   dropdownContent?: React.ReactNode;
 }
 
-const dropdownContent = ({label}: {label: string}) => {
+const dropdownContent = ({label, action}: {label: string, action?: (val: string) => void}) => {
   switch (label) {
     case "Text Color":
-      return <ColorPicker value="#000000" onChange={(val) => console.log(val)} />;
+      return <ColorPicker value="#000000" onChange={(val) => action?.(val)} />;
     case "Highlight":
-      return <ColorPicker value="#ffff00" onChange={(val) => console.log(val)} />;
+      return <ColorPicker value="#ffff00" onChange={(val) => action?.(val)} />;
     case "Link":
-      return <AttachURL action={() => console.log("Attach URL action")} recentURLs={["https://example.com", "https://another-example.com"]} />;
-      // return <Input value="" onChange={(val) => console.log(val)} placeholder="Enter URL" label="Link" />;
+      return <AttachURL action={() => action?.("")} recentURLs={["https://example.com", "https://another-example.com"]} />;
+    case "Table":
+      return <InsertTable initialRows={3} initialColumns={3} maxRows={10} maxColumns={10} onInsert={(rows, columns) => action?.(`${rows}x${columns}`)} />;
     default:
       return null;
   }
@@ -79,7 +81,7 @@ const RibbonItem = ({
         isActive={isActive}
         onPrimaryAction={(val) => action?.(val ?? "")}
       >
-        {dropdownContent({label})}
+        {dropdownContent({label, action})}
       </ButtonDropDown>
     );
   }
