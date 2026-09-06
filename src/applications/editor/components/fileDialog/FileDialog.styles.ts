@@ -44,10 +44,13 @@ const StyledFileDialog = styled.dialog`
             grid-area: title;
             padding-block: 0;
             font-size: 1rem;
-            font-weight: bold;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .close-button svg {
@@ -59,6 +62,29 @@ const StyledFileDialog = styled.dialog`
         }
     }
 
+
+    // Recommended - Enhanced input experience
+        .dialog-main input,
+        .search-wrapper input {
+            background-color: var(--editor-surface);
+            border: 0.125rem solid var(--editor-border);
+            border-radius: 0.375rem;
+            padding: 0.625rem 0.875rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            
+            &:focus {
+                border-color: var(--clr-primary-light);
+                box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+                outline: none;
+            }
+        }
+
+        .input-wrapper input {
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
     .dialog-main {
         grid-area: main;
         border-block: 0.125rem solid var(--editor-border);
@@ -68,6 +94,13 @@ const StyledFileDialog = styled.dialog`
         grid-template-areas:
             "main-left main-right"
             "file-name main-right";
+
+        & > * {
+            border-block-start: 0.0625rem solid var(--editor-border);
+            margin-block-start: 0.25rem;
+            padding-block: 0.75rem;
+            padding-inline: 1rem;
+        }
 
         .main-left {
             grid-area: main-left;
@@ -99,11 +132,21 @@ const StyledFileDialog = styled.dialog`
                 list-style: none;
                 padding: 0.25rem;
                 li {
-                    padding: 0.25rem 0.5rem;
-                    font-size: 1.2rem;
+                    padding: 0.5rem 0.75rem;
+                    border-radius: 0.375rem;
+                    transition: all 0.15s ease;
+
                     &:hover {
                         cursor: pointer;
                         background-color: var(--editor-surface-hover);
+                        padding-left: 1rem; // Subtle indent on hover
+                    }
+
+                    &.selected, 
+                    &:focus {
+                        background-color: var(--clr-primary-light);
+                        color: var(--clr-primary-dark);
+                        outline: none;
                     }
                 }
 
@@ -113,7 +156,7 @@ const StyledFileDialog = styled.dialog`
         .main-right {
             grid-area: main-right;
             border-inline-start: 0.1875rem solid var(--editor-border);
-            padding: 0.5rem;
+            padding: 1rem;
         }
         .input-wrapper {
             grid-area: file-name;
@@ -137,6 +180,10 @@ const StyledFileDialog = styled.dialog`
             min-block-size: 3rem;
             min-inline-size: 8rem;
             font-weight: 600;
+
+            &:not(:first-child) {
+                margin-left: 0.5rem;
+            }
         }   
     }
 `;
