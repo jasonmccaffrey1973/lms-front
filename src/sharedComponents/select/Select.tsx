@@ -65,6 +65,8 @@ const Select = ({ value, onChange, options, label, disabled }: SelectProps) => {
       ? `${baseId}-option-${filteredOptions[activeIndex].value}`
       : undefined;
 
+  const inputValue = selectOpen ? searchTerm : selectedLabelText;
+
   return (
     <div className="select-container">
       {label && <label htmlFor={inputId}>{label}</label>}
@@ -80,7 +82,7 @@ const Select = ({ value, onChange, options, label, disabled }: SelectProps) => {
           aria-activedescendant={activeOptionId}
           placeholder={selectedLabelText || "Select..."}
           style={{ fontFamily: selectedFontFamily }}
-          value={searchTerm}
+          value={inputValue}
           onFocus={openSelect}
           onClick={handleClick}
           onChange={handleSearchChange}

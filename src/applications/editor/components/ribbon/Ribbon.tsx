@@ -36,6 +36,7 @@ const Ribbon = ({
     handleRibbonTabChange,
     handleRibbonItemClick,
     isItemActive,
+    getItemValue,
   } = useRibbon(editor, openFileDialog);
 
   const tabs = Object.values(EDITOR_TABS);
@@ -87,7 +88,7 @@ const Ribbon = ({
                 <RibbonItem
                   key={`${visibleTab.value}-${group.key}-${item.value ?? item.label}`}
                   elementType={item.elementType}
-                  value={item.value}
+                  value={getItemValue(item)}
                   icon={item.icon as SVGIconName | undefined}
                   label={item.label}
                   options={item.options}

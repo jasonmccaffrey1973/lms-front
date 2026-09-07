@@ -148,14 +148,14 @@ const executeRibbonAction = (
       break;
 
     case "setFontFamily":
-      if (item.fontFamily) {
-        chain.setFontFamily(item.fontFamily).run();
+      if (item.value || item.fontFamily) {
+        chain.setFontFamily(item.value || item.fontFamily || "").run();
       }
       break;
 
     case "setFontSize":
-      if (item.fontSize) {
-        chain.setFontSize(item.fontSize).run();
+      if (item.value || item.fontSize) {
+        chain.setFontSize(item.value || item.fontSize || "").run();
       }
       break;
 

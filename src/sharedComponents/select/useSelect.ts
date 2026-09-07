@@ -132,6 +132,12 @@ export const useSelect = ({
     }
   }, [activeIndex, selectOpen]);
 
+  useEffect(() => {
+    if (!selectOpen) {
+      setSearchTerm("");
+    }
+  }, [value, selectOpen]);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setNavigatedIndex(0);

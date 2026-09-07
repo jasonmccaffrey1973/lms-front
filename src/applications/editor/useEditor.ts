@@ -2,7 +2,11 @@ import { useEditor as useTiptapEditor } from "@tiptap/react";
 import Highlight from "@tiptap/extension-highlight";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
-import { TextStyle } from "@tiptap/extension-text-style";
+import {
+  FontFamily,
+  FontSize,
+  TextStyle,
+} from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -24,6 +28,8 @@ const useEditor = () =>
       }),
       Underline,
       TextStyle,
+      FontFamily,
+      FontSize,
       Highlight.configure({
         multicolor: true,
       }),

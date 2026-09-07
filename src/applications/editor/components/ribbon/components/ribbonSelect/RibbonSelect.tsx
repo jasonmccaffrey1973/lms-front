@@ -9,14 +9,6 @@ interface RibbonSelectProps {
   label?: string;
 }
 
-
-interface RibbonSelectProps {
-  value: string;
-  options?: readonly SelectOption[] | SelectOption[];
-  onChange?: (val: string) => void;
-  label?: string;
-}
-
 const RibbonSelect = ({ value, options = [], onChange, label }: RibbonSelectProps) => {
   const normalizedOptions = options.map((opt) => {
     if (typeof opt === "object" && opt !== null && "value" in opt) {
@@ -37,7 +29,7 @@ const RibbonSelect = ({ value, options = [], onChange, label }: RibbonSelectProp
       : normalizedOptions[0]?.value || "";
 
   return (
-    <StyledEditorRibbonSelectItem>
+    <StyledEditorRibbonSelectItem key={`${label ?? "control"}-${sanitizedValue}`}>
       <Select
         value={sanitizedValue}
         onChange={onChange || (() => {})}

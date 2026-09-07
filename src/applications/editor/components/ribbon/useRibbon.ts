@@ -1,10 +1,6 @@
 import type { Editor } from "@tiptap/core";
-import { useState } from "react";
 
-import {
-  EDITOR_TABS,
-  type EditorTab,
-} from "../../../../constants";
+import type { EditorTab } from "../../../../constants/types";
 
 import {
   executeRibbonAction,
@@ -13,16 +9,13 @@ import {
 
 import type { FileDialogType } from "../fileDialog/fileDialog.types";
 import type { RibbonMenuItem } from "./Ribbon.types";
-
-const DEFAULT_TAB =
-  Object.values(EDITOR_TABS)[0]?.value as EditorTab;
+import { getRibbonItemValue, useEditorState } from "../../EditorState";
 
 const useRibbon = (
   editor: Editor | null,
   openFileDialog: (type: FileDialogType) => void,
 ) => {
-  const [activeTab, setActiveTab] =
-    useState<EditorTab>(DEFAULT_TAB);
+  const { selection, activeTab, setActiveTab } = useEditorState();
 
   const handleRibbonTabChange = (tab: EditorTab) => {
     setActiveTab(tab);
@@ -33,7 +26,16 @@ const useRibbon = (
       return;
     }
 
-    executeRibbonAction(editor, item, {
+    const enrichedItem =
+      item.action === "setFontFamily" || item.action === "setFontSize"
+        ? {
+            ...item,
+            ...(item.action === "setFontFamily" ? { fontFamily: item.value } : {}),
+            ...(item.action === "setFontSize" ? { fontSize: item.value } : {}),
+          }
+        : item;
+
+    executeRibbonAction(editor, enrichedItem, {
       newDocument: () => {
         openFileDialog("newDocument");
       },
@@ -59,6 +61,9 @@ const useRibbon = (
 
     isItemActive: (item: RibbonMenuItem) =>
       isRibbonItemActive(editor, item),
+
+    getItemValue: (item: RibbonMenuItem) =>
+      getRibbonItemValue(item, selection),
   };
 };
 
