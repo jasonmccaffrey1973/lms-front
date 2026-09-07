@@ -60,6 +60,10 @@ const GROUP_ORDER = [
  * ------------------------------------------------------------------------------------ */
 const TYPEFACE_OPTIONS = [
     { label: "Arial", value: "Arial" },
+    { label: "Courier New", value: "Courier New" },
+    { label: "Georgia", value: "Georgia" },
+    { label: "Helvetica", value: "Helvetica" },
+    { label: "Tahoma", value: "Tahoma" },
     { label: "Times New Roman", value: "Times New Roman" },
     { label: "Verdana", value: "Verdana" },
 ];

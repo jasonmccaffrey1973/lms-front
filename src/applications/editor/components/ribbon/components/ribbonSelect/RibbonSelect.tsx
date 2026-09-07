@@ -12,14 +12,32 @@ interface RibbonSelectProps {
 const RibbonSelect = ({ value, options = [], onChange, label }: RibbonSelectProps) => {
   const normalizedOptions = options.map((opt) => {
     if (typeof opt === "object" && opt !== null && "value" in opt) {
+      const optionValue = String(opt.value);
+      const optionLabel = String(opt.label ?? opt.value);
+
       return {
-        label: String(opt.label ?? opt.value),
-        value: String(opt.value),
+        label:
+          label === "Typeface" ? (
+            <span style={{ fontFamily: optionValue }}>{optionLabel}</span>
+          ) : (
+            optionLabel
+          ),
+        value: optionValue,
+        searchText: optionLabel,
       };
     }
+
+    const optionValue = String(opt);
+
     return {
-      label: String(opt),
-      value: String(opt),
+      label:
+        label === "Typeface" ? (
+          <span style={{ fontFamily: optionValue }}>{optionValue}</span>
+        ) : (
+          optionValue
+        ),
+      value: optionValue,
+      searchText: optionValue,
     };
   });
 
