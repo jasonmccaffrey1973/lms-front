@@ -1,6 +1,6 @@
 // Type definitions extracted from constants.ts for better organization and exportability
 
-import type { EDITOR_TABS } from "../constants";
+import type { EDITOR_TABS } from "./constants";
 import type { SVGIconName } from "../sharedComponents/SVG/SVGIcon";
 
 /** ------------------------------------------------------------------------------------

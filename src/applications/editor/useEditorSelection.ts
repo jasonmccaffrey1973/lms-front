@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import type { Editor } from "@tiptap/core";
 
-import { EDITOR_TABS } from "../../constants";
+import { EDITOR_TABS } from "../../constants/constants";
 import type { EditorTab } from "../../constants/types";
 import type { RibbonMenuItem } from "./components/ribbon/Ribbon.types";
 
@@ -22,6 +22,7 @@ export type EditorSelectionState = {
   textAlign: string;
 };
 
+const DEFAULT_FONT_FAMILY = "Arial";
 const DEFAULT_FONT_SIZE = "14px";
 
 export const getEditorSelectionState = (editor: Editor | null): EditorSelectionState => {
@@ -56,7 +57,7 @@ export const getRibbonItemValue = (
 ): string => {
   switch (item.action) {
     case "setFontFamily":
-      return selection.fontFamily ?? "";
+      return selection.fontFamily || DEFAULT_FONT_FAMILY;
     case "setFontSize":
       return selection.fontSize || DEFAULT_FONT_SIZE;
     default:

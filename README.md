@@ -1,5 +1,13 @@
 # React + TypeScript + Vite
 
+## Package Manager
+
+This repository is Yarn-only.
+
+- Use `yarn install` to install dependencies.
+- Use `yarn dev`, `yarn test`, and `yarn build` for scripts.
+- `npm install` is blocked by a `preinstall` guard in `package.json`.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

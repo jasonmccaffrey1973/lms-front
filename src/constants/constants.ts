@@ -1,4 +1,5 @@
-import type { EditorTab } from "./constants/types";
+import type { EditorTab } from "./types";
+import { FONT_FAMILIES } from "../assets/fonts/fontStyles";
 
 /** ====================================================================================
  * Application constants for status codes and editor menu items.
@@ -59,13 +60,12 @@ const GROUP_ORDER = [
  * Defines the available typeface options for the editor.
  * ------------------------------------------------------------------------------------ */
 const TYPEFACE_OPTIONS = [
-    { label: "Arial", value: "Arial" },
-    { label: "Courier New", value: "Courier New" },
-    { label: "Georgia", value: "Georgia" },
-    { label: "Helvetica", value: "Helvetica" },
-    { label: "Tahoma", value: "Tahoma" },
-    { label: "Times New Roman", value: "Times New Roman" },
-    { label: "Verdana", value: "Verdana" },
+    ...Array.from(new Set(["Arial", ...FONT_FAMILIES]))
+        .sort((a, b) => a.localeCompare(b))
+        .map((fontFamily) => ({
+            label: fontFamily,
+            value: fontFamily,
+        })),
 ];
 
 /** ------------------------------------------------------------------------------------

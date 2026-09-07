@@ -1,6 +1,9 @@
 import {createGlobalStyle} from 'styled-components'
+import FontStyles from './fonts/fontStyles'
 
 const GlobalStyles = createGlobalStyle`
+
+${FontStyles}
 
 :root {
 

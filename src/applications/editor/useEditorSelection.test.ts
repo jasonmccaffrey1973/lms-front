@@ -56,4 +56,13 @@ describe("editor selection state", () => {
       ),
     ).toBe("14px");
   });
+
+  it("defaults typeface control to Arial when selection has no font family", () => {
+    expect(
+      getRibbonItemValue(
+        { label: "Typeface", action: "setFontFamily" },
+        { fontFamily: "" },
+      ),
+    ).toBe("Arial");
+  });
 });

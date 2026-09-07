@@ -227,6 +227,28 @@ Edit [`globalStyles.ts`](src/assets/globalStyles.ts) to modify CSS variables:
 }
 ```
 
+### Adding Typefaces
+
+Typeface registration is centralized in [src/assets/fonts/fontStyles.ts](src/assets/fonts/fontStyles.ts).
+
+To add a new typeface:
+
+1. Add a new entry to `FONTS` in [src/assets/fonts/fontStyles.ts](src/assets/fonts/fontStyles.ts) with at least:
+  - `normal`: path to the `.ttf` file under `/src/assets/fonts/...`
+  - `weight`: either a range for variable fonts (for example `"100 900"`) or a fixed value (for example `"400"`)
+2. Optionally add `italic` when an italic file exists.
+3. Keep the font family key exactly how you want it displayed in the editor (for example `"Open Sans"`).
+
+The app then updates automatically:
+
+- `@font-face` rules are generated from `FONTS` and injected through [src/assets/globalStyles.ts](src/assets/globalStyles.ts).
+- Editor typeface options are derived from `FONT_FAMILIES` in [src/constants/constants.ts](src/constants/constants.ts), alphabetized, and filtered to valid normal `.ttf` paths.
+
+Notes:
+
+- `Arial` is always present as a default fallback in the typeface menu.
+- If a font does not provide an italic file, omit `italic`; only the normal face will be generated.
+
 ### Adding New Pages
 
 1. Create file in `src/pages/` (e.g., `settings/Settings.tsx`)

@@ -3,7 +3,7 @@ import type { Editor } from "@tiptap/core";
 import {
   EDITOR_TABS,
   GROUP_ORDER,
-} from "../../../../constants";
+} from "../../../../constants/constants";
 
 import type { FileDialogType } from "../fileDialog/fileDialog.types";
 import type { SVGIconName } from "../../../../sharedComponents/SVG/SVGIcon";
