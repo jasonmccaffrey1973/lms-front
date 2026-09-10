@@ -152,12 +152,57 @@ const StyledFileDialog = styled.dialog`
 
             }
         }
-
+        
         .main-right {
             grid-area: main-right;
-            border-inline-start: 0.1875rem solid var(--editor-border);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            border-inline-start: 1px solid var(--editor-border);
             padding: 1rem;
+            
         }
+        
+        .document-preview {
+            margin: auto;
+            inline-size: 100%;
+            padding: 1.5rem;
+            background-color: var(--editor-surface);
+            box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+            aspect-ratio: 16 / 9;
+            
+            &[data-orentation = "portrait"] {
+                aspect-ratio: 9 / 16;
+                inline-size: auto;
+                max-block-size: 80dvh;
+            }
+            
+            
+            .preview-wrapper {
+                display: grid;
+                grid-template-rows: auto 1fr;
+                padding: 1rem;
+            }    
+        }
+
+        .document-meta-list {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            padding-inline: 1.33rem;
+            gap: 0.8rem 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 300;
+
+            label {
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+
+            .metadata-data {
+                font-weight: 300;
+            }
+
+        }
+        
         .input-wrapper {
             grid-area: file-name;
             width: 100%;

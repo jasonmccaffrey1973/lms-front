@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import { Dashboard, Login, LogoutPage, ErrorPage, TestPage } from './pages';
+import { Dashboard, Login, LogoutPage, ErrorPage, TestPage, MediaManagerPage } from './pages';
 import { Editor } from './applications';
 import { useAuth } from "./auth"
 
@@ -19,6 +19,7 @@ const AppRoutes = () => {
 			{/*  */}
 			<Route path="/dashboard" element={<Dashboard />} />
 			{/* APPLICATIONS */}
+			<Route path="/media-manager" element={isAuthenticated ? <MediaManagerPage /> : <Navigate to="/unauthorized" replace />} />
 			<Route path="/lesson-editor" element={isAuthenticated ? <Editor /> : <Navigate to="/unauthorized" replace />} />
 			{/* ERROR PAGES */}
 			<Route path="/bad-request" element={isAuthenticated ? <ErrorPage statusCode={400} /> : <Navigate to="/login" replace />} />

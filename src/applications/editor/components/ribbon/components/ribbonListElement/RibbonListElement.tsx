@@ -4,11 +4,9 @@ import {
   ItemLabel,
   StyledMenuListWrapper,
 } from "./RibbonListElement.styles";
-import useRibbonListElement from "./useRibbonListElement";
 import type { RibbonListElementProps } from "./RibbonListElement.types";
 
-const RibbonListElement = ({ label, items }: RibbonListElementProps) => {
-  const { handleListItemClick } = useRibbonListElement();
+const RibbonListElement = ({ label, items, action }: RibbonListElementProps) => {
 
   return (
     <StyledMenuListWrapper>
@@ -16,7 +14,7 @@ const RibbonListElement = ({ label, items }: RibbonListElementProps) => {
         {items.map((item) => (
             <StyledMenuListItem
             key={item.value}
-            onClick={() => handleListItemClick(item.action, item.value)}
+            onClick={() => action?.(item.value)}
             >
             <ItemLabel $value={item.value}>{item.label}</ItemLabel>
             </StyledMenuListItem>

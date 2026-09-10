@@ -17,7 +17,8 @@ const useAttachURL = ({
 
     const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        action();
+        const value = newURL.trim();
+        action(value);
     };
 
     const updateURL = (value: string) => {

@@ -25,11 +25,13 @@ import type { RibbonMenuItem } from "./Ribbon.types";
 interface RibbonProps {
   editor: Editor | null;
   openFileDialog: (type: FileDialogType) => void;
+  openMediaDialog: (mode: "image" | "video") => void;
 }
 
 const Ribbon = ({
   editor,
   openFileDialog,
+  openMediaDialog,
 }: RibbonProps) => {
   const {
     activeTab,
@@ -37,7 +39,7 @@ const Ribbon = ({
     handleRibbonItemClick,
     isItemActive,
     getItemValue,
-  } = useRibbon(editor, openFileDialog);
+  } = useRibbon(editor, openFileDialog, openMediaDialog);
 
   const tabs = Object.values(EDITOR_TABS);
 

@@ -7,6 +7,7 @@ type MenuListItemTypes = {
 type RibbonListElementProps = {
     label: string;
     items: MenuListItemTypes[];
+    action?: (value: string) => void;
 };
 
 export type { MenuListItemTypes, RibbonListElementProps };

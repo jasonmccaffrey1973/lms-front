@@ -2,7 +2,11 @@ import { useState } from "react";
 
 import type { FileDialogType } from "./fileDialog.types";
 
-const useFileDialog = () => {
+type FileDialogAction = (filename: string) => void | Promise<void>;
+
+type FileDialogActions = Partial<Record<FileDialogType, FileDialogAction>>;
+
+const useFileDialog = (actions: FileDialogActions = {}) => {
 
     /** ---------------------------------------------------------------------------------
      * State 
@@ -15,19 +19,11 @@ const useFileDialog = () => {
     /** ---------------------------------------------------------------------------------
      * Constants
      ** --------------------------------------------------------------------------------- */
-    const CLOSE_DIALOG_ACTIONS: Record<FileDialogType, () => void> = {
-        newDocument: () => {
-            console.log("Creating new document with filename:", filename);
-        },
-        openDocument: () => {
-            console.log("Opening document with filename:", filename);
-        },
-        saveDocument: () => {
-            console.log("Saving document with filename:", filename);
-        },
-        saveDocumentAs: () => {
-            console.log("Saving document as with filename:", filename);
-        },
+    const CLOSE_DIALOG_ACTIONS: Record<FileDialogType, FileDialogAction> = {
+        newDocument: actions.newDocument ?? (() => undefined),
+        openDocument: actions.openDocument ?? (() => undefined),
+        saveDocument: actions.saveDocument ?? (() => undefined),
+        saveDocumentAs: actions.saveDocumentAs ?? (() => undefined),
     };
 
     const DIALOG_UI_ELEMENTS = {
@@ -78,7 +74,7 @@ const useFileDialog = () => {
 
     const toggleFileDialog = () => setFileDialogOpen((previous) => !previous);
 
-    const processDialogclose = () => {
+    const processDialogclose = async () => {
 
         
         if (!fileDialogType || !CLOSE_DIALOG_ACTIONS[fileDialogType]) {
@@ -92,7 +88,7 @@ const useFileDialog = () => {
         }
 
         const action = CLOSE_DIALOG_ACTIONS[fileDialogType];
-        action();
+        await action(filename);
         closeFileDialog();
     };
 

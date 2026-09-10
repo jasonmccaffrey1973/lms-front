@@ -49,6 +49,59 @@ const StyledEditorTemplate = styled.div`
   .ProseMirror:focus {
     box-shadow: inset 0 0 0 1px var(--editor-focus-ring);
   }
+
+  .ProseMirror .tableWrapper {
+    margin: 0.75rem 0;
+    overflow-x: auto;
+  }
+
+  .ProseMirror table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .ProseMirror td,
+  .ProseMirror th {
+    border: 1px solid var(--editor-border-strong);
+    box-sizing: border-box;
+    min-width: 3rem;
+    padding: 0.4rem 0.5rem;
+    position: relative;
+    vertical-align: top;
+  }
+
+  .ProseMirror td > p,
+  .ProseMirror th > p {
+    margin: 0;
+  }
+
+  .ProseMirror th {
+    background: var(--editor-surface-hover);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .ProseMirror .selectedCell::after {
+    background: color-mix(in srgb, var(--editor-focus-ring) 20%, transparent);
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .ProseMirror .column-resize-handle {
+    background-color: var(--editor-focus-ring);
+    bottom: -2px;
+    pointer-events: none;
+    position: absolute;
+    right: -2px;
+    top: 0;
+    width: 4px;
+  }
 `;
 
 export default StyledEditorTemplate;

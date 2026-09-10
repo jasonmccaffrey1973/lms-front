@@ -50,7 +50,9 @@ type RibbonAction =
   | "setHorizontalRule"
   | "setHardBreak"
   | "insertImage"
+  | "insertVideo"
   | "insertTable"
+  | "deleteTable"
   | "toggleLink"
   | "unsetLink"
   | "setMargins"
@@ -65,7 +67,7 @@ type RibbonAction =
 type RibbonMenuItem = {
   label: string;
   value?: string;
-  elementType?: "button" | "select" | "checkbox" | "radio" | "link" | "list";
+  elementType?: "button" | "select" | "checkbox" | "radio" | "link" | "list" | "buttonDropdown";
   action?: RibbonAction;
   icon?: SVGIconName;
   level?: Level;
@@ -81,6 +83,7 @@ type RibbonActionHandlers = {
   openDocument: () => void;
   saveDocument: () => void;
   saveDocumentAs: () => void;
+  openMediaDialog: (mode: "image" | "video") => void;
 };
 
 export type { SelectOption, RibbonGroup, RibbonAction, RibbonMenuItem, RibbonActionHandlers };

@@ -1,11 +1,11 @@
 type UseAttachURLProps = {
     recentURLs?: string[];
-    action: () => void;
+    action: (url: string) => void;
 };
 
 type AttachURLProps = {
     recentURLs?: string[];
-    action: () => void;
+    action: (url: string) => void;
 };
 
 type UseAttachURLReturn = {

@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useReducer,
   useState,
   type ReactNode,
 } from "react";
@@ -83,24 +84,29 @@ export const EditorStateProvider = ({
   editor: Editor | null;
   children: ReactNode;
 }) => {
-  const [selection, setSelection] = useState<EditorSelectionState>(() =>
-    getEditorSelectionState(editor),
+  const [selectionVersion, bumpSelectionVersion] = useReducer((value: number) => value + 1, 0);
+
+  const selection = useMemo(
+    () => {
+      void selectionVersion;
+      return getEditorSelectionState(editor);
+    },
+    [editor, selectionVersion],
   );
+
   const [activeTab, setActiveTab] = useState<EditorTab>(DEFAULT_TAB);
 
   useEffect(() => {
-    const updateSelection = () => {
-      setSelection(getEditorSelectionState(editor));
-    };
-
     if (!editor) {
-      setSelection(getEditorSelectionState(null));
       return;
     }
 
+    const updateSelection = () => {
+      bumpSelectionVersion();
+    };
+
     editor.on("transaction", updateSelection);
     editor.on("selectionUpdate", updateSelection);
-    updateSelection();
 
     return () => {
       editor.off("transaction", updateSelection);
@@ -118,10 +124,7 @@ export const EditorStateProvider = ({
     [editor, selection, activeTab],
   );
 
-  return (
-    // eslint-disable-next-line react/react-in-jsx-scope
-    React.createElement(EditorSelectionContext.Provider, { value }, children)
-  );
+  return React.createElement(EditorSelectionContext.Provider, { value }, children);
 };
 
 export const useEditorState = () => {

@@ -24,14 +24,22 @@ export interface RibbonItemProps {
   dropdownContent?: React.ReactNode;
 }
 
-const dropdownContent = ({label, action}: {label: string, action?: (val: string) => void}) => {
+const dropdownContent = ({
+  label,
+  value,
+  action,
+}: {
+  label: string;
+  value: string;
+  action?: (val: string) => void;
+}) => {
   switch (label) {
     case "Text Color":
-      return <ColorPicker value="#000000" onChange={(val) => action?.(val)} />;
+      return <ColorPicker value={value || "#000000"} onChange={(val) => action?.(val)} />;
     case "Highlight":
-      return <ColorPicker value="#ffff00" onChange={(val) => action?.(val)} />;
+      return <ColorPicker value={value || "#ffff00"} onChange={(val) => action?.(val)} />;
     case "Link":
-      return <AttachURL action={() => action?.("")} recentURLs={["https://example.com", "https://another-example.com"]} />;
+      return <AttachURL action={(url) => action?.(url)} recentURLs={["https://example.com", "https://another-example.com"]} />;
     case "Table":
       return <InsertTable initialRows={3} initialColumns={3} maxRows={10} maxColumns={10} onInsert={(rows, columns) => action?.(`${rows}x${columns}`)} />;
     default:
@@ -67,12 +75,15 @@ const RibbonItem = ({
       <RibbonListElement
         label={label}
         items={items}
+        action={(val) => action?.(val)}
       />
     );
   }
 
   // 3. Dropdowns with popovers (e.g. Color Picker)
-  if (elementType === "buttonDropdown" && dropdownContent({label})) {
+  const content = dropdownContent({ label, value, action });
+
+  if (elementType === "buttonDropdown" && content) {
     return (
       <ButtonDropDown
         label={label}
@@ -81,7 +92,7 @@ const RibbonItem = ({
         isActive={isActive}
         onPrimaryAction={(val) => action?.(val ?? "")}
       >
-        {dropdownContent({label, action})}
+        {content}
       </ButtonDropDown>
     );
   }

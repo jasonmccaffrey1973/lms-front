@@ -3,10 +3,22 @@ import { StyledColorPicker } from "./ColorPicker.styles";
 import useColorPicker from "./useColorPicker";
 import Button from "../Button/Button";
 import SVGIcon from "../SVG/SVGIcon";
+import { useTheme } from "../../theme";
 
 const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
+    const { theme } = useTheme();
+    const isSystemDark =
+        typeof window !== "undefined" && window.matchMedia
+            ? window.matchMedia("(prefers-color-scheme: dark)").matches
+            : false;
 
-    const { COLOR_PALETTE, STANDARD_COLORS, currentColor, handleColorClick } = useColorPicker({initialColor: value, changeHandler: onChange});
+    const isDarkMode = theme === "dark" || (theme === "system" && isSystemDark);
+
+    const { COLOR_PALETTE, STANDARD_COLORS, colorInputValue, handleColorClick } = useColorPicker({
+        initialColor: value,
+        changeHandler: onChange,
+        isDarkMode,
+    });
 
     const ColorButton = ({ color }: { color: string }) => {
         const handleClick = () => handleColorClick(color);
@@ -38,7 +50,7 @@ const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
             ))}
         </div>
         <div className="custom-color">
-            <input id="color-input" type="color" value={currentColor} onChange={(e) => handleColorClick(e.target.value)} />
+            <input id="color-input" type="color" value={colorInputValue} onChange={(e) => handleColorClick(e.target.value)} />
         </div>
     </StyledColorPicker>
 }

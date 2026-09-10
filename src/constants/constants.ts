@@ -240,17 +240,18 @@ const HOME_MENU_ITEMS = [
     },
     {
         label: "Styles",
+        action: "setStyle",
         elementType: "list",
         items: STYLES_MENU_ITEMS,
         group: "structure",
     },
-    {
-        label: "Paragraph",
-        value: "paragraph",
-        action: "setParagraph",
-        group: "structure",
-        icon: "paragraph",
-    },
+    // {
+    //     label: "Paragraph",
+    //     value: "paragraph",
+    //     action: "setParagraph",
+    //     group: "structure",
+    //     icon: "paragraph",
+    // },
     {
         label: "Align Left",
         value: "align_left",
@@ -308,13 +309,13 @@ const HOME_MENU_ITEMS = [
         group: "structure",
         icon: "quote",
     },
-    {
-        label: "Code",
-        value: "code",
-        action: "toggleCodeBlock",
-        group: "structure",
-        icon: "code",
-    },
+    // {
+    //     label: "Code",
+    //     value: "code",
+    //     action: "toggleCodeBlock",
+    //     group: "structure",
+    //     icon: "code",
+    // },
     // {
     //     label: "Divider",
     //     value: "divider",
@@ -369,6 +370,13 @@ const INSERT_MENU_ITEMS = [
         action: "insertTable",
         group: "insert",
         icon: "table",
+    },
+    {
+        label: "Delete Table",
+        value: "delete_table",
+        action: "deleteTable",
+        group: "insert",
+        icon: "clearformatting",
     },
 ];
 

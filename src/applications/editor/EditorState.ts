@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useReducer,
   useState,
   type ReactNode,
 } from "react";
@@ -20,6 +21,8 @@ export type EditorSelectionState = {
   fontFamily: string;
   fontSize: string;
   textAlign: string;
+  textColor: string;
+  highlightColor: string;
 };
 
 const DEFAULT_FONT_FAMILY = "Arial";
@@ -39,10 +42,13 @@ export const getEditorSelectionState = (
       fontFamily: "",
       fontSize: "",
       textAlign: "",
+      textColor: "",
+      highlightColor: "",
     };
   }
 
   const textStyle = editor.getAttributes("textStyle") ?? {};
+  const highlight = editor.getAttributes("highlight") ?? {};
 
   return {
     bold: editor.isActive("bold"),
@@ -52,6 +58,8 @@ export const getEditorSelectionState = (
     fontFamily: String(textStyle.fontFamily ?? ""),
     fontSize: String(textStyle.fontSize ?? ""),
     textAlign: editor.getAttributes("paragraph")?.textAlign ?? "",
+    textColor: String(textStyle.color ?? ""),
+    highlightColor: String(highlight.color ?? ""),
   };
 };
 
@@ -64,6 +72,10 @@ export const getRibbonItemValue = (
       return selection.fontFamily || DEFAULT_FONT_FAMILY;
     case "setFontSize":
       return selection.fontSize || DEFAULT_FONT_SIZE;
+    case "setTextColor":
+      return selection.textColor || "#000000";
+    case "toggleHighlight":
+      return selection.highlightColor || "#ffff00";
     default:
       return item.value ?? "";
   }
@@ -85,24 +97,29 @@ export const EditorStateProvider = ({
   editor: Editor | null;
   children: ReactNode;
 }) => {
-  const [selection, setSelection] = useState<EditorSelectionState>(() =>
-    getEditorSelectionState(editor),
+  const [selectionVersion, bumpSelectionVersion] = useReducer((value: number) => value + 1, 0);
+
+  const selection = useMemo(
+    () => {
+      void selectionVersion;
+      return getEditorSelectionState(editor);
+    },
+    [editor, selectionVersion],
   );
+
   const [activeTab, setActiveTab] = useState<EditorTab>(DEFAULT_TAB);
 
   useEffect(() => {
-    const updateSelection = () => {
-      setSelection(getEditorSelectionState(editor));
-    };
-
     if (!editor) {
-      setSelection(getEditorSelectionState(null));
       return;
     }
 
+    const updateSelection = () => {
+      bumpSelectionVersion();
+    };
+
     editor.on("transaction", updateSelection);
     editor.on("selectionUpdate", updateSelection);
-    updateSelection();
 
     return () => {
       editor.off("transaction", updateSelection);
@@ -153,6 +170,8 @@ export const useEditorSelection = (editorOverride?: Editor | null) => {
       fontFamily: selection.fontFamily,
       fontSize: selection.fontSize,
       textAlign: selection.textAlign,
+      textColor: selection.textColor,
+      highlightColor: selection.highlightColor,
     }),
     [selection],
   );

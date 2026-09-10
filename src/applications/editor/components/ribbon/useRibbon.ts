@@ -14,6 +14,7 @@ import { getRibbonItemValue, useEditorState } from "../../EditorState";
 const useRibbon = (
   editor: Editor | null,
   openFileDialog: (type: FileDialogType) => void,
+  openMediaDialog: (mode: "image" | "video") => void,
 ) => {
   const { selection, activeTab, setActiveTab } = useEditorState();
 
@@ -51,6 +52,8 @@ const useRibbon = (
       saveDocumentAs: () => {
         openFileDialog("saveDocumentAs");
       },
+
+      openMediaDialog,
     });
   };
 
