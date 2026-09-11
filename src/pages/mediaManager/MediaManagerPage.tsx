@@ -5,7 +5,6 @@ import Button from "../../sharedComponents/Button/Button";
 import {StyledMediaManagerPage, StyledTabBar, StyledTab, StyledRibbon, StyledContent, StyledHeader, StyledFooter } from "./MediaManager.styles";
 import useMediaManager from "./useMediaManager";
 import type { RibbonIcon } from "./MediaManager.types";
-import Render from "../../sharedComponents/Render";
 import SVGIcon from "../../sharedComponents/SVG/SVGIcon";
 
 
@@ -20,15 +19,15 @@ const MediaTab = ({ type, selectedType, action  }: { type: string; selectedType?
 const MediaManagerPage = () => {
   const { MEDIA_TYPES, ribbonIcons, selectedTab, selectTab, performRibbonAction } = useMediaManager();  
 
-  const RibbonButton = ({ item }: { item: RibbonIcon }) => (
-    
-    <Button color="transparent" key={item.label} type="button" onClick={() => performRibbonAction(item.action)}>
-        <Render if={!!item.icon}>
-            <SVGIcon icon={item.icon} />
-        </Render>
-          {item.label}
-    </Button>
-  );
+  const RibbonButton = ({ item }: { item: RibbonIcon }) => {
+    const label = `${item.action === "Bulk" ? "Bulk Upload" : item.action} ${item.action === "Bulk" ? selectedTab+'s' : selectedTab}`;
+    return (
+      <Button color="transparent" key={selectedTab + item.action} type="button" onClick={() => performRibbonAction[item.action.toLowerCase()]?.()}>
+          <SVGIcon icon={item.icon} />
+            {label}
+      </Button>
+    );
+  };
 
   return (
     <PageTemplate>
@@ -46,7 +45,7 @@ const MediaManagerPage = () => {
                 <label>{selectedTab}</label>
                 <div className="icons">
                     {ribbonIcons.map((item) => (
-                        <RibbonButton key={item.label} item={item} />
+                        <RibbonButton key={item.action} item={item} />
                     ))}
                 </div>
             </div>

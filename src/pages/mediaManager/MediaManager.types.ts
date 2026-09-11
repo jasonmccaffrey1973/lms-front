@@ -1,11 +1,12 @@
 import type { SVGIconName } from "../../sharedComponents/SVG/SVGIcon";
 
-type MediaKind = "image" | "video" | "audio";
+type MediaType = "image" | "video" | "audio";
 
-type RibbonIcon = {
-  icon: SVGIconName;
-  label: string;
-  action: string;
-};
+type RibbonAction = "Delete" | "Add" | "View" | "Bulk" | "Edit";
+  
+interface RibbonIcon {
+      icon: SVGIconName;
+      action: RibbonAction;
+    }
 
-export type { MediaKind, RibbonIcon };
+    export type { MediaType, RibbonIcon, RibbonAction };

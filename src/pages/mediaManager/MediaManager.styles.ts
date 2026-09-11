@@ -109,10 +109,12 @@ const StyledRibbon = styled.ul`
         letter-spacing: 0.05rem;
         padding: 0.5rem;
         opacity: 0.8;
+        color: var(--editor-text);
 
         svg {
           margin-block-end: 0.75rem;
           height: 2rem;
+          fill: currentColor;
         }
 
         &:hover {

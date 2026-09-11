@@ -8,25 +8,25 @@ const MEDIA_TYPES = {
 
 const RIBBON_ICONS = {
     image: [
-        {icon: "imageUpload", label: "Add Image", action: "addImage" },
-        {icon: "imageView", label: "View Image", action: "viewImage" },
-        {icon: "imageBulk", label: "Bulk Upload", action: "bulkUploadImages" },
-        {icon: "imageEdit", label: "Edit Image", action: "editImage" },
-        {icon: "imageDelete", label: "Delete Image", action: "deleteImage" }
+        {icon: "imageUpload", action:"Add" },
+        {icon: "imageView", action:"View" },
+        {icon: "imageBulk", action:"Bulk" },
+        {icon: "imageEdit", action:"Edit" },
+        {icon: "imageDelete", action:"Delete" }
     ],
     video: [
-        {icon: "videoUpload", label: "Add Video", action: "addVideo" },
-        {icon: "videoView", label: "View Video", action: "viewVideo" },
-        {icon: "videoBulk", label: "Bulk Upload", action: "bulkUploadVideos" },
-        {icon: "videoEdit", label: "Edit Video", action: "editVideo" },
-        {icon: "videoDelete", label: "Delete Video", action: "deleteVideo" }
+        {icon: "videoUpload", action:"Add" },
+        {icon: "videoView", action:"View" },
+        {icon: "videoBulk", action:"Bulk" },
+        {icon: "videoEdit", action:"Edit" },
+        {icon: "videoDelete", action:"Delete" }
     ],
     audio: [
-        {icon: "audioUpload", label: "Add Audio", action: "addAudio" },
-        {icon: "audioView", label: "View Audio", action: "viewAudio" },
-        {icon: "audioBulk", label: "Bulk Upload", action: "bulkUploadAudios" },
-        {icon: "audioEdit", label: "Edit Audio", action: "editAudio" },
-        {icon: "audioDelete", label: "Delete Audio", action: "deleteAudio" }
+        {icon: "audioUpload", action:"Add" },
+        {icon: "audioView", action:"View" },
+        {icon: "audioBulk", action:"Bulk" },
+        {icon: "audioEdit", action:"Edit" },
+        {icon: "audioDelete", action:"Delete" }
     ],
 } satisfies Record<string, RibbonIcon[]>;
 

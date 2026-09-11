@@ -1,30 +1,6 @@
 import { useState } from "react";
 import { MEDIA_TYPES, RIBBON_ICONS } from "./mediaManager.constants";
 import type { RibbonIcon } from "./MediaManager.types";
-
-
-
-// import { MEDIA_STORAGE_KEY } from "../../applications/media/adapters/localMediaAdapter";
-// import { createMediaService } from "../../applications/media/mediaService";
-// import type { MediaItem, MediaKind } from "../../applications/media/types";
-
-// const readStoredItems = (): MediaItem[] => {
-    //   if (typeof window === "undefined") {
-        //     return [];
-        //   }
-        
-        //   const rawValue = window.localStorage.getItem(MEDIA_STORAGE_KEY);
-        //   if (!rawValue) {
-            //     return [];
-            //   }
-            
-            //   try {
-                //     const parsed = JSON.parse(rawValue) as unknown;
-                //     return Array.isArray(parsed) ? (parsed as MediaItem[]) : [];
-                //   } catch {
-                    //     return [];
-                    //   }
-                    // };
                     
 type MediaTab = keyof typeof RIBBON_ICONS;
 
@@ -42,85 +18,89 @@ const useMediaManager = () => {
     setRibbonIcons(RIBBON_ICONS[tab]);
   };
 
-  const performRibbonAction = (actionLabel: string) => {
-    switch (actionLabel) {
-      case "Add":
-        // perform add action
-        break;
-      case "Delete":
-        // perform delete action
-        break;
-      default:
-        break;
-    }
+  const performRibbonAction: Record<string, () => void> = {
+      'add': () => {
+        switch (selectedTab) {
+          case MEDIA_TYPES.IMAGE:
+            console.log("Adding image");
+            break;
+          case MEDIA_TYPES.VIDEO:
+            console.log("Adding video");
+            break;
+          case MEDIA_TYPES.AUDIO:
+            console.log("Adding audio");
+            break;
+          default:
+            console.warn("Unknown media type");
+        }
+        console.log("Adding image");
+      },
+      'view': () => {
+        switch (selectedTab) {
+          case MEDIA_TYPES.IMAGE:
+            console.log("Viewing image");
+            break;
+          case MEDIA_TYPES.VIDEO:
+            console.log("Viewing video");
+            break;
+          case MEDIA_TYPES.AUDIO:
+            console.log("Viewing audio");
+            break;
+          default:
+            console.warn("Unknown media type");
+        }
+      },
+      'bulk': () => {
+        switch (selectedTab) {
+          case MEDIA_TYPES.IMAGE:
+            console.log("Bulk uploading images");
+            break;
+          case MEDIA_TYPES.VIDEO:
+            console.log("Bulk uploading videos");
+            break;
+          case MEDIA_TYPES.AUDIO:
+            console.log("Bulk uploading audios");
+            break;
+          default:
+            console.warn("Unknown media type");
+        }
+      },
+      'edit': () => {
+        switch (selectedTab) {
+          case MEDIA_TYPES.IMAGE:
+            console.log("Editing image");
+            break;
+          case MEDIA_TYPES.VIDEO:
+            console.log("Editing video");
+            break;
+          case MEDIA_TYPES.AUDIO:
+            console.log("Editing audio");
+            break;
+          default:
+            console.warn("Unknown media type");
+        }
+      },
+      'delete': () => {
+        switch (selectedTab) {
+          case MEDIA_TYPES.IMAGE:
+            console.log("Deleting image");
+            break;
+          case MEDIA_TYPES.VIDEO:
+            console.log("Deleting video");
+            break;
+          case MEDIA_TYPES.AUDIO:
+            console.log("Deleting audio");
+            break;
+          default:
+            console.warn("Unknown media type");
+        }
+      },
+      '': () => {
+        console.warn("No action specified");
+      },
   };
 
-  //   const toggleSelected = (id: string) => {
-  //     setSelectedIds((prev) =>
-  //       prev.includes(id) ? prev.filter((entry) => entry !== id) : [...prev, id],
-  //     );
-  //   };
-
-  //   const openDialog = (mode: MediaKind) => {
-  //     setDialogMode(mode);
-  //     setDialogOpen(true);
-  //     setError("");
-  //   };
-
-  //   const closeDialog = () => {
-  //     setDialogOpen(false);
-  //   };
-
-  //   const deleteSelected = async () => {
-  //     if (!selectedIds.length) {
-  //       return;
-  //     }
-
-  //     await mediaService.deleteMedia(selectedIds);
-  //     setSelectedIds([]);
-  //     await loadItems();
-  //   };
-
-  //   const uploadMedia = async ({
-  //     mode,
-  //     files,
-  //     altText,
-  //   }: {
-  //     mode: MediaKind;
-  //     files: File[];
-  //     altText: string;
-  //   }) => {
-  //     for (const file of files) {
-  //       await mediaService.addUploadMedia(mode, file, { altText });
-  //     }
-
-  //     await loadItems();
-  //   };
-
-  //   const addUrlMedia = async ({
-  //     mode,
-  //     url,
-  //     altText,
-  //   }: {
-  //     mode: MediaKind;
-  //     url: string;
-  //     altText: string;
-  //   }) => {
-  //     await mediaService.addUrlMedia(mode, url, { altText });
-  //     await loadItems();
-  //   };
-
   return {
-    // items,
-    // selectedIds,
-    // toggleSelected,
-    // dialogOpen,
-    // dialogMode,
-    // openDialog,
-    // closeDialog,
-    // deleteSelected,
-    // uploadMedia,
-    // addUrlMedia,
     MEDIA_TYPES,
     selectedTab,
     selectTab,
