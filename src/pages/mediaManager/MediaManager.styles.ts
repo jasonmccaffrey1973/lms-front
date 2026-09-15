@@ -149,4 +149,39 @@ const StyledFooter = styled.footer`
   box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 `;
 
-export {StyledMediaManagerPage, StyledTabBar, StyledTab, StyledRibbon, StyledContent, StyledHeader, StyledFooter };
+const StyledContextWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.33rem 1.5rem;
+  margin-block: 0.66rem 0.33rem;
+  padding: 0.33rem;
+  border: 1px solid var(--editor-border);
+  border-radius: 0.33rem;
+  background-color: var(--editor-surface-subtle);
+  box-shadow: inset 0.33rem 0.33rem 1rem rgba(0, 0, 0, 0.1);
+
+
+  label {
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--editor-text-muted);
+    margin-inline-end: 0.5rem;
+  }
+
+  .context-label {
+    display: block;
+    inline-size: 100%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--editor-text-muted);
+    margin: 0.5rem 0 0.25rem 0.5rem;
+  }
+`;
+
+
+export {StyledMediaManagerPage, StyledTabBar, StyledTab, StyledRibbon, StyledContent, StyledHeader, StyledFooter, StyledContextWrapper };

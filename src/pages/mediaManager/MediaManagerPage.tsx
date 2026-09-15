@@ -2,10 +2,11 @@
 import PageTemplate from "../../templates/PageTemplate";
 import Button from "../../sharedComponents/Button/Button";
 // import MediaDialog from "../../applications/media/components/MediaDialog";
-import {StyledMediaManagerPage, StyledTabBar, StyledTab, StyledRibbon, StyledContent, StyledHeader, StyledFooter } from "./MediaManager.styles";
+import {StyledMediaManagerPage, StyledTabBar, StyledTab, StyledRibbon, StyledContent, StyledHeader, StyledFooter, StyledContextWrapper } from "./MediaManager.styles";
 import useMediaManager from "./useMediaManager";
 import type { RibbonIcon } from "./MediaManager.types";
 import SVGIcon from "../../sharedComponents/SVG/SVGIcon";
+import Render from "../../sharedComponents/Render";
 
 
 
@@ -16,8 +17,17 @@ const MediaTab = ({ type, selectedType, action  }: { type: string; selectedType?
   );
 };
 
+const ContextInput = ({ label, type }: { label?: string; type: string }) => {
+  return (
+    <div className="input-wrapper">
+      {label && <label htmlFor={label}>{label}</label>}
+      <input type={type} id={label || ""} />
+    </div>
+  );
+};
+
 const MediaManagerPage = () => {
-  const { MEDIA_TYPES, ribbonIcons, selectedTab, selectTab, performRibbonAction } = useMediaManager();  
+  const { MEDIA_TYPES, ribbonIcons, selectedTab, selectTab, performRibbonAction, showContext } = useMediaManager();  
 
   const RibbonButton = ({ item }: { item: RibbonIcon }) => {
     const label = `${item.action === "Bulk" ? "Bulk Upload" : item.action} ${item.action === "Bulk" ? selectedTab+'s' : selectedTab}`;
@@ -28,6 +38,7 @@ const MediaManagerPage = () => {
       </Button>
     );
   };
+
 
   return (
     <PageTemplate>
@@ -49,6 +60,14 @@ const MediaManagerPage = () => {
                     ))}
                 </div>
             </div>
+            <Render if={showContext}>
+                <StyledContextWrapper>
+                  <div className="context-label">{`Add Image`}</div>
+                  <ContextInput label="Media URL" type="url" />
+                  <ContextInput label="Alt Text" type="text" />
+                  <ContextInput label="Storage Location" type="text" />
+                </StyledContextWrapper>
+            </Render>
         </StyledRibbon>
         <StyledContent>
         </StyledContent>

@@ -1,15 +1,33 @@
-import ButtonDropDown from "../../sharedComponents/buttonDropDown/ButtonDropDown";
-import InsertTable from "../../sharedComponents/insertTable/InsertTable";
+import { useRef } from "react";
+import useDialog from "../../sharedComponents/dialog/useDialog";
+
+import FileUploader from "../../sharedComponents/fileUploader/FileUploader";
+import Dialog from "../../sharedComponents/dialog/Dailog";
+
 const TestPage = () => {
   
+  const dialogRef = useRef<HTMLDialogElement>(null!);
+  const dialogControls = useDialog({ ref: dialogRef });
+  const { toggleDialog, closeDialog } = dialogControls;
 
+  
   return (
+    <>
+      <button onClick={toggleDialog}>Open Dialog</button>
+      <Dialog 
+        title="Upload File(s)"
+        closeDialog={closeDialog} 
+        dialogRef={dialogRef} 
+        controls={dialogControls} 
+        footerButtons={[
+          {color: "danger", label: "Close", onClick: closeDialog},
+          {color: "success", label: "Upload Files", onClick: closeDialog}
+        ]}>
+        <FileUploader />
+      </Dialog>
 
-    <ButtonDropDown label="Text Color" icon="textcolor" value="#ff0000" isActive={true} onPrimaryAction={(val) => console.log(val)}>
-      <InsertTable initialRows={3} initialColumns={3} onInsert={(rows, columns) => console.log(`Inserted table with ${rows} rows and ${columns} columns`)} />
-    </ButtonDropDown>
-
+    </>
   );
-};
+}
 
 export default TestPage;
