@@ -57,6 +57,13 @@ const TestPage = () => {
         <FileUploader
           uploadFile={mockUpload}
           autoUpload={true}
+          duplicateStrategy="keepBoth"
+          imageOptimization={{
+            enabled: true,
+            maxWidth: 2048,
+            maxHeight: 2048,
+            quality: 0.85,
+          }}
         />
       </Dialog>
     </>

@@ -7,11 +7,12 @@ import type {
     UseUploaderReturn,
     UploadError,
 } from "./fileUploader.types"; 
+import { optimizeImage } from "./imageOptimizer";
     
 /** -----------------------------------------------------------------------------------------------------------
  * Formats a file size in bytes into a human-readable string (e.g., '1.24 MB').
  * ----------------------------------------------------------------------------------------------------------- */
-const formatFileSize = (bytes: number): string => {
+export const formatFileSize = (bytes: number): string => {
      if (bytes === 0) { 
         return "0 Bytes"; 
     }
@@ -25,10 +26,88 @@ const formatFileSize = (bytes: number): string => {
 /** -----------------------------------------------------------------------------------------------------------
  * Revokes a blob/object URL preview to free up browser memory.
  * ----------------------------------------------------------------------------------------------------------- */
-const revokeFilePreview = (file?: UploaderFile) => {
+export const revokeFilePreview = (file?: UploaderFile) => {
     if (file?.preview && file.preview.startsWith("blob:")) {
         URL.revokeObjectURL(file.preview);
     }
+};
+
+/** -----------------------------------------------------------------------------------------------------------
+ * Default client-side filename sanitization.
+ * Strips directory traversal (.., /, \), dangerous control & filesystem characters (<>:"/\|?*),
+ * normalizes consecutive whitespace and underscores, and guarantees a valid base name.
+ * ----------------------------------------------------------------------------------------------------------- */
+export const defaultSanitizeFilename = (name: string): string => {
+    // 1. Remove leading dot/slash combinations and replace path separators
+    let clean = name.replace(/^[./\\]+/, "").replace(/[/\\]+/g, "_");
+
+    // 2. Remove illegal filesystem chars: < > : " / \ | ? *
+    clean = clean.replace(/[<>:"/\\|?*]/g, "_");
+
+    // 3. Remove non-printable ASCII control characters (0-31 and 127)
+    clean = Array.from(clean)
+        .map((ch) => {
+            const code = ch.charCodeAt(0);
+            return (code >= 0 && code <= 31) || code === 127 ? "_" : ch;
+        })
+        .join("");
+
+    // 4. Normalize multiple whitespace and underscores
+    clean = clean.replace(/\s+/g, " ").replace(/_+/g, "_").trim();
+
+    // 4. Extract base name and extension
+    const lastDotIndex = clean.lastIndexOf(".");
+    if (lastDotIndex <= 0) {
+        return clean || "unnamed_file";
+    }
+
+    const base = clean.slice(0, lastDotIndex).trim().replace(/[._]+$/, "");
+    const ext = clean.slice(lastDotIndex);
+
+    return (base || "unnamed_file") + ext;
+};
+
+/** -----------------------------------------------------------------------------------------------------------
+ * Generates a unique filename by appending an incremental numeric suffix (e.g., 'photo (1).png').
+ * ----------------------------------------------------------------------------------------------------------- */
+export const generateUniqueFileName = (fileName: string, existingNames: Set<string>): string => {
+    if (!existingNames.has(fileName)) {
+        return fileName;
+    }
+
+    const lastDotIndex = fileName.lastIndexOf(".");
+    const base = lastDotIndex > 0 ? fileName.slice(0, lastDotIndex) : fileName;
+    const ext = lastDotIndex > 0 ? fileName.slice(lastDotIndex) : "";
+
+    let counter = 1;
+    let candidate = `${base} (${counter})${ext}`;
+    while (existingNames.has(candidate)) {
+        counter += 1;
+        candidate = `${base} (${counter})${ext}`;
+    }
+
+    return candidate;
+};
+
+/** -----------------------------------------------------------------------------------------------------------
+ * Creates a new File object with an updated filename if the name has changed.
+ * ----------------------------------------------------------------------------------------------------------- */
+export const createRenamedFile = (originalFile: File, newName: string): File => {
+    if (originalFile.name === newName) return originalFile;
+    return new File([originalFile], newName, {
+        type: originalFile.type,
+        lastModified: originalFile.lastModified,
+    });
+};
+
+/** -----------------------------------------------------------------------------------------------------------
+ * Formats react-dropzone FileRejection errors into readable human messages.
+ * ----------------------------------------------------------------------------------------------------------- */
+export const formatRejectionErrors = (fileRejections: FileRejection[]): string[] => {
+    return fileRejections.map((rejection) => {
+        const messages = rejection.errors.map((e) => e.message).join(", ");
+        return `${rejection.file.name}: ${messages}`;
+    });
 };
 
 /** -----------------------------------------------------------------------------------------------------------
@@ -46,6 +125,9 @@ const useFileUploader = (options: UseFileUploaderOptions = {}): UseUploaderRetur
         multiple = true,
         uploadFile,
         autoUpload = false,
+        duplicateStrategy = "keepBoth",
+        sanitizeFilename,
+        imageOptimization,
         onFilesChange,
         onError,
         onDropRejected,
@@ -69,10 +151,11 @@ const useFileUploader = (options: UseFileUploaderOptions = {}): UseUploaderRetur
      * Cleanup all active object URLs and abort ongoing uploads when the component unmounts.
      ** ----------------------------------------------------------------------------------------------------------- */
     useEffect(() => {
+        const activeAbortControllers = abortControllersRef.current;
         return () => {
             filesRef.current.forEach(revokeFilePreview);
-            abortControllersRef.current.forEach((controller) => controller.abort());
-            abortControllersRef.current.clear();
+            activeAbortControllers.forEach((controller) => controller.abort());
+            activeAbortControllers.clear();
         };
     }, []);
 
@@ -198,36 +281,68 @@ const useFileUploader = (options: UseFileUploaderOptions = {}): UseUploaderRetur
     }, [uploadFile, uploadSingleFile]);
 
     const handleDrop = useCallback(
-        (acceptedFiles: File[]) => {
+        async (acceptedFiles: File[]) => {
             updateError(undefined);
 
-            // Build the accepted/duplicate lists before calling setFiles so we can
-            // reference them both for the state update AND for auto-upload without a
-            // separate ref sync cycle.
-            const existingKeys = new Set(filesRef.current.map((f) => `${f.file.name}::${f.file.size}`));
-            const accepted: UploaderFile[] = [];
+            const sanitize = sanitizeFilename ?? defaultSanitizeFilename;
+            const currentFiles = filesRef.current;
+            const existingNames = new Set(currentFiles.map((f) => f.file.name));
+
+            const newlyAccepted: UploaderFile[] = [];
+            const replacedFiles: UploaderFile[] = [];
             const duplicates: string[] = [];
 
-            for (const file of acceptedFiles) {
-                const key = `${file.name}::${file.size}`;
-                if (existingKeys.has(key)) {
-                    duplicates.push(file.name);
-                    continue;
+            for (const rawFile of acceptedFiles) {
+                // 1. Sanitize filename (stripping traversal, illegal characters, whitespace)
+                const safeName = sanitize(rawFile.name);
+                let file = createRenamedFile(rawFile, safeName);
+
+                // 2. Client-Side Image Optimization (Canvas Resizing & Compression)
+                let previewUrl: string | undefined;
+                if (imageOptimization?.enabled && file.type.toLowerCase().startsWith("image/")) {
+                    const optimized = await optimizeImage(file, imageOptimization);
+                    file = optimized.file;
+                    previewUrl = optimized.previewUrl;
+                } else {
+                    const isImage = file.type ? file.type.startsWith("image/") : false;
+                    previewUrl = isImage ? URL.createObjectURL(file) : undefined;
                 }
-                existingKeys.add(key);
+
+                // 3. Evaluate duplicate strategy against existing staged files
+                const isDuplicate = existingNames.has(file.name);
+
+                if (isDuplicate) {
+                    if (duplicateStrategy === "skip") {
+                        if (previewUrl) URL.revokeObjectURL(previewUrl);
+                        duplicates.push(file.name);
+                        continue;
+                    } else if (duplicateStrategy === "keepBoth") {
+                        const uniqueName = generateUniqueFileName(file.name, existingNames);
+                        file = createRenamedFile(file, uniqueName);
+                        existingNames.add(file.name);
+                    } else if (duplicateStrategy === "replace") {
+                        // Keep the duplicate name; will replace the existing staged entry
+                    }
+                } else {
+                    existingNames.add(file.name);
+                }
 
                 const id = crypto.randomUUID();
-                const isImage = file.type ? file.type.startsWith("image/") : false;
-                const preview = isImage ? URL.createObjectURL(file) : undefined;
 
-                accepted.push({
+                const uploaderFile: UploaderFile = {
                     id,
                     file,
                     sizeLabel: formatFileSize(file.size),
-                    preview,
+                    preview: previewUrl,
                     status: uploadFile ? "pending" : undefined,
                     progress: uploadFile ? 0 : undefined,
-                });
+                };
+
+                if (isDuplicate && duplicateStrategy === "replace") {
+                    replacedFiles.push(uploaderFile);
+                } else {
+                    newlyAccepted.push(uploaderFile);
+                }
             }
 
             if (duplicates.length > 0) {
@@ -237,26 +352,56 @@ const useFileUploader = (options: UseFileUploaderOptions = {}): UseUploaderRetur
                 });
             }
 
-            if (accepted.length === 0) return;
+            if (newlyAccepted.length === 0 && replacedFiles.length === 0) return;
 
-            // Pure state updater — no side effects inside
-            setFiles((currentFiles) => {
-                if (!multiple) {
-                    currentFiles.forEach(revokeFilePreview);
-                    return [accepted[0]];
+            // Pure state updater
+            setFiles((prev) => {
+                const updated = [...prev];
+
+                // Replace matching entries in-place when duplicateStrategy="replace"
+                for (const rep of replacedFiles) {
+                    const idx = updated.findIndex((f) => f.file.name === rep.file.name);
+                    if (idx !== -1) {
+                        revokeFilePreview(updated[idx]);
+                        updated[idx] = rep;
+                    } else {
+                        updated.push(rep);
+                    }
                 }
-                return [...currentFiles, ...accepted];
+
+                if (!multiple) {
+                    // Single file mode: revoke all existing previews and keep only the latest file
+                    const latest =
+                        newlyAccepted[newlyAccepted.length - 1] ?? replacedFiles[replacedFiles.length - 1];
+                    updated.forEach((f) => {
+                        if (f.id !== latest.id) revokeFilePreview(f);
+                    });
+                    return [latest];
+                }
+
+                return [...updated, ...newlyAccepted];
             });
 
             // Trigger auto-upload after setFiles, passing the file objects directly.
             // This avoids the filesRef race condition (the ref is synced in a useEffect
             // that runs after render, but we already have the objects here).
             if (autoUpload && uploadFile) {
-                const filesToUpload = multiple ? accepted : [accepted[0]];
+                const filesToUpload = multiple
+                    ? [...replacedFiles, ...newlyAccepted]
+                    : [newlyAccepted[newlyAccepted.length - 1] ?? replacedFiles[replacedFiles.length - 1]];
                 filesToUpload.forEach((uf) => uploadSingleFile(uf.id, uf));
             }
         },
-        [autoUpload, multiple, updateError, uploadFile, uploadSingleFile]
+        [
+            autoUpload,
+            duplicateStrategy,
+            imageOptimization,
+            multiple,
+            sanitizeFilename,
+            updateError,
+            uploadFile,
+            uploadSingleFile,
+        ]
     );
 
 
@@ -268,10 +413,7 @@ const useFileUploader = (options: UseFileUploaderOptions = {}): UseUploaderRetur
         (fileRejections: FileRejection[]) => {
             onDropRejected?.(fileRejections);
 
-            const rejectionErrors = fileRejections.map((rejection) => {
-                const messages = rejection.errors.map((e) => e.message).join(", ");
-                return `${rejection.file.name}: ${messages}`;
-            });
+            const rejectionErrors = formatRejectionErrors(fileRejections);
 
             updateError({
                 error: `${fileRejections.length} file${fileRejections.length === 1 ? "" : "s"} rejected`,

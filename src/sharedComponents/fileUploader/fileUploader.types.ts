@@ -28,6 +28,23 @@ interface AggregateProgress {
     percentage: number;
 }
 
+type DuplicateStrategy = "skip" | "keepBoth" | "replace";
+
+interface ImageOptimizationOptions {
+    /** Whether to enable client-side canvas optimization */
+    enabled?: boolean;
+    /** Maximum image width in pixels. Default: 2048 */
+    maxWidth?: number;
+    /** Maximum image height in pixels. Default: 2048 */
+    maxHeight?: number;
+    /** Output quality from 0.1 to 1.0 (default: 0.85, visually lossless) */
+    quality?: number;
+    /** Desired MIME type format. Defaults to preserving original format (or image/jpeg if unsupported) */
+    format?: "image/jpeg" | "image/webp" | "image/png";
+    /** If true, only generates a downscaled preview thumbnail and keeps the uploaded raw file untouched */
+    thumbnailOnly?: boolean;
+}
+
 interface UseFileUploaderOptions {
     accept?: Accept;
     maxSize?: number; // in bytes
@@ -35,6 +52,9 @@ interface UseFileUploaderOptions {
     multiple?: boolean;
     uploadFile?: UploadFileHandler;
     autoUpload?: boolean;
+    duplicateStrategy?: DuplicateStrategy;
+    sanitizeFilename?: (fileName: string) => string;
+    imageOptimization?: ImageOptimizationOptions;
     onFilesChange?: (files: UploaderFile[]) => void;
     onError?: (error: UploadError) => void;
     onDropRejected?: (fileRejections: FileRejection[]) => void;
@@ -71,6 +91,8 @@ interface FileUploaderProps extends UseFileUploaderOptions {
 export type {
     UploaderFile,
     UploadFileStatus,
+    DuplicateStrategy,
+    ImageOptimizationOptions,
     UploadFileHandler,
     AggregateProgress,
     UseFileUploaderOptions,
