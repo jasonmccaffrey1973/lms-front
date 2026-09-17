@@ -18,46 +18,72 @@ import {
 import type { FileUploaderProps, UploaderFile } from "./fileUploader.types";
 import useFileUploader from "./useFileUploader";
 
-/**
+
+/** ---------------------------------------------------------------------------------------
+ * FileUploader Component
+*
+* ---------------------------------------------------------------------------------------
+* Example Usage:
+* ---------------------------------------------------------------------------------------
+ * import { useState } from "react";
+ * import FileUploader from "./FileUploader";
+ * import type { UploaderFile } from "./fileUploader.types";
+*
+* const MyComponent = () => {
+*   const [files, setFiles] = useState<UploaderFile[]>([]);
+*
+*   return (
+*     <FileUploader
+*       accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
+*       maxSize={10 * 1024 * 1024} // 10 MB
+*       maxFiles={5}
+*       multiple={true}
+*       onFilesChange={setFiles}
+*       title="Upload Media"
+*       description="Drag & drop images here or click to browse (max 10MB each)"
+*     />
+*   );
+* };
+** --------------------------------------------------------------------------------------- */
+
+
+/** --------------------------------------------------------------------------------------- 
  * Resolves an appropriate icon based on the file MIME type or file extension.
- */
+ ** --------------------------------------------------------------------------------------- */
+
 const getFileIcon = (file: File) => {
     const type = file.type?.toLowerCase() || "";
     const name = file.name?.toLowerCase() || "";
 
+    const accessFileExtensions = [".accdb", ".mdb"];
+
     if (type.startsWith("image/")) return "image";
     if (type.startsWith("video/")) return "video";
+    if (type.includes("access") || accessFileExtensions.some(ext => name.endsWith(ext))) return "msAccess";
+    if (type.includes("onenote") || name.endsWith(".one")) return "msOneNote";
     if (type.includes("pdf") || name.endsWith(".pdf")) return "pdf";
+    if (type.includes("powerpoint") || name.endsWith(".ppt") || name.endsWith(".pptx")) return "msPowerPoint";
+    if (type.includes("word") || name.endsWith(".doc") || name.endsWith(".docx")) return "msWord";
+    if (type.includes("excel") || name.endsWith(".xls") || name.endsWith(".xlsx")) return "msExcel";
     if (type.includes("audio/") || name.endsWith(".mp3") || name.endsWith(".wav")) return "audioBulk";
     return "document";
 };
 
-/** ---------------------------------------------------------------------------------------
- * FileUploader Component
- *
- * ---------------------------------------------------------------------------------------
- * Example Usage:
- * ---------------------------------------------------------------------------------------
- * import { useState } from "react";
- * import FileUploader from "./FileUploader";
- * import type { UploaderFile } from "./fileUploader.types";
- *
- * const MyComponent = () => {
- *   const [files, setFiles] = useState<UploaderFile[]>([]);
- *
- *   return (
- *     <FileUploader
- *       accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
- *       maxSize={10 * 1024 * 1024} // 10 MB
- *       maxFiles={5}
- *       multiple={true}
- *       onFilesChange={setFiles}
- *       title="Upload Media"
- *       description="Drag & drop images here or click to browse (max 10MB each)"
- *     />
- *   );
- * };
+/** --------------------------------------------------------------------------------------- 
+ * @param title - The title of the FileUploader component.
+ * @param description - The description of the FileUploader component.
+ * @param showAggregateProgress - Whether to show the aggregate progress bar.
+ * @param uploaderOptions - Additional options for the file uploader.
+ * @example
+ * <FileUploader
+ *   title="Upload Media"
+ *   description="Drag & drop images here or click to browse (max 10MB each)"
+ *   showAggregateProgress={true}
+ *   uploaderOptions={{ accept: { "image/*": [".png", ".jpg", ".jpeg", ".webp"] }, maxSize: 10 * 1024 * 1024, maxFiles: 5, multiple: true }}
+ * />
+ * @returns The rendered FileUploader component.
  ** --------------------------------------------------------------------------------------- */
+
 const FileUploader = ({
     title,
     description,

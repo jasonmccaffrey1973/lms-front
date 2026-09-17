@@ -1,71 +1,52 @@
-import { useRef } from "react";
-import useDialog from "../../sharedComponents/dialog/useDialog";
-import FileUploader from "../../sharedComponents/fileUploader/FileUploader";
-import Dialog from "../../sharedComponents/dialog/Dailog";
+import Button from "../../sharedComponents/Button/Button";
+import Render from "../../sharedComponents/Render";
+import SVGIcon from "../../sharedComponents/SVG/SVGIcon";
+import { StyledMediaItem, StyledMetaWrapper } from "./TestPage.styles";
+import useTestPage from "./useTestPage";
 
-/**
- * Simulated slow upload function (3 seconds total per file).
- * Increments progress every 300ms and reacts to cancellation.
- */
-const mockUpload = (
-  file: File,
-  onProgress: (pct: number) => void,
-  signal: AbortSignal
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      if (signal.aborted) {
-        clearInterval(interval);
-        reject(new Error("Aborted"));
-        return;
-      }
+interface MediaMetaProps {
+  meta: Record<string, unknown>;
+}
 
-      progress += 10;
-      onProgress(progress);
-
-      if (progress >= 100) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 300);
-
-    signal.addEventListener("abort", () => {
-      clearInterval(interval);
-      reject(new Error("Aborted"));
-    });
-  });
-};
+const MediaMeta = ({ meta }: MediaMetaProps) => {
+  return (
+    <aside className="media-meta-wrapper">
+      <ul>
+        {Object.entries(meta).map(([key, value]) => (
+          <li key={key}>
+            <span className="meta-label">{key}: </span>
+            <span className="meta-value">{JSON.stringify(value)}</span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+}
 
 const TestPage = () => {
-  const dialogRef = useRef<HTMLDialogElement>(null!);
-  const dialogControls = useDialog({ ref: dialogRef });
-  const { toggleDialog, closeDialog } = dialogControls;
+
+
+  const { MetaVisible, toggleMeta, meta, media } = useTestPage();
 
   return (
     <>
-      <button onClick={toggleDialog}>Open Dialog</button>
-      <Dialog 
-        title="Upload File(s)"
-        closeDialog={closeDialog} 
-        dialogRef={dialogRef} 
-        controls={dialogControls} 
-        footerButtons={[
-          { color: "danger", label: "Cancel", onClick: closeDialog },
-          { color: "success", label: "Upload Files", onClick: closeDialog }
-        ]}>
-        <FileUploader
-          uploadFile={mockUpload}
-          autoUpload={true}
-          duplicateStrategy="keepBoth"
-          imageOptimization={{
-            enabled: true,
-            maxWidth: 2048,
-            maxHeight: 2048,
-            quality: 0.85,
-          }}
-        />
-      </Dialog>
+    <StyledMediaItem>
+        <header className="media-header">
+          <Button onClick={() => toggleMeta()}><SVGIcon icon={MetaVisible ? "chevronDown" : "chevronRight"} /></Button>
+        </header>
+        <section className="media-body">
+          <img className="thumbnail" src={media?.src as string} alt="Test Image" />
+        </section>
+        <footer className="media-footer">
+          <h2>{media?.filename as string}</h2>
+        </footer>
+
+        <Render if={Boolean(meta && Object.keys(meta).length > 0)}>
+          <StyledMetaWrapper aria-hidden={!MetaVisible}>
+            <MediaMeta meta={meta!} />
+          </StyledMetaWrapper>
+        </Render> 
+    </StyledMediaItem>
     </>
   );
 };

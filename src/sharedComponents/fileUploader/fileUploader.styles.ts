@@ -235,9 +235,9 @@ const StyledFileItem = styled.li`
         }
 
         svg {
-            width: 1rem;
-            height: 1rem;
-            opacity: 0.7;
+            width: 2rem;
+            height: 2rem;
+            opacity: 0.9;
         }
     }
 

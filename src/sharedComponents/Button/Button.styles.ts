@@ -61,7 +61,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.025rem;
-    user-select: none;
+    cursor: pointer;
 
     svg {
         block-size: max(90%, 1rem);

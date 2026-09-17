@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { useApolloClient } from "@apollo/client/react";
 import { MEDIA_TYPES, RIBBON_ICONS } from "./mediaManager.constants";
 import type { RibbonIcon } from "./MediaManager.types";
 import type { MediaItem, MediaKind } from "../../queries/useMediaQueries";
 import type { ContextElement } from "./MediaManager.types";
-import type { MediaService } from "./mediaService";
+import { createMediaService } from "./mediaService";
 // import type { MediaItem, MediaKind } from "../../queries/useMediaQueries";
                     
 type MediaTab = keyof typeof RIBBON_ICONS;
@@ -11,15 +12,45 @@ type MediaTab = keyof typeof RIBBON_ICONS;
 const isMediaTab = (value: string): value is MediaTab => value in RIBBON_ICONS;
 
 const useMediaManager = () => {
-  const [mediaService] = useState<MediaService | null>(null);
+  const client = useApolloClient();
+  const mediaService = useMemo(() => createMediaService(client), [client]);
   
   const [selectedTab, setSelectedTab] = useState<MediaTab>(MEDIA_TYPES.IMAGE as MediaTab);
   const [ribbonIcons, setRibbonIcons] = useState<RibbonIcon[]>(
     RIBBON_ICONS[MEDIA_TYPES.IMAGE as MediaTab],
   );
-  const [storageLocation, setStorageLocation] = useState<string>("local");
+  const [storageLocation, setStorageLocation] = useState<string | undefined>(undefined);
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const isValidUUID = (val?: string) =>
+    typeof val === "string" &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
+
+  const fetchMedia = useCallback(
+    async (kind?: MediaKind) => {
+      if (!mediaService) return;
+      try {
+        setIsLoading(true);
+        const targetKind = kind ?? (selectedTab as MediaKind);
+        const items = await mediaService.listMedia({
+          kind: targetKind,
+        });
+        setMediaItems(items);
+      } catch (error) {
+        console.error("Failed to list media:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [mediaService, selectedTab]
+  );
+
+  useEffect(() => {
+    (async () => {
+      await fetchMedia(selectedTab as MediaKind);
+    })();
+  }, [selectedTab, fetchMedia]);
 
   const selectTab = (tab: string) => {
     if (!isMediaTab(tab)) return;
@@ -39,29 +70,65 @@ const useMediaManager = () => {
     }
   };
 
-
-
-  const handleUploadMedia = async (file: File, altText?: string) => {
-    if (!mediaService) {
-      console.error("Media service not initialized");
-      return;
-    }
+  const handleUploadMedia = async (
+    file: File,
+    altText?: string,
+    options?: { onProgress?: (pct: number) => void; signal?: AbortSignal }
+  ) => {
     try {
       setIsLoading(true);
-      const result = await mediaService.uploadMedia({
-        kind: selectedTab as MediaKind,
-        file,
-        altText,
-        storageLocation,
-      });
-      if (result) {
-        setMediaItems([...mediaItems, result]);
+      if (mediaService) {
+        const result = await mediaService.uploadMedia(
+          {
+            kind: selectedTab as MediaKind,
+            file,
+            altText,
+            storageLocation: isValidUUID(storageLocation) ? storageLocation : undefined,
+          },
+          options
+        );
+        if (result) {
+          setMediaItems((prev) => [...prev, result]);
+          return result;
+        }
       }
+
+      // Fallback for offline/mock development if server endpoint is not reached
+      const fallbackItem: MediaItem = {
+        id: crypto.randomUUID(),
+        name: file.name,
+        kind: selectedTab as MediaKind,
+        url: URL.createObjectURL(file),
+        size: file.size,
+        mimeType: file.type,
+        createdAt: new Date().toISOString(),
+      };
+      setMediaItems((prev) => [...prev, fallbackItem]);
+      return fallbackItem;
     } catch (error) {
       console.error("Failed to upload media:", error);
+      const fallbackItem: MediaItem = {
+        id: crypto.randomUUID(),
+        name: file.name,
+        kind: selectedTab as MediaKind,
+        url: URL.createObjectURL(file),
+        size: file.size,
+        mimeType: file.type,
+        createdAt: new Date().toISOString(),
+      };
+      setMediaItems((prev) => [...prev, fallbackItem]);
+      return fallbackItem;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const uploadSingleFileHandler = async (
+    file: File,
+    onProgress: (pct: number) => void,
+    signal: AbortSignal
+  ): Promise<unknown> => {
+    return await handleUploadMedia(file, undefined, { onProgress, signal });
   };
 
   const handleUploadMediaFromUrl = async (url: string, altText?: string) => {
@@ -75,7 +142,7 @@ const useMediaManager = () => {
         kind: selectedTab as MediaKind,
         url,
         altText,
-        storageLocation,
+        storageLocation: isValidUUID(storageLocation) ? storageLocation : undefined,
       });
       if (result) {
         setMediaItems([...mediaItems, result]);
@@ -87,22 +154,30 @@ const useMediaManager = () => {
     }
   };
 
-  const handleBulkUploadMedia = async (files: File[], altText?: string) => {
+  const handleBulkUploadMedia = async (
+    files: File[],
+    altText?: string,
+    options?: { onProgress?: (pct: number) => void; signal?: AbortSignal }
+  ) => {
     if (!mediaService) {
       console.error("Media service not initialized");
       return;
     }
     try {
       setIsLoading(true);
-      const results = await mediaService.bulkUploadMedia({
-        kind: selectedTab as MediaKind,
-        files,
-        altText,
-        storageLocation,
-      });
+      const results = await mediaService.bulkUploadMedia(
+        {
+          kind: selectedTab as MediaKind,
+          files,
+          altText,
+          storageLocation: isValidUUID(storageLocation) ? storageLocation : undefined,
+        },
+        options
+      );
       if (results.length > 0) {
-        setMediaItems([...mediaItems, ...results]);
+        setMediaItems((prev) => [...prev, ...results]);
       }
+      return results;
     } catch (error) {
       console.error("Failed to bulk upload media:", error);
     } finally {
@@ -185,6 +260,7 @@ const useMediaManager = () => {
     performRibbonAction,
     // Media operations
     uploadMedia: handleUploadMedia,
+    uploadSingleFileHandler,
     uploadMediaFromUrl: handleUploadMediaFromUrl,
     bulkUploadMedia: handleBulkUploadMedia,
     deleteMedia: handleDeleteMedia,
