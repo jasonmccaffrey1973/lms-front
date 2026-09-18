@@ -183,5 +183,36 @@ const StyledContextWrapper = styled.div`
   }
 `;
 
+const StyledNoMediaWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 100%;
+  color: var(--editor-text-muted);
+  font-size: 1.25rem;
+  text-align: center;
 
-export {StyledMediaManagerPage, StyledTabBar, StyledTab, StyledRibbon, StyledContent, StyledHeader, StyledFooter, StyledContextWrapper };
+  a {
+    display: inline-block;
+    color: var(--app-text);
+    text-decoration: underline;
+    cursor: pointer;
+    margin-inline: 0.5rem;
+    transition: transform 250ms ease-in-out;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+`;
+
+const StyledMediaGrid = styled.div`
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  padding: 0.5rem;
+`;
+
+
+export {StyledMediaManagerPage, StyledTabBar, StyledTab, StyledRibbon, StyledContent, StyledHeader, StyledFooter, StyledContextWrapper, StyledNoMediaWrapper, StyledMediaGrid };

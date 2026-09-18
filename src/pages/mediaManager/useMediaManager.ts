@@ -1,32 +1,78 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useApolloClient } from "@apollo/client/react";
 import { MEDIA_TYPES, RIBBON_ICONS } from "./mediaManager.constants";
-import type { RibbonIcon } from "./MediaManager.types";
+import type { RibbonIcon, MediaTab } from "./MediaManager.types";
 import type { MediaItem, MediaKind } from "../../queries/useMediaQueries";
-import type { ContextElement } from "./MediaManager.types";
 import { createMediaService } from "./mediaService";
-// import type { MediaItem, MediaKind } from "../../queries/useMediaQueries";
+import type { Accept } from "react-dropzone";
+import useDialog from "../../sharedComponents/dialog/useDialog";
                     
-type MediaTab = keyof typeof RIBBON_ICONS;
-
 const isMediaTab = (value: string): value is MediaTab => value in RIBBON_ICONS;
 
 const useMediaManager = () => {
   const client = useApolloClient();
   const mediaService = useMemo(() => createMediaService(client), [client]);
+ 
+/**================================================================================
+ *  Media Manager Constants
+ ** ================================================================================ */
+
+/** -------------------------------------------------------------------------------
+ *  Accepted file types for each media type.
+ ** ------------------------------------------------------------------------------- */
+  const ACCEPT_BY_TYPE: Record<string, Accept> = {
+  image: { "image/*": [".png", ".jpg", ".jpeg", ".webp", ".gif"] },
+  video: { "video/*": [".mp4", ".webm", ".mov", ".avi"] },
+  audio: { "audio/*": [".mp3", ".wav", ".ogg", ".aac", ".m4a"] },
+};
   
+/** ================================================================================
+ * Media Manager State
+ ** ================================================================================ */
   const [selectedTab, setSelectedTab] = useState<MediaTab>(MEDIA_TYPES.IMAGE as MediaTab);
-  const [ribbonIcons, setRibbonIcons] = useState<RibbonIcon[]>(
-    RIBBON_ICONS[MEDIA_TYPES.IMAGE as MediaTab],
-  );
+  const [ribbonIcons, setRibbonIcons] = useState<RibbonIcon[]>(RIBBON_ICONS[MEDIA_TYPES.IMAGE as MediaTab],);
   const [storageLocation, setStorageLocation] = useState<string | undefined>(undefined);
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null!);
+  const dialogControls = useDialog({ ref: dialogRef });
+  const [isBulkUpload, setIsBulkUpload] = useState(false);
 
+/** ================================================================================
+ * Dialog controls for the media manager upload modal.
+ ** ================================================================================ */
+  const { openDialog, closeDialog } = dialogControls;
+
+/** ================================================================================ 
+ * Media Manager Actions 
+ ** ================================================================================ */
+
+  /** -------------------------------------------------------------------------------
+   * Opens the media manager upload modal.
+   * @param bulk Indicates whether the upload is a bulk upload.
+   * @returns void
+   ** ------------------------------------------------------------------------------- */
+  const openUploadModal = (bulk = false) => {
+    setIsBulkUpload(bulk);
+    openDialog();
+  };
+
+  /** -------------------------------------------------------------------------------
+   * Checks if a given value is a valid UUID.
+   * @param val The value to check
+   * @returns True if the value is a valid UUID, false otherwise.
+   * @example isValidUUID("123e4567-e89b-12d3-a456-426614174000") // true
+   * @example isValidUUID("invalid-uuid") // false  
+   ** ------------------------------------------------------------------------------- */
   const isValidUUID = (val?: string) =>
     typeof val === "string" &&
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
 
+  /** -------------------------------------------------------------------------------
+   * Fetches media items from the media service.
+   * @param kind The kind of media to fetch. Defaults to the currently selected tab.
+   * @returns void
+   ** ------------------------------------------------------------------------------- */
   const fetchMedia = useCallback(
     async (kind?: MediaKind) => {
       if (!mediaService) return;
@@ -46,30 +92,32 @@ const useMediaManager = () => {
     [mediaService, selectedTab]
   );
 
+  /** -------------------------------------------------------------------------------
+   * Effect hook to fetch media items whenever the selected tab changes.
+   ** ------------------------------------------------------------------------------- */
   useEffect(() => {
     (async () => {
       await fetchMedia(selectedTab as MediaKind);
     })();
   }, [selectedTab, fetchMedia]);
 
+  /** -------------------------------------------------------------------------------
+   * Selects a media tab and updates the ribbon icons accordingly.
+   * @param tab The tab to select
+   ** ------------------------------------------------------------------------------- */
   const selectTab = (tab: string) => {
     if (!isMediaTab(tab)) return;
     setSelectedTab(tab);
     setRibbonIcons(RIBBON_ICONS[tab]);
   };
 
-  const [showContext, setShowContext] = useState(false);
-
-  const toggleContext = () => setShowContext(!showContext);
-  const closeContext = () => setShowContext(false);
-  const openContext = ({ elements, label }: { elements: ContextElement[], label?: string }) => {
-    setShowContext(true);
-    console.log("Context elements:", elements);
-    if (label) {
-      console.log("Context label:", label);
-    }
-  };
-
+  /** -------------------------------------------------------------------------------
+   * Handles the upload of a media file.
+   * @param file The file to upload.
+   * @param altText Optional alternative text for the media.
+   * @param options Optional upload options including progress callback and abort signal.
+   * @returns The uploaded media item.
+   ** ------------------------------------------------------------------------------- */
   const handleUploadMedia = async (
     file: File,
     altText?: string,
@@ -123,6 +171,13 @@ const useMediaManager = () => {
     }
   };
 
+  /** -------------------------------------------------------------------------------
+   * Handles the upload of a single media file.
+   * @param file The file to upload.
+   * @param onProgress Callback function to track upload progress.
+   * @param signal Abort signal to cancel the upload.
+   * @returns The uploaded media item.
+   ** ------------------------------------------------------------------------------- */
   const uploadSingleFileHandler = async (
     file: File,
     onProgress: (pct: number) => void,
@@ -154,6 +209,13 @@ const useMediaManager = () => {
     }
   };
 
+  /** -------------------------------------------------------------------------------
+   * Handles the bulk upload of media files.
+   * @param files The files to upload.
+   * @param altText Optional alternative text for the media.
+   * @param options Optional upload options including progress callback and abort signal.
+   * @returns The uploaded media items.
+   ** ------------------------------------------------------------------------------- */
   const handleBulkUploadMedia = async (
     files: File[],
     altText?: string,
@@ -185,6 +247,10 @@ const useMediaManager = () => {
     }
   };
 
+  /** -------------------------------------------------------------------------------
+   * Handles the deletion of media items.
+   * @param ids The IDs of the media items to delete.
+   ** ------------------------------------------------------------------------------- */
   const handleDeleteMedia = async (ids: string[]) => {
     if (!mediaService) {
       console.error("Media service not initialized");
@@ -203,6 +269,10 @@ const useMediaManager = () => {
     }
   };
 
+  /** -------------------------------------------------------------------------------
+   * Handles the update of the storage location for media items.
+   * @param location The new storage location.
+   ** ------------------------------------------------------------------------------- */
   const handleUpdateStorageLocation = async (location: string) => {
     if (!mediaService) {
       console.error("Media service not initialized");
@@ -218,33 +288,23 @@ const useMediaManager = () => {
     }
   };
 
+  /** -------------------------------------------------------------------------------
+   * Defines the actions for the ribbon toolbar.
+   ** ------------------------------------------------------------------------------- */
   const performRibbonAction: Record<string, () => void> = {
       'add': () => {
-        openContext({
-          elements: [
-            {label: `Add ${selectedTab} URL`, type: 'url', action: () => void handleUploadMediaFromUrl("")},
-            {label: `Upload ${selectedTab}`, type: 'file', action: () => void handleUploadMedia(new File([], ""))},
-          ],
-          label: `Add ${selectedTab}`
-        });
-        console.log(`Opening add dialog for ${selectedTab}`);
-        // This will trigger opening the MediaDialog
+        openUploadModal(false);
       },
       'view': () => {
-        closeContext();
         console.log(`Viewing ${selectedTab}`);
       },
       'bulk': () => {
-        // openContext();
-        console.log(`Bulk uploading ${selectedTab}`);
-        // This will trigger bulk upload modal
+        openUploadModal(true);
       },
       'edit': () => {
-        closeContext();
         console.log(`Editing ${selectedTab}`);
       },
       'delete': () => {
-        closeContext();
         console.log(`Deleting selected ${selectedTab}`);
       },
       '': () => {
@@ -252,8 +312,19 @@ const useMediaManager = () => {
       },
   };
 
+  /** ==================================================================================
+   * Returns the media manager hook API.
+   * @returns {object} The media manager hook API.
+   ** ================================================================================== */
   return {
     MEDIA_TYPES,
+    ACCEPT_BY_TYPE,
+
+    isBulkUpload, 
+    closeDialog,
+    openUploadModal,
+    dialogRef, 
+    dialogControls,
     selectedTab,
     selectTab,
     ribbonIcons,
@@ -270,10 +341,6 @@ const useMediaManager = () => {
     mediaTotal: mediaItems.length,
     storageLocation,
     isLoading,
-    showContext,
-    toggleContext,
-    openContext,
-    closeContext,
   };
 };
 

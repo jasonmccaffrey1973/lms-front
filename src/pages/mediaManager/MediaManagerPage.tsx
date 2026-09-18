@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
 import PageTemplate from "../../templates/PageTemplate";
 import Button from "../../sharedComponents/Button/Button";
-import Dialog from "../../sharedComponents/dialog/Dailog";
-import useDialog from "../../sharedComponents/dialog/useDialog";
+import Dialog from "../../sharedComponents/dialog/Dialog";
 import FileUploader from "../../sharedComponents/fileUploader/FileUploader";
-import type { Accept } from "react-dropzone";
+import SVGIcon from "../../sharedComponents/SVG/SVGIcon";
+import Render from "../../sharedComponents/Render";
+import MediaItem from "./mediaItem/MediaItem";
+
 import {
   StyledMediaManagerPage,
   StyledTabBar,
@@ -13,45 +14,139 @@ import {
   StyledContent,
   StyledHeader,
   StyledFooter,
-  StyledContextWrapper,
+  StyledNoMediaWrapper,
+  StyledMediaGrid,
 } from "./MediaManager.styles";
+
 import useMediaManager from "./useMediaManager";
-import type { RibbonIcon } from "./MediaManager.types";
-import SVGIcon from "../../sharedComponents/SVG/SVGIcon";
-import Render from "../../sharedComponents/Render";
-import MediaItem from "./mediaItem/MediaItem";
+import type { RibbonIcon, MediaTabProps, NoMediaUploadedProps, MediaManagerUploadDialogProps } from "./MediaManager.types";
 
-const ACCEPT_BY_TYPE: Record<string, Accept> = {
-  image: { "image/*": [".png", ".jpg", ".jpeg", ".webp", ".gif"] },
-  video: { "video/*": [".mp4", ".webm", ".mov", ".avi"] },
-  audio: { "audio/*": [".mp3", ".wav", ".ogg", ".aac", ".m4a"] },
-};
 
+/** -------------------------------------------------------------------------------
+ * Renders a single media tab.
+ * @param param0 The props for the media tab.
+ * @returns The rendered media tab component.
+ ** ------------------------------------------------------------------------------- */
 const MediaTab = ({
   type,
   selectedType,
   action,
-}: {
-  type: string;
-  selectedType?: string;
-  action?: () => void;
-}) => {
+}: MediaTabProps) => (
+  <StyledTab
+    aria-selected={selectedType === type}
+    onClick={action}
+  >
+    {type}
+  </StyledTab>
+);
+
+
+/** -------------------------------------------------------------------------------
+ * Renders the "No Media Uploaded" message with actions to add or bulk upload media.
+ * @param param0 The props for the no media uploaded component.
+ * @returns The rendered no media uploaded component.
+ ** ------------------------------------------------------------------------------- */
+const NoMediaUploaded = ({ selectedTab, performRibbonAction }: NoMediaUploadedProps) => {
   return (
-    <StyledTab aria-selected={selectedType === type} onClick={action}>
-      {type}
-    </StyledTab>
+    <StyledNoMediaWrapper>
+      No {selectedTab}s uploaded yet. Click{" "}
+      <a
+        href="#"
+        onClick={(event) => {
+          event.preventDefault();
+          performRibbonAction['add']?.();
+        }}
+      >
+        <strong>Add {selectedTab}</strong>
+      </a>{" "}
+      or{" "}
+      <a
+        href="#"
+        onClick={(event) => {
+          event.preventDefault();
+          performRibbonAction['bulk']?.();
+        }}
+      >
+        <strong>Bulk Upload {selectedTab}s</strong>
+      </a>{" "}
+      above to upload.
+    </StyledNoMediaWrapper>
   );
 };
 
-const ContextInput = ({ label, type }: { label?: string; type: string }) => {
+/** -------------------------------------------------------------------------------
+ * Renders the media manager upload dialog.
+ * @param param0 The props for the media manager upload dialog component.
+ * @returns The rendered media manager upload dialog component.
+ ** ------------------------------------------------------------------------------- */
+const MediaManagerUploadDialog = ({
+  isBulkUpload,
+  selectedTab,
+  closeDialog,
+  dialogRef,
+  controls,
+}: MediaManagerUploadDialogProps) => {
+  const {
+    ACCEPT_BY_TYPE,
+    uploadSingleFileHandler,
+  } = useMediaManager();
+
   return (
-    <div className="input-wrapper">
-      {label && <label htmlFor={label}>{label}</label>}
-      <input type={type} id={label || ""} />
-    </div>
+    <Dialog
+      title={
+        isBulkUpload
+          ? `Bulk Upload ${selectedTab}s`
+          : `Upload ${selectedTab}`
+      }
+      closeDialog={closeDialog}
+      dialogRef={dialogRef}
+      controls={controls}
+      footerButtons={[
+        {
+          color: "danger",
+          label: "Close",
+          onClick: closeDialog,
+        },
+      ]}
+    >
+      <FileUploader
+        key={`${selectedTab}-${isBulkUpload}`}
+        title={
+          isBulkUpload
+            ? `Drop ${selectedTab}s here to bulk upload`
+            : `Drop a ${selectedTab} here to upload`
+        }
+        description={
+          isBulkUpload
+            ? `Drag & drop multiple ${selectedTab} files or click to browse`
+            : `Drag & drop a single ${selectedTab} file or click to browse`
+        }
+        accept={ACCEPT_BY_TYPE[selectedTab]}
+        multiple={isBulkUpload}
+        maxFiles={isBulkUpload ? 20 : 1}
+        autoUpload={true}
+        duplicateStrategy="keepBoth"
+        imageOptimization={
+          selectedTab === "image"
+            ? {
+                enabled: true,
+                maxWidth: 2048,
+                maxHeight: 2048,
+                quality: 0.85,
+              }
+            : undefined
+        }
+        showAggregateProgress={isBulkUpload}
+        uploadFile={uploadSingleFileHandler}
+      />
+    </Dialog>
   );
 };
 
+/** ===============================================================================
+ * Renders the media manager page.
+ * @returns The rendered media manager page component.
+ ** =============================================================================== */
 const MediaManagerPage = () => {
   const {
     MEDIA_TYPES,
@@ -59,42 +154,38 @@ const MediaManagerPage = () => {
     selectedTab,
     selectTab,
     performRibbonAction,
-    showContext,
     mediaItems,
-    uploadSingleFileHandler,
+    isBulkUpload,
+    closeDialog,
+    dialogRef,
+    dialogControls,
   } = useMediaManager();
 
-  const dialogRef = useRef<HTMLDialogElement>(null!);
-  const dialogControls = useDialog({ ref: dialogRef });
-  const { openDialog, closeDialog } = dialogControls;
-  const [isBulkUpload, setIsBulkUpload] = useState(false);
 
-  const openUploadModal = (bulk = false) => {
-    setIsBulkUpload(bulk);
-    openDialog();
-  };
+  /** -------------------------------------------------------------------------------
+   * Renders a single ribbon button.
+   * @param param0 The props for the ribbon button component.
+   * @returns The rendered ribbon button component.
+   ** ------------------------------------------------------------------------------- */
+  const RibbonButton = ({
+    item,
+  }: {
+    item: RibbonIcon;
+  }) => {
+    const allowBulk =
+      item.action.toLowerCase() === "bulk";
 
-  const RibbonButton = ({ item }: { item: RibbonIcon }) => {
-    const isBulk = item.action.toLowerCase() === "bulk";
-    const isAdd = item.action.toLowerCase() === "add";
-    const label = `${isBulk ? "Bulk Upload" : item.action} ${isBulk ? selectedTab + "s" : selectedTab}`;
+    const label = allowBulk
+      ? `Bulk Upload ${selectedTab}s`
+      : `${item.action} ${selectedTab}`;
 
     const handleClick = () => {
-      if (isAdd) {
-        openUploadModal(false);
-        return;
-      }
-      if (isBulk) {
-        openUploadModal(true);
-        return;
-      }
       performRibbonAction[item.action.toLowerCase()]?.();
     };
-
+    
     return (
       <Button
         color="transparent"
-        key={selectedTab + item.action}
         type="button"
         onClick={handleClick}
       >
@@ -104,11 +195,18 @@ const MediaManagerPage = () => {
     );
   };
 
-  const filteredItems = mediaItems.filter((item) => item.kind === selectedTab);
+/** -------------------------------------------------------------------------------
+ * Filters the media items based on the selected tab.
+ * @returns The filtered media items.
+ ** ------------------------------------------------------------------------------- */
+  const filteredItems = mediaItems.filter(
+    (item) => item.kind === selectedTab
+  );
 
   return (
     <PageTemplate>
       <StyledMediaManagerPage>
+
         <StyledTabBar>
           {Object.values(MEDIA_TYPES).map((type) => (
             <MediaTab
@@ -119,117 +217,68 @@ const MediaManagerPage = () => {
             />
           ))}
         </StyledTabBar>
-        <StyledHeader>Media Manager</StyledHeader>
+
+
+        <StyledHeader>
+          Media Manager
+        </StyledHeader>
+
+
         <StyledRibbon>
           <div className="button-wrapper">
             <label>{selectedTab}</label>
+
             <div className="icons">
               {ribbonIcons.map((item) => (
-                <RibbonButton key={item.action} item={item} />
+                <RibbonButton
+                  key={item.action}
+                  item={item}
+                />
               ))}
             </div>
           </div>
-          <Render if={showContext}>
-            <StyledContextWrapper>
-              <div className="context-label">{`Add ${selectedTab}`}</div>
-              <ContextInput label="Media URL" type="url" />
-              <ContextInput label="Alt Text" type="text" />
-              <ContextInput label="Storage Location" type="text" />
-            </StyledContextWrapper>
-          </Render>
         </StyledRibbon>
+
+
         <StyledContent>
           <Render if={filteredItems.length === 0}>
-            <div
-              style={{
-                padding: "2rem",
-                textAlign: "center",
-                color: "var(--editor-text-muted)",
-              }}
-            >
-              No {selectedTab}s uploaded yet. Click{" "}
-              <strong>Add {selectedTab}</strong> or{" "}
-              <strong>Bulk Upload {selectedTab}s</strong> above to upload.
-            </div>
+            <NoMediaUploaded
+              selectedTab={selectedTab}
+              performRibbonAction={performRibbonAction}
+            />
           </Render>
+
           <Render if={filteredItems.length > 0}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-                gap: "1rem",
-                padding: "1rem",
-              }}
-            >
-              {filteredItems.map((item) => (
+            <StyledMediaGrid>
+              {filteredItems.map((item ) => (
                 <MediaItem
                   key={item.id}
                   item={item}
                 />
               ))}
-            </div>
+            </StyledMediaGrid>
           </Render>
         </StyledContent>
+
+
         <StyledFooter>
-          <Button type="button" color="danger">
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            color="success"
-            onClick={() => openUploadModal(false)}
-          >
-            Upload
-          </Button>
+          <></>
         </StyledFooter>
 
-        <Dialog
-          title={
-            isBulkUpload
-              ? `Bulk Upload ${selectedTab}s`
-              : `Upload ${selectedTab}`
-          }
-          closeDialog={closeDialog}
-          dialogRef={dialogRef}
-          controls={dialogControls}
-          footerButtons={[
-            { color: "danger", label: "Close", onClick: closeDialog },
-          ]}
-        >
-          <FileUploader
-            key={`${selectedTab}-${isBulkUpload}`}
-            title={
-              isBulkUpload
-                ? `Drop ${selectedTab}s here to bulk upload`
-                : `Drop a ${selectedTab} here to upload`
-            }
-            description={
-              isBulkUpload
-                ? `Drag & drop multiple ${selectedTab} files or click to browse`
-                : `Drag & drop a single ${selectedTab} file or click to browse`
-            }
-            accept={ACCEPT_BY_TYPE[selectedTab]}
-            multiple={isBulkUpload}
-            maxFiles={isBulkUpload ? 20 : 1}
-            autoUpload={true}
-            duplicateStrategy="keepBoth"
-            imageOptimization={
-              selectedTab === "image"
-                ? {
-                    enabled: true,
-                    maxWidth: 2048,
-                    maxHeight: 2048,
-                    quality: 0.85,
-                  }
-                : undefined
-            }
-            showAggregateProgress={isBulkUpload}
-            uploadFile={uploadSingleFileHandler}
-          />
-        </Dialog>
       </StyledMediaManagerPage>
+
+
+      <MediaManagerUploadDialog
+        isBulkUpload={isBulkUpload}
+        selectedTab={selectedTab}
+        closeDialog={closeDialog}
+        dialogRef={dialogRef}
+        controls={dialogControls}
+      />
+
     </PageTemplate>
   );
 };
+
 
 export default MediaManagerPage;

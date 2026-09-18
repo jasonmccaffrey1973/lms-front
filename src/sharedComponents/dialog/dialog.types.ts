@@ -1,18 +1,11 @@
+
+import type React from "react";
+
+
 type dialogProps = {
   isDialogOpen: boolean;
 };
 
-interface dialogComponentProps {
-  title: string;
-  dialogRef: React.RefObject<HTMLDialogElement>;
-  closeDialog: () => void;
-  children?: React.ReactNode;
-  footerButtons?: dialogFooterButton[];
-  controls: {
-    toggleDialog: () => void;
-    closeDialog: () => void;
-  };
-}
 
 interface dialogFooterButton {
   label: string;
@@ -20,4 +13,31 @@ interface dialogFooterButton {
   color?: string;
 }
 
-export type { dialogProps, dialogFooterButton, dialogComponentProps };
+
+interface dialogComponentProps {
+  title: string;
+
+  /*
+   * The Dialog component uses a native <dialog>
+   * element, so the ref must target HTMLDialogElement.
+   */
+  dialogRef: React.RefObject<HTMLDialogElement>;
+
+  closeDialog: () => void;
+
+  children?: React.ReactNode;
+
+  footerButtons?: dialogFooterButton[];
+
+  controls: {
+    toggleDialog: () => void;
+    closeDialog: () => void;
+  };
+}
+
+
+export type {
+  dialogProps,
+  dialogFooterButton,
+  dialogComponentProps,
+};

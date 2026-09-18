@@ -27,24 +27,32 @@ overflow-y: auto;
     grid-area: media-header;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    margin-block: -0.5rem 0;
+    padding-block: 0.33rem;
     
     button {
         position: sticky;
         top: 0;
         right: 0;
         z-index: 10;
-
         aspect-ratio: 1 / 1;
         padding: 0.33rem;
         border-radius: 50%;
         border: 1px solid var(--editor-border);
         background-color: var(--editor-surface);
-        color: var(--editor-text);
-        margin-block-end: 0.33rem;
+        color: var(--app-text);
         
         svg {
             width: 1rem;
             height: 1rem;
+            fill: currentColor;
+        }
+
+        &:hover {
+            svg {
+                fill: var(--clr-text-light);
+            }
         }
     }
 }
@@ -57,7 +65,7 @@ overflow-y: auto;
     .thumbnail {
         object-fit: cover;
         width: 100%;
-        aspect-ratio: 16 / 9;
+        aspect-ratio: 8 / 7;
     }
 }
 
@@ -82,19 +90,26 @@ overflow-y: auto;
 `;
 
 const StyledMetaWrapper = styled.div`
-
+position: absolute;
+top: 0;
+bottom: 0;
 height: 100%;
 width: 100%;
-
-
-
-transition: transform 0.2s, opacity 0.2s;
+background-color: var(--editor-surface);
+transition: all 250ms ease-in-out;
+pointer-events: auto;
+transform-origin: right;
 
 &[aria-hidden="true"] {
+    right: -200%;
     opacity: 0;
     pointer-events: none;
-    transform: scaleX(0);
-    transform-origin: right;
+}
+
+&[aria-hidden="false"] {
+    right: 0;
+    opacity: 0.965;
+    pointer-events: auto;
 }
 
   .media-meta-wrapper {
@@ -103,25 +118,18 @@ transition: transform 0.2s, opacity 0.2s;
       list-style: none;
       padding: 0.33rem;
       margin: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background-color: var(--editor-surface);
+      margin-block-start: 1.33rem;
       color: var(--app-text);
       padding: 0.5rem;
       border-radius: 8px;
       width: 100%;
       font-size: 0.7rem;
+      min-block-size: 100%;
     }
-
     li {
-      margin-bottom: 8px;
+      margin-block: 0.33rem;
       display: flex;
-      margin-block-end: 0.5rem;
       gap: 0.5rem;
-      &.last {
-        margin-block-end: 0;
-      }
     }
 
     .meta-label {
