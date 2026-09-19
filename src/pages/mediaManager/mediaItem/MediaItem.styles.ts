@@ -23,16 +23,19 @@ overflow-y: auto;
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+&[aria-selected="true"] {
+    outline: 2px solid var(--clr-info);
+}
+
 .media-header {
     grid-area: media-header;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin-block: -0.5rem 0;
     padding-block: 0.33rem;
     
-    button {
-        position: sticky;
+    button:not(.selected-check-button) {
         top: 0;
         right: 0;
         z-index: 10;
@@ -54,6 +57,19 @@ overflow-y: auto;
                 fill: var(--clr-text-light);
             }
         }
+    }
+
+    .selected-check-button {
+        z-index: 10;
+        color: var(--app-text);
+        margin-block-start: -0.5rem;
+        margin-inline-start: -0.5rem;
+        color: var(--clr-info);
+    }
+    .selected-check-button svg {
+        width: 1rem;
+        height: 1rem;
+        fill: currentColor;
     }
 }
 

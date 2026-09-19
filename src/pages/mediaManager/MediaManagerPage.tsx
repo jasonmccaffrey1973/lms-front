@@ -80,6 +80,7 @@ const NoMediaUploaded = ({ selectedTab, performRibbonAction }: NoMediaUploadedPr
  * @returns The rendered media manager upload dialog component.
  ** ------------------------------------------------------------------------------- */
 const MediaManagerUploadDialog = ({
+
   isBulkUpload,
   selectedTab,
   closeDialog,
@@ -154,11 +155,16 @@ const MediaManagerPage = () => {
     selectedTab,
     selectTab,
     performRibbonAction,
-    mediaItems,
+    filteredItems,
     isBulkUpload,
     closeDialog,
     dialogRef,
     dialogControls,
+    formatLabel,
+    isItemChecked,
+    handleCheckClick,
+    uncheckItem,
+    numberOfCheckedItems,
   } = useMediaManager();
 
 
@@ -182,7 +188,7 @@ const MediaManagerPage = () => {
     const handleClick = () => {
       performRibbonAction[item.action.toLowerCase()]?.();
     };
-    
+
     return (
       <Button
         color="transparent"
@@ -195,13 +201,7 @@ const MediaManagerPage = () => {
     );
   };
 
-/** -------------------------------------------------------------------------------
- * Filters the media items based on the selected tab.
- * @returns The filtered media items.
- ** ------------------------------------------------------------------------------- */
-  const filteredItems = mediaItems.filter(
-    (item) => item.kind === selectedTab
-  );
+
 
   return (
     <PageTemplate>
@@ -225,20 +225,19 @@ const MediaManagerPage = () => {
 
 
         <StyledRibbon>
-          <div className="button-wrapper">
-            <label>{selectedTab}</label>
-
-            <div className="icons">
-              {ribbonIcons.map((item) => (
-                <RibbonButton
-                  key={item.action}
-                  item={item}
-                />
-              ))}
+          <>
+          {Object.entries(ribbonIcons).map(([group, icons]) => (
+            <div className="group-wrapper" key={group}>
+              <label className="group-label"> {group} {formatLabel(selectedTab)} </label>
+              <div className="icons">
+                {icons.map((item) => (
+                  <RibbonButton key={item.action} item={item} />
+                ))}
+              </div>
             </div>
-          </div>
+          ))}
+          </>
         </StyledRibbon>
-
 
         <StyledContent>
           <Render if={filteredItems.length === 0}>
@@ -249,11 +248,14 @@ const MediaManagerPage = () => {
           </Render>
 
           <Render if={filteredItems.length > 0}>
-            <StyledMediaGrid>
+            <StyledMediaGrid aria-multiselectable="true">
               {filteredItems.map((item ) => (
                 <MediaItem
                   key={item.id}
                   item={item}
+                  isItemChecked={() => isItemChecked(item.id)}
+                  toggleItemCheck={() => handleCheckClick(item.id)}
+                  uncheckItem={() => uncheckItem(item.id)}
                 />
               ))}
             </StyledMediaGrid>
@@ -262,7 +264,9 @@ const MediaManagerPage = () => {
 
 
         <StyledFooter>
-          <></>
+          <Render if={numberOfCheckedItems() > 0}>
+            <p>{numberOfCheckedItems()} {selectedTab}{numberOfCheckedItems() > 1 ? 's' : ''} selected</p>
+          </Render>
         </StyledFooter>
 
       </StyledMediaManagerPage>

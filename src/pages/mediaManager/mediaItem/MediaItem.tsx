@@ -4,6 +4,7 @@ import SVGIcon from "../../../sharedComponents/SVG/SVGIcon";
 import { StyledMediaItem, StyledMetaWrapper } from "./MediaItem.styles";
 import useMediaItem from "./useMediaItem";
 import type { MediaItemProps } from "./MediaItem.types";
+import SelectedCheck from "../../../sharedComponents/selectedCheck/SelectedCheck";
 
 interface MediaMetaProps {
   meta: Record<string, unknown>;
@@ -41,19 +42,19 @@ const MediaThumbnail = ({ kind, src, name }: { kind: string; src: string; name: 
   }
 };
 
-const MediaItem = ({ item, onSelect, isSelected }: MediaItemProps) => {
+const MediaItem = ({ item, isItemChecked, toggleItemCheck, uncheckItem }: MediaItemProps) => {
   const { MetaVisible, toggleMeta, meta, media } = useMediaItem(item);
-
-  const handleClick = () => {
-    onSelect?.(item);
-  };
 
   return (
     <StyledMediaItem
-      aria-selected={isSelected}
-      onClick={handleClick}
+      aria-selected={isItemChecked()}
+      onClick={toggleItemCheck}
     >
       <header className="media-header">
+        <SelectedCheck
+          isItemChecked={isItemChecked}
+          uncheckItem={uncheckItem}
+        />
         <Button onClick={(e) => { e.stopPropagation(); toggleMeta(); }}>
           <SVGIcon icon={MetaVisible ? "chevronDown" : "chevronRight"} />
         </Button>

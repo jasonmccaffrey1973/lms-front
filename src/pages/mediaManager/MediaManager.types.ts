@@ -11,10 +11,13 @@ type ContextElement = {
   type: string;
   action?: () => void ;
 };
+
+type RibbonGroups = "Upload" | "Selected";
   
 interface RibbonIcon {
       icon: SVGIconName;
       action: RibbonAction;
+      group: RibbonGroups;
 }
 
 type MediaTabProps = {
@@ -37,14 +40,31 @@ type MediaManagerUploadDialogProps = Pick<
 };
 
 type MediaTab = keyof typeof RIBBON_ICONS;
+interface RibbonIcon {
+    icon: SVGIconName;
+    action: RibbonAction;
+    group: RibbonGroups;
+}
+
+type GroupedRibbonIcons = Partial<
+    Record<RibbonGroups, RibbonIcon[]>
+>;
+  
+type GroupedRibbonActions = Record<
+    string,
+    Record<string, RibbonAction[]>
+>;
     
 export type { 
   MediaType,
+  GroupedRibbonIcons,
+  GroupedRibbonActions,
   RibbonIcon,
   RibbonAction,
+  RibbonGroups,
   ContextElement,
   MediaTabProps,
   NoMediaUploadedProps,
   MediaManagerUploadDialogProps,
-  MediaTab
+  MediaTab,
 };

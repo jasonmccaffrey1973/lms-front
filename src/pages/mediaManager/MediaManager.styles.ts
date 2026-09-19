@@ -70,6 +70,8 @@ const StyledTab = styled.li`
 
 const StyledRibbon = styled.ul`
   grid-area: ribbon;
+  display: flex;
+  gap: 0.75rem;
   inline-size: 100%;
   margin: 0;
   margin-block-start: -4px;
@@ -79,7 +81,7 @@ const StyledRibbon = styled.ul`
   box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   border: 1px solid var(--editor-border);
 
-  .button-wrapper {
+  .group-wrapper {
       background-color: var(--editor-surface-subtle);
       border: 1px solid var(--editor-border);
       inline-size: fit-content;
@@ -112,8 +114,8 @@ const StyledRibbon = styled.ul`
         color: var(--editor-text);
 
         svg {
-          margin-block-end: 0.75rem;
-          height: 2rem;
+          margin-block: 0.33rem;
+          height: 1.8rem;
           fill: currentColor;
         }
 
@@ -208,10 +210,10 @@ const StyledNoMediaWrapper = styled.div`
 `;
 
 const StyledMediaGrid = styled.div`
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;  
+  gap: 1.5rem;
+  padding: 1rem;
 `;
 
 

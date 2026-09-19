@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useApolloClient } from "@apollo/client/react";
 import { MEDIA_TYPES, RIBBON_ICONS } from "./mediaManager.constants";
-import type { RibbonIcon, MediaTab } from "./MediaManager.types";
+import type { RibbonIcon, MediaTab, GroupedRibbonIcons, RibbonGroups } from "./MediaManager.types";
 import type { MediaItem, MediaKind } from "../../queries/useMediaQueries";
 import { createMediaService } from "./mediaService";
 import type { Accept } from "react-dropzone";
 import useDialog from "../../sharedComponents/dialog/useDialog";
+import useSelectedCheck from "../../sharedComponents/selectedCheck/useSelectedCheck"; 
                     
 const isMediaTab = (value: string): value is MediaTab => value in RIBBON_ICONS;
 
@@ -25,18 +26,46 @@ const useMediaManager = () => {
   video: { "video/*": [".mp4", ".webm", ".mov", ".avi"] },
   audio: { "audio/*": [".mp3", ".wav", ".ogg", ".aac", ".m4a"] },
 };
+
+/** ================================================================================
+ * Helper Functions for the Media Manager
+ ** ================================================================================ */
+
+/** -------------------------------------------------------------------------------
+ * Groups ribbon icons by their group property.
+ * @param icons The ribbon icons to group.
+ * @returns A grouped representation of the ribbon icons.
+ ** ------------------------------------------------------------------------------- */
+const groupRibbonIcons = (
+    icons: RibbonIcon[]
+): GroupedRibbonIcons => {
+    const groupedMap = new Map<RibbonGroups, RibbonIcon[]>();
+
+    for (const item of icons) {
+        const group = item.group;
+
+        if (!groupedMap.has(group)) {
+            groupedMap.set(group, []);
+        }
+
+        groupedMap.get(group)!.push(item);
+    }
+
+    return Object.fromEntries(groupedMap.entries()) as GroupedRibbonIcons;
+};
   
 /** ================================================================================
  * Media Manager State
  ** ================================================================================ */
   const [selectedTab, setSelectedTab] = useState<MediaTab>(MEDIA_TYPES.IMAGE as MediaTab);
-  const [ribbonIcons, setRibbonIcons] = useState<RibbonIcon[]>(RIBBON_ICONS[MEDIA_TYPES.IMAGE as MediaTab],);
+  const [ribbonIcons, setRibbonIcons] = useState<GroupedRibbonIcons>(groupRibbonIcons(RIBBON_ICONS[MEDIA_TYPES.IMAGE as MediaTab]));
   const [storageLocation, setStorageLocation] = useState<string | undefined>(undefined);
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null!);
   const dialogControls = useDialog({ ref: dialogRef });
   const [isBulkUpload, setIsBulkUpload] = useState(false);
+  const { isItemChecked, handleCheckClick, uncheckItem, numberOfCheckedItems } = useSelectedCheck();
 
 /** ================================================================================
  * Dialog controls for the media manager upload modal.
@@ -69,6 +98,13 @@ const useMediaManager = () => {
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
 
   /** -------------------------------------------------------------------------------
+   * Formats a string value by capitalizing its first character.
+   * @param value The string value to format.
+   * @returns The formatted string with the first character capitalized.
+   ** ------------------------------------------------------------------------------- */
+  const formatLabel = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
+
+  /** -------------------------------------------------------------------------------
    * Fetches media items from the media service.
    * @param kind The kind of media to fetch. Defaults to the currently selected tab.
    * @returns void
@@ -92,6 +128,8 @@ const useMediaManager = () => {
     [mediaService, selectedTab]
   );
 
+
+
   /** -------------------------------------------------------------------------------
    * Effect hook to fetch media items whenever the selected tab changes.
    ** ------------------------------------------------------------------------------- */
@@ -101,15 +139,24 @@ const useMediaManager = () => {
     })();
   }, [selectedTab, fetchMedia]);
 
-  /** -------------------------------------------------------------------------------
-   * Selects a media tab and updates the ribbon icons accordingly.
-   * @param tab The tab to select
-   ** ------------------------------------------------------------------------------- */
-  const selectTab = (tab: string) => {
+
+/** -------------------------------------------------------------------------------
+ * Selects a media tab and updates the ribbon icons accordingly.
+ * @param tab The tab to select.
+ ** ------------------------------------------------------------------------------- */
+const selectTab = (tab: string) => {
     if (!isMediaTab(tab)) return;
+
     setSelectedTab(tab);
-    setRibbonIcons(RIBBON_ICONS[tab]);
-  };
+
+    const icons = RIBBON_ICONS[tab as MediaTab];
+
+    const groupedIcons = groupRibbonIcons(icons);
+
+    console.log("Grouped Ribbon Icons:", groupedIcons);
+
+    setRibbonIcons(groupedIcons);
+};
 
   /** -------------------------------------------------------------------------------
    * Handles the upload of a media file.
@@ -288,6 +335,15 @@ const useMediaManager = () => {
     }
   };
 
+/** -------------------------------------------------------------------------------
+ * Filters and memoizes media items for each media type in a single pass.
+ ** ------------------------------------------------------------------------------- */
+
+const filteredItems = useMemo(
+    () => mediaItems.filter((item) => item.kind === selectedTab),
+    [mediaItems, selectedTab]
+);
+
   /** -------------------------------------------------------------------------------
    * Defines the actions for the ribbon toolbar.
    ** ------------------------------------------------------------------------------- */
@@ -320,6 +376,11 @@ const useMediaManager = () => {
     MEDIA_TYPES,
     ACCEPT_BY_TYPE,
 
+    isItemChecked,
+    handleCheckClick,
+    uncheckItem,
+    numberOfCheckedItems,
+
     isBulkUpload, 
     closeDialog,
     openUploadModal,
@@ -329,6 +390,7 @@ const useMediaManager = () => {
     selectTab,
     ribbonIcons,
     performRibbonAction,
+    formatLabel,
     // Media operations
     uploadMedia: handleUploadMedia,
     uploadSingleFileHandler,
@@ -338,6 +400,7 @@ const useMediaManager = () => {
     updateStorageLocation: handleUpdateStorageLocation,
     // Data
     mediaItems,
+    filteredItems,
     mediaTotal: mediaItems.length,
     storageLocation,
     isLoading,
