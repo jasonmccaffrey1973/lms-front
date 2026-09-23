@@ -7,7 +7,8 @@ export type StyledButtonProps = {
     $textColor?: string;
 };
 
-// Extend standard HTML button attributes
+// Preserve native button attributes (disabled, form, aria-*, data-*, etc.) while
+// using `color` for the component's visual variant.
 export type ButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color"> & {
     action?: () => void;
     color?: string;

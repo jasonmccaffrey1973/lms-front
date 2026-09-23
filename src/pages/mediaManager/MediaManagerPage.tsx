@@ -6,6 +6,7 @@ import SVGIcon from "../../sharedComponents/SVG/SVGIcon";
 import Render from "../../sharedComponents/Render";
 import MediaItem from "./mediaItem/MediaItem";
 import ViewMedia from "./veiwMedia/ViewMedia";
+import DeleteMedia from "./deleteMedia/DeleteMedia";
 
 import {
   StyledMediaManagerPage,
@@ -171,6 +172,10 @@ const MediaManagerPage = () => {
     viewedMediaType,
     viewDialogRef,
     viewDialogControls,
+    deleteDialogRef,
+    deleteDialogControls,
+    selectedMedia,
+    deleteMedia,
   } = useMediaManager();
 
   const selectedTabCheckedCount = filteredItems.filter((item) => isItemChecked(item.id)).length;
@@ -298,6 +303,13 @@ const MediaManagerPage = () => {
         type={viewedMediaType}
         dialogRef={viewDialogRef}
         controls={viewDialogControls}
+      />
+
+      <DeleteMedia
+        dialogRef={deleteDialogRef}
+        controls={deleteDialogControls}
+        items={selectedMedia}
+        onDelete={deleteMedia}
       />
 
     </PageTemplate>

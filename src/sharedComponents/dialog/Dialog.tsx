@@ -19,7 +19,7 @@ const Dialog = ({title, children, footerButtons,  controls, dialogRef }: dialogC
       </div>
       <div className="dialog-footer">
         {footerButtons?.map((button, index) => (
-          <Button key={index} onClick={button.onClick} color={button.color}>{button.label}</Button>
+          <Button key={index} onClick={button.onClick} color={button.color} disabled={button.disabled}>{button.label}</Button>
         ))}
       </div>
     </div>

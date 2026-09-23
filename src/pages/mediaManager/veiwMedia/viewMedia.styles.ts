@@ -4,19 +4,27 @@ const StyledMediaViewer = styled.div`
 
 
 .media-gallery {
-        display: grid;
-        grid-template-columns: 20rem 1fr 20rem;
-        position: relative;
-        padding: 1rem;
-        inline-size: 100%;
-        block-size: 100%;
-        
+    display: grid;
+    grid-template-columns: 20rem 1fr 20rem;
+    position: relative;
+    padding: 1rem;
+    max-inline-size: 100%;
+    max-block-size: 100%;
+    
+    
+    img, video, audio {
+        grid-column: 1 / -1;
+        grid-row: 1 / -1;
+        max-height: 80vh;
+        object-fit: scale-down;
+    }
         .gallery-media-wrapper {
             width: 100%;
             height: 100%;
             grid-column: 1 / -1;
             grid-row: 1 / -1;
             overflow: hidden;
+            
             @media (min-aspect-ratio: 1/1) { /* Tall Images */
                 block-size: 100%;
                 inline-size: auto;
@@ -46,11 +54,6 @@ const StyledMediaViewer = styled.div`
             justify-content: center;
             min-inline-size: 0;
 
-            img, video, audio {
-                max-inline-size: 100%;
-                max-block-size: 100%;
-                object-fit: contain;
-            }
         }
 
         .previous, .next {

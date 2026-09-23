@@ -24,7 +24,7 @@ const useViewMedia = ({media, type, controls}: ViewMediaProps) => {
             onClick: controls.closeDialog,
             color: "primary"
         }
-    ];
+    ] satisfies import("../../../sharedComponents/dialog/dialog.types").dialogFooterButton[];
 
     return {
         dialogTitle,

@@ -8,6 +8,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             action,
             onClick,
             type = "button",
+            disabled,
             color,
             textColor,
             children,
@@ -24,6 +25,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             <StyledButton
                 ref={ref}
                 type={type}
+                disabled={disabled}
                 $color={color}
                 $textColor={textColor}
                 onClick={handleClick}
@@ -38,3 +40,4 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button";
 
 export default Button;
+export type { ButtonProps };

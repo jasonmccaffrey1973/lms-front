@@ -69,8 +69,10 @@ const groupRibbonIcons = (
   const dialogControls = useDialog({ ref: dialogRef });
   const viewDialogRef = useRef<HTMLDialogElement>(null!);
   const viewDialogControls = useDialog({ ref: viewDialogRef });
+  const deleteDialogRef = useRef<HTMLDialogElement>(null!);
+  const deleteDialogControls = useDialog({ ref: deleteDialogRef });
   const [isBulkUpload, setIsBulkUpload] = useState(false);
-  const { isItemChecked, handleCheckClick, uncheckItem, numberOfCheckedItems } = useSelectedCheck();
+  const { isItemChecked, handleCheckClick, uncheckItem, numberOfCheckedItems, getCheckedItems } = useSelectedCheck();
 
 /** ================================================================================
  * Dialog controls for the media manager upload modal.
@@ -328,6 +330,8 @@ const selectTab = (tab: string) => {
       const result = await mediaService.deleteMedia({ ids });
       if (result.success) {
         setMediaItems(mediaItems.filter((item) => !ids.includes(item.id)));
+        ids.forEach(uncheckItem);
+        deleteDialogControls.closeDialog();
       }
     } catch (error) {
       console.error("Failed to delete media:", error);
@@ -395,7 +399,7 @@ const filteredItems = useMemo(
         console.log(`Editing ${selectedTab}`);
       },
       'delete': () => {
-        console.log(`Deleting selected ${selectedTab}`);
+        deleteDialogControls.openDialog();
       },
       '': () => {
         console.warn("No action specified");
@@ -444,6 +448,9 @@ const filteredItems = useMemo(
     viewedMediaType,
     viewDialogRef,
     viewDialogControls,
+    deleteDialogRef,
+    deleteDialogControls,
+    selectedMedia: filteredItems.filter((item) => getCheckedItems().includes(item.id)),
     closeMediaViewer,
   };
 };

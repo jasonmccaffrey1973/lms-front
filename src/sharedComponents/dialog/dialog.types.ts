@@ -1,16 +1,14 @@
-
 import type React from "react";
-
 
 type dialogProps = {
   isDialogOpen: boolean;
 };
 
-
 interface dialogFooterButton {
   label: string;
   onClick: () => void;
   color?: string;
+  disabled?: boolean;
 }
 
 
@@ -31,11 +29,11 @@ interface dialogComponentProps {
   footerButtons?: dialogFooterButton[];
 
   controls: {
+    isDialogOpen: boolean;
     toggleDialog: () => void;
     closeDialog: () => void;
   };
 }
-
 
 export type {
   dialogProps,
