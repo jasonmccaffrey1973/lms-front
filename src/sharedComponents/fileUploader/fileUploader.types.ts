@@ -1,4 +1,5 @@
 import type { Accept, DropzoneState, FileRejection } from "react-dropzone"; 
+import type { SVGProps } from "react";
 
 type UploadFileStatus = "pending" | "uploading" | "success" | "error";
 
@@ -55,6 +56,8 @@ interface UseFileUploaderOptions {
     duplicateStrategy?: DuplicateStrategy;
     sanitizeFilename?: (fileName: string) => string;
     imageOptimization?: ImageOptimizationOptions;
+    /** Called once when every staged file has uploaded successfully. */
+    onAllUploadsComplete?: () => void;
     onFilesChange?: (files: UploaderFile[]) => void;
     onError?: (error: UploadError) => void;
     onDropRejected?: (fileRejections: FileRejection[]) => void;
@@ -88,6 +91,10 @@ interface FileUploaderProps extends UseFileUploaderOptions {
     showAggregateProgress?: boolean;
 }
 
+type UploaderTypeIconProps = SVGProps<SVGSVGElement> & {
+  title: string;
+};
+
 export type {
     UploaderFile,
     UploadFileStatus,
@@ -99,4 +106,5 @@ export type {
     UseUploaderReturn,
     UploadError,
     FileUploaderProps,
+    UploaderTypeIconProps,
 };

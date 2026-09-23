@@ -128,6 +128,7 @@ const useFileUploader = (options: UseFileUploaderOptions = {}): UseUploaderRetur
         duplicateStrategy = "keepBoth",
         sanitizeFilename,
         imageOptimization,
+        onAllUploadsComplete,
         onFilesChange,
         onError,
         onDropRejected,
@@ -137,6 +138,7 @@ const useFileUploader = (options: UseFileUploaderOptions = {}): UseUploaderRetur
     const [error, setError] = useState<UploadError>(undefined);
     const filesRef = useRef<UploaderFile[]>([]);
     const abortControllersRef = useRef<Map<string, AbortController>>(new Map());
+    const hasReportedCompletionRef = useRef(false);
 
     /** -----------------------------------------------------------------------------------------------------------
      * Synchronize ref with latest files outside of render phase
@@ -146,6 +148,19 @@ const useFileUploader = (options: UseFileUploaderOptions = {}): UseUploaderRetur
         filesRef.current = files;
         onFilesChange?.(files);
     }, [files, onFilesChange]);
+
+    /** Notify the consumer once, after the complete batch succeeds. */
+    useEffect(() => {
+        const allUploadsSucceeded =
+            files.length > 0 && files.every((file) => file.status === "success");
+
+        if (allUploadsSucceeded && !hasReportedCompletionRef.current) {
+            hasReportedCompletionRef.current = true;
+            onAllUploadsComplete?.();
+        } else if (!allUploadsSucceeded) {
+            hasReportedCompletionRef.current = false;
+        }
+    }, [files, onAllUploadsComplete]);
 
     /** -----------------------------------------------------------------------------------------------------------
      * Cleanup all active object URLs and abort ongoing uploads when the component unmounts.

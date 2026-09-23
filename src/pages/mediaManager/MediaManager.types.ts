@@ -33,10 +33,18 @@ type NoMediaUploadedProps = {
 
 type MediaManagerUploadDialogProps = Pick<
   dialogComponentProps,
-  "dialogRef" | "closeDialog" | "controls"
+  "dialogRef" | "controls"
 > & {
+  closeDialog: () => void;
   isBulkUpload: boolean;
   selectedTab: string;
+  ACCEPT_BY_TYPE: Record<string, import("react-dropzone").Accept>;
+  uploadSingleFileHandler: (
+    file: File,
+    onProgress: (pct: number) => void,
+    signal: AbortSignal
+  ) => Promise<unknown>;
+  onAllUploadsComplete: () => void;
 };
 
 type MediaTab = keyof typeof RIBBON_ICONS;

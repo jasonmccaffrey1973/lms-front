@@ -23,7 +23,8 @@ interface dialogComponentProps {
    */
   dialogRef: React.RefObject<HTMLDialogElement>;
 
-  closeDialog: () => void;
+  /** @deprecated Dialog closes through controls.closeDialog. */
+  closeDialog?: () => void;
 
   children?: React.ReactNode;
 

@@ -62,8 +62,13 @@ const groupRibbonIcons = (
   const [storageLocation, setStorageLocation] = useState<string | undefined>(undefined);
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [viewedMedia, setViewedMedia] = useState<MediaItem[]>([]);
+  const [viewedMediaType, setViewedMediaType] = useState<MediaKind>(MEDIA_TYPES.IMAGE);
+  const loadedMediaKindsRef = useRef<Set<MediaKind>>(new Set());
   const dialogRef = useRef<HTMLDialogElement>(null!);
   const dialogControls = useDialog({ ref: dialogRef });
+  const viewDialogRef = useRef<HTMLDialogElement>(null!);
+  const viewDialogControls = useDialog({ ref: viewDialogRef });
   const [isBulkUpload, setIsBulkUpload] = useState(false);
   const { isItemChecked, handleCheckClick, uncheckItem, numberOfCheckedItems } = useSelectedCheck();
 
@@ -110,15 +115,24 @@ const groupRibbonIcons = (
    * @returns void
    ** ------------------------------------------------------------------------------- */
   const fetchMedia = useCallback(
-    async (kind?: MediaKind) => {
+    async (kind?: MediaKind, forceRefresh = false) => {
       if (!mediaService) return;
+      const targetKind = kind ?? (selectedTab as MediaKind);
+
+      if (!forceRefresh && loadedMediaKindsRef.current.has(targetKind)) {
+        return;
+      }
+
       try {
         setIsLoading(true);
-        const targetKind = kind ?? (selectedTab as MediaKind);
         const items = await mediaService.listMedia({
           kind: targetKind,
         });
-        setMediaItems(items);
+        setMediaItems((previousItems) => [
+          ...previousItems.filter((item) => item.kind !== targetKind),
+          ...items,
+        ]);
+        loadedMediaKindsRef.current.add(targetKind);
       } catch (error) {
         console.error("Failed to list media:", error);
       } finally {
@@ -233,6 +247,12 @@ const selectTab = (tab: string) => {
     return await handleUploadMedia(file, undefined, { onProgress, signal });
   };
 
+  /** Refresh the active tab and dismiss the uploader after a successful batch. */
+  const refreshMediaAfterUpload = useCallback(async () => {
+    await fetchMedia(selectedTab as MediaKind, true);
+    closeDialog();
+  }, [closeDialog, fetchMedia, selectedTab]);
+
   const handleUploadMediaFromUrl = async (url: string, altText?: string) => {
     if (!mediaService) {
       console.error("Media service not initialized");
@@ -344,6 +364,20 @@ const filteredItems = useMemo(
     [mediaItems, selectedTab]
 );
 
+  const openMediaViewer = () => {
+    const selectedMedia = mediaItems.filter(
+      (item) => item.kind === selectedTab && isItemChecked(item.id)
+    );
+
+    if (selectedMedia.length === 0) return;
+
+    setViewedMedia(selectedMedia);
+    setViewedMediaType(selectedTab as MediaKind);
+    viewDialogControls.openDialog();
+  };
+
+  const closeMediaViewer = () => viewDialogControls.closeDialog();
+
   /** -------------------------------------------------------------------------------
    * Defines the actions for the ribbon toolbar.
    ** ------------------------------------------------------------------------------- */
@@ -352,7 +386,7 @@ const filteredItems = useMemo(
         openUploadModal(false);
       },
       'view': () => {
-        console.log(`Viewing ${selectedTab}`);
+        openMediaViewer();
       },
       'bulk': () => {
         openUploadModal(true);
@@ -394,6 +428,7 @@ const filteredItems = useMemo(
     // Media operations
     uploadMedia: handleUploadMedia,
     uploadSingleFileHandler,
+    refreshMediaAfterUpload,
     uploadMediaFromUrl: handleUploadMediaFromUrl,
     bulkUploadMedia: handleBulkUploadMedia,
     deleteMedia: handleDeleteMedia,
@@ -404,6 +439,12 @@ const filteredItems = useMemo(
     mediaTotal: mediaItems.length,
     storageLocation,
     isLoading,
+    // Media viewer
+    viewedMedia,
+    viewedMediaType,
+    viewDialogRef,
+    viewDialogControls,
+    closeMediaViewer,
   };
 };
 

@@ -15,7 +15,7 @@ import {
     StyledAggregateProgress,
 } from "./fileUploader.styles";
 
-import type { FileUploaderProps, UploaderFile } from "./fileUploader.types";
+import type { FileUploaderProps, UploaderFile, UploaderTypeIconProps } from "./fileUploader.types";
 import useFileUploader from "./useFileUploader";
 
 
@@ -68,6 +68,24 @@ const getFileIcon = (file: File) => {
     if (type.includes("audio/") || name.endsWith(".mp3") || name.endsWith(".wav")) return "audioBulk";
     return "document";
 };
+
+const UploaderTypeIcon = ({ title, ...rest }: UploaderTypeIconProps) => {
+    
+    const getIconName = (title: string) => {
+      const lower = title.toLowerCase();
+      if (lower.includes("image")) return "imageUpload";
+      if (lower.includes("video")) return "videoUpload";
+      if (lower.includes("audio")) return "audioUpload";
+      if (lower.includes("document")) return "documentUpload";
+      return "imageUpload";
+    }
+
+  const icon = getIconName(title); // pull the branching into a helper
+  return <SVGIcon icon={icon} {...rest} />;
+};
+
+
+
 
 /** --------------------------------------------------------------------------------------- 
  * @param title - The title of the FileUploader component.
@@ -147,7 +165,7 @@ const FileUploader = ({
         >
             <input {...getInputProps({ id: "uploader-file-input", "aria-label": "Select files to upload" })} />
             <StyledDropZoneContent>
-                <SVGIcon icon="imageUpload" className="icon-drop" />
+                <UploaderTypeIcon title={title || ""} className="icon-drop" />
                 <StyledTitle>
                     {title ?? defaultTitle}
                 </StyledTitle>

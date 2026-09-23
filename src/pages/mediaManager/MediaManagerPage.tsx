@@ -5,6 +5,7 @@ import FileUploader from "../../sharedComponents/fileUploader/FileUploader";
 import SVGIcon from "../../sharedComponents/SVG/SVGIcon";
 import Render from "../../sharedComponents/Render";
 import MediaItem from "./mediaItem/MediaItem";
+import ViewMedia from "./veiwMedia/ViewMedia";
 
 import {
   StyledMediaManagerPage,
@@ -86,12 +87,10 @@ const MediaManagerUploadDialog = ({
   closeDialog,
   dialogRef,
   controls,
+  ACCEPT_BY_TYPE,
+  uploadSingleFileHandler,
+  onAllUploadsComplete,
 }: MediaManagerUploadDialogProps) => {
-  const {
-    ACCEPT_BY_TYPE,
-    uploadSingleFileHandler,
-  } = useMediaManager();
-
   return (
     <Dialog
       title={
@@ -139,6 +138,7 @@ const MediaManagerUploadDialog = ({
         }
         showAggregateProgress={isBulkUpload}
         uploadFile={uploadSingleFileHandler}
+        onAllUploadsComplete={onAllUploadsComplete}
       />
     </Dialog>
   );
@@ -164,8 +164,16 @@ const MediaManagerPage = () => {
     isItemChecked,
     handleCheckClick,
     uncheckItem,
-    numberOfCheckedItems,
+    ACCEPT_BY_TYPE,
+    uploadSingleFileHandler,
+    refreshMediaAfterUpload,
+    viewedMedia,
+    viewedMediaType,
+    viewDialogRef,
+    viewDialogControls,
   } = useMediaManager();
+
+  const selectedTabCheckedCount = filteredItems.filter((item) => isItemChecked(item.id)).length;
 
 
   /** -------------------------------------------------------------------------------
@@ -226,7 +234,9 @@ const MediaManagerPage = () => {
 
         <StyledRibbon>
           <>
-          {Object.entries(ribbonIcons).map(([group, icons]) => (
+          {Object.entries(ribbonIcons)
+            .filter(([group]) => group !== "Selected" || selectedTabCheckedCount > 0)
+            .map(([group, icons]) => (
             <div className="group-wrapper" key={group}>
               <label className="group-label"> {group} {formatLabel(selectedTab)} </label>
               <div className="icons">
@@ -264,8 +274,8 @@ const MediaManagerPage = () => {
 
 
         <StyledFooter>
-          <Render if={numberOfCheckedItems() > 0}>
-            <p>{numberOfCheckedItems()} {selectedTab}{numberOfCheckedItems() > 1 ? 's' : ''} selected</p>
+          <Render if={selectedTabCheckedCount > 0}>
+            <p>{selectedTabCheckedCount} {selectedTab}{selectedTabCheckedCount > 1 ? 's' : ''} selected</p>
           </Render>
         </StyledFooter>
 
@@ -278,6 +288,16 @@ const MediaManagerPage = () => {
         closeDialog={closeDialog}
         dialogRef={dialogRef}
         controls={dialogControls}
+        ACCEPT_BY_TYPE={ACCEPT_BY_TYPE}
+        uploadSingleFileHandler={uploadSingleFileHandler}
+        onAllUploadsComplete={refreshMediaAfterUpload}
+      />
+
+      <ViewMedia
+        media={viewedMedia}
+        type={viewedMediaType}
+        dialogRef={viewDialogRef}
+        controls={viewDialogControls}
       />
 
     </PageTemplate>

@@ -46,7 +46,9 @@ export const MediaUploadModal = () => {
 
 ### 2. Async Uploads with Progress & Cancellation
 
-Provide an `uploadFile` handler and optionally enable `autoUpload`:
+Provide an `uploadFile` handler and optionally enable `autoUpload`. Use
+`onAllUploadsComplete` to refresh surrounding data or close a dialog after every
+staged file succeeds:
 
 ```tsx
 import { FileUploader } from "@/sharedComponents/fileUploader";
@@ -93,11 +95,16 @@ const uploadToBackend = async (
 };
 
 export const UploadWithProgress = () => {
+  const handleAllUploadsComplete = () => {
+    // For example: refetch uploaded media, then close the upload dialog.
+  };
+
   return (
     <FileUploader
       uploadFile={uploadToBackend}
       autoUpload={true}
       showAggregateProgress={true}
+      onAllUploadsComplete={handleAllUploadsComplete}
     />
   );
 };
@@ -208,6 +215,7 @@ export const CustomUploader = () => {
 | `duplicateStrategy` | `"keepBoth" \| "replace" \| "skip"` | `"keepBoth"` | How duplicate drops are handled |
 | `imageOptimization` | `ImageOptimizationOptions` | `undefined` | Canvas resizing and compression configuration |
 | `sanitizeFilename` | `(name: string) => string` | Built-in | Custom filename sanitization function |
+| `onAllUploadsComplete` | `() => void` | `undefined` | Called once after every staged file has uploaded successfully; it is not called if a file fails or is cancelled. |
 | `onFilesChange` | `(files: UploaderFile[]) => void` | `undefined` | Callback fired whenever files state changes |
 | `onError` | `(error: UploadError) => void` | `undefined` | Callback fired on validation or duplicate errors |
 | `onDropRejected` | `(rejections: FileRejection[]) => void` | `undefined` | Callback fired when files are rejected by dropzone |
@@ -221,4 +229,3 @@ Unit tests are located in `useFileUploader.test.ts` using Vitest:
 ```bash
 yarn test src/sharedComponents/fileUploader
 ```
-
