@@ -25,6 +25,18 @@ li {
     gap: 0.5rem;
 }
 
+button {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    svg {
+        display: block;
+        height: 1.33em;
+        width: 1.33em;
+    }
+}
+
 `;
 
 export default StyledDeleteMediaModal;

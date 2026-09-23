@@ -24,7 +24,7 @@ const useMediaManager = () => {
   const ACCEPT_BY_TYPE: Record<string, Accept> = {
   image: { "image/*": [".png", ".jpg", ".jpeg", ".webp", ".gif"] },
   video: { "video/*": [".mp4", ".webm", ".mov", ".avi"] },
-  audio: { "audio/*": [".mp3", ".wav", ".ogg", ".aac", ".m4a"] },
+  audio: { "audio/*": [".mp3", ".wav", ".ogg", ".aac", ".m4a", "flac"] },
 };
 
 /** ================================================================================

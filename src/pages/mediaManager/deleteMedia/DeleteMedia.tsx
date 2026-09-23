@@ -5,12 +5,13 @@ import StyledDeleteMediaModal from "./deleteMedia.styles";
 import type { DeleteMediaProps, DeleteListItemProps } from "./deleteMedia.types";
 import formatFileSize from "../../../helperFunctions/formatFileSize";
 import useDeleteMedia from "./useDeleteMedia";
+import SVGIcon from "../../../sharedComponents/SVG/SVGIcon";
 
 const DeleteListItem = ({ item, removeFromDeleteList }: DeleteListItemProps) => {
   const {name, id, size = 0 } = item;
   return (
     <li key={id}>
-      <Button color="warning" onClick={() => removeFromDeleteList(id)}>Remove</Button>
+      <Button color="success" onClick={() => removeFromDeleteList(id)}><SVGIcon icon="undo" />keep</Button>
       {name} <span className="filesize">({formatFileSize(size)})</span>
     </li>
   );
