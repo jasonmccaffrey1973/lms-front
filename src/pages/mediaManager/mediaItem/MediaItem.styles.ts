@@ -16,8 +16,7 @@ padding: 0.5rem;
 box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
 transition: transform 250ms ease-in-out;
 position: relative;
-overflow-x: hidden;
-overflow-y: auto;
+overflow: hidden;
 
 &:hover {
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
@@ -75,13 +74,29 @@ overflow-y: auto;
 
 .media-body {
     grid-area: media-body;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     
     .thumbnail {
         object-fit: cover;
         width: 100%;
         aspect-ratio: 8 / 7;
+    }
+
+    audio {
+        --_min-block-size: 2rem; //Sort of sets the size of the audio player
+        inline-size: 90%;
+        block-size: auto;
+        margin-block: calc(var(--_min-block-size) / 2);
+    }
+
+    video {
+        inline-size: 90%;
+        block-size: auto;
+        margin-block: calc(var(--_min-block-size) / 2);
     }
 }
 
@@ -111,6 +126,7 @@ top: 0;
 bottom: 0;
 height: 100%;
 width: 100%;
+overflow-y: auto;
 background-color: var(--editor-surface);
 transition: all 250ms ease-in-out;
 pointer-events: auto;

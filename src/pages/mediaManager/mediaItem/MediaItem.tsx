@@ -45,6 +45,8 @@ const MediaThumbnail = ({ kind, src, name }: { kind: string; src: string; name: 
 const MediaItem = ({ item, isItemChecked, toggleItemCheck, uncheckItem }: MediaItemProps) => {
   const { MetaVisible, toggleMeta, meta, media } = useMediaItem(item);
 
+  console.log(media);
+
   return (
     <StyledMediaItem
       aria-selected={isItemChecked()}
@@ -60,7 +62,20 @@ const MediaItem = ({ item, isItemChecked, toggleItemCheck, uncheckItem }: MediaI
         </Button>
       </header>
       <section className="media-body">
-        <MediaThumbnail kind={media.kind} src={media.src} name={media.filename} />
+        <Render if={media.kind === "audio"}>
+          <audio controls>
+            <source src={media.src} type={media.type} />
+          </audio>
+        </Render>
+        <Render if={media.kind === "image"}>
+          <MediaThumbnail kind={media.kind} src={media.src} name={media.filename} />
+        </Render>
+        <Render if={media.kind === "video"}>
+          <video muted controls>
+            <track kind="thumbnails" src={media.src} default />
+            <source src={media.src} type={media.type} />
+          </video>
+        </Render>
       </section>
       <footer className="media-footer">
         <h2>{media.filename}</h2>

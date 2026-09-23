@@ -149,7 +149,7 @@ const ViewMedia = ({media, type, dialogRef, controls}: ViewMediaProps) => {
                     <MediaGallery key={media.map((item) => item.id).join(",")} items={media} type={type} />
                 </Render>
                 <Render if={numberOfMediaItems === 1}>
-                   <MediaPreview item={media[0]} type={type} />
+                   <MediaPreview key={`${type}-${media[0].id}`} item={media[0]} type={type} />
                 </Render>
             </StyledMediaViewer>
         </Dialog>
