@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+const headerHeight = document.querySelector(".header-wrapper")?.clientHeight || 0;
+const footerHeight = document.querySelector(".footer-content")?.parentElement?.clientHeight || 0;
+
+
+
 const StyledEditorTemplate = styled.div`
   display: grid;
   grid-template-rows: auto 1fr;
@@ -7,7 +12,7 @@ const StyledEditorTemplate = styled.div`
     'template-ribbon'
     'template-editor-shell';
   inline-size: 100%;
-  block-size: 100%;
+  block-size: calc(100vh - ${headerHeight}px - ${footerHeight}px);
   flex: 1 1 auto;
   gap: 0.5rem;
   background: var(--editor-surface);
@@ -23,6 +28,7 @@ const StyledEditorTemplate = styled.div`
     background: var(--editor-surface);
     overflow: hidden;
     padding: 0.75rem;
+    overflow-y: auto;
   }
 
   .editor-shell > div {

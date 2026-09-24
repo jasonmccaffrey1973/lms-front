@@ -1,11 +1,8 @@
-import type { Editor } from "@tiptap/core";
-
 import {
   EDITOR_TABS,
   GROUP_ORDER,
 } from "../../../../constants/constants";
 
-import type { FileDialogType } from "../fileDialog/fileDialog.types";
 import type { SVGIconName } from "../../../../sharedComponents/SVG/SVGIcon";
 
 import {
@@ -20,18 +17,15 @@ import EditorRibbonTab from "./components/EditorRibbonTab";
 import RibbonItem from "./components/RibbonItem";
 import TabItemsWrapper from "./components/TabItemsWrapper";
 import useRibbon from "./useRibbon";
-import type { RibbonMenuItem } from "./Ribbon.types";
+import type { RibbonMenuItem, RibbonProps } from "./Ribbon.types";
 
-interface RibbonProps {
-  editor: Editor | null;
-  openFileDialog: (type: FileDialogType) => void;
-  openMediaDialog: (mode: "image" | "video") => void;
-}
+
 
 const Ribbon = ({
   editor,
   openFileDialog,
   openMediaDialog,
+  openSpellingGrammarDialog,
 }: RibbonProps) => {
   const {
     activeTab,
@@ -39,7 +33,7 @@ const Ribbon = ({
     handleRibbonItemClick,
     isItemActive,
     getItemValue,
-  } = useRibbon(editor, openFileDialog, openMediaDialog);
+  } = useRibbon(editor, openFileDialog, openMediaDialog, openSpellingGrammarDialog);
 
   const tabs = Object.values(EDITOR_TABS);
 

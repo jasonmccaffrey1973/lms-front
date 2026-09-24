@@ -1,6 +1,8 @@
 import type { Level } from "@tiptap/extension-heading";
+import type { Editor } from "@tiptap/core";
 import type { SVGIconName } from "../../../../sharedComponents/SVG/SVGIcon";
 import type { MenuListItemTypes } from "./components/ribbonListElement/RibbonListElement.types"; 
+import type { FileDialogType } from "../fileDialog/fileDialog.types";
 
 type SelectOption = {
   label: string;
@@ -84,6 +86,14 @@ type RibbonActionHandlers = {
   saveDocument: () => void;
   saveDocumentAs: () => void;
   openMediaDialog: (mode: "image" | "video") => void;
+  checkSpellingGrammar?: () => void;
 };
 
-export type { SelectOption, RibbonGroup, RibbonAction, RibbonMenuItem, RibbonActionHandlers };
+interface RibbonProps {
+  editor: Editor | null;
+  openFileDialog: (type: FileDialogType) => void;
+  openMediaDialog: (mode: "image" | "video") => void;
+  openSpellingGrammarDialog?: () => void;
+}
+
+export type { SelectOption, RibbonGroup, RibbonAction, RibbonMenuItem, RibbonActionHandlers, RibbonProps };

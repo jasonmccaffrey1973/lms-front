@@ -94,6 +94,7 @@ overflow: hidden;
     }
 
     video {
+        
         inline-size: 90%;
         block-size: auto;
         margin-block: calc(var(--_min-block-size) / 2);

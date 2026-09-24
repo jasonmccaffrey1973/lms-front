@@ -1,12 +1,14 @@
 import type { Editor as TiptapEditor } from "@tiptap/core";
 import { EditorContent } from "@tiptap/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import FileDialog from "../components/fileDialog/FileDialog";
 import useFileDialog from "../components/fileDialog/useFileDialog";
 import Ribbon from "../components/ribbon/Ribbon";
 import StyledEditorTemplate from "./Editor.Template.Styles";
 import MediaDialog from "../../media/components/MediaDialog";
+import SpellingGrammarDialog from "../components/spellingGrammarDialog/SpellingGrammarDialog";
+import useDialog from "../../../sharedComponents/dialog/useDialog";
 import { createMediaService } from "../../media/mediaService";
 import type { MediaKind } from "../../media/types";
 import {
@@ -285,6 +287,9 @@ const EditorTemplate = ({ editor }: EditorTemplateProps) => {
     }
   }, [fileDialogOpen, fileDialogType, refetchLessons]);
 
+  const spellingGrammarDialogRef = useRef<HTMLDialogElement>(null!);
+  const spellingGrammarDialogControls = useDialog({ ref: spellingGrammarDialogRef });
+
   return (
     <>
       <StyledEditorTemplate>
@@ -292,6 +297,7 @@ const EditorTemplate = ({ editor }: EditorTemplateProps) => {
           editor={editor}
           openFileDialog={openFileDialog}
           openMediaDialog={openMediaDialog}
+          openSpellingGrammarDialog={spellingGrammarDialogControls.openDialog}
         />
 
         <div
@@ -301,6 +307,12 @@ const EditorTemplate = ({ editor }: EditorTemplateProps) => {
           {editor ? <EditorContent editor={editor} /> : null}
         </div>
       </StyledEditorTemplate>
+
+      <SpellingGrammarDialog
+        editor={editor}
+        dialogRef={spellingGrammarDialogRef}
+        controls={spellingGrammarDialogControls}
+      />
 
       <FileDialog
         type={fileDialogType}

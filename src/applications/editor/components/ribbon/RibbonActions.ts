@@ -370,6 +370,10 @@ const executeRibbonAction = (
       chain.unsetLink().run();
       break;
 
+    case "checkSpellingGrammar":
+      handlers.checkSpellingGrammar?.();
+      break;
+
     default:
       console.log(`Ribbon item clicked: ${item.label}`);
       break;

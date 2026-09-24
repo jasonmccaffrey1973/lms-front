@@ -15,6 +15,7 @@ const useRibbon = (
   editor: Editor | null,
   openFileDialog: (type: FileDialogType) => void,
   openMediaDialog: (mode: "image" | "video") => void,
+  openSpellingGrammarDialog?: () => void,
 ) => {
   const { selection, activeTab, setActiveTab } = useEditorState();
 
@@ -54,6 +55,7 @@ const useRibbon = (
       },
 
       openMediaDialog,
+      checkSpellingGrammar: openSpellingGrammarDialog,
     });
   };
 
