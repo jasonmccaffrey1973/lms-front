@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
+/** 
+ * get height of header and footer to help eliminate overflow issues in the editor template
+ */
 const headerHeight = document.querySelector(".header-wrapper")?.clientHeight || 0;
-const footerHeight = document.querySelector(".footer-content")?.parentElement?.clientHeight || 0;
-
-
+const footerHeight = document.querySelector(".footer-content")?.parentElement?.clientHeight || 0; 
 
 const StyledEditorTemplate = styled.div`
   display: grid;
@@ -11,8 +12,8 @@ const StyledEditorTemplate = styled.div`
   grid-template-areas:
     'template-ribbon'
     'template-editor-shell';
-  inline-size: 100%;
-  block-size: calc(100vh - ${headerHeight}px - ${footerHeight}px);
+  /* inline-size: 100%; */
+  block-size: calc(100vh - (${headerHeight + footerHeight}px));
   flex: 1 1 auto;
   gap: 0.5rem;
   background: var(--editor-surface);
@@ -54,6 +55,22 @@ const StyledEditorTemplate = styled.div`
 
   .ProseMirror:focus {
     box-shadow: inset 0 0 0 1px var(--editor-focus-ring);
+  }
+
+  .ProseMirror ins[data-track-change="insertion"],
+  .ProseMirror .track-change-insertion {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #1e7e34;
+    text-decoration: underline;
+    border-bottom: 2px solid #28a745;
+  }
+
+  .ProseMirror del[data-track-change="deletion"],
+  .ProseMirror .track-change-deletion {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #bd2130;
+    text-decoration: line-through;
+    opacity: 0.8;
   }
 
   .ProseMirror .tableWrapper {

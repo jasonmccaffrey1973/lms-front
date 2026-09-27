@@ -87,6 +87,7 @@ type RibbonActionHandlers = {
   saveDocumentAs: () => void;
   openMediaDialog: (mode: "image" | "video") => void;
   checkSpellingGrammar?: () => void;
+  toggleTrackChanges?: () => void;
 };
 
 interface RibbonProps {
@@ -94,6 +95,7 @@ interface RibbonProps {
   openFileDialog: (type: FileDialogType) => void;
   openMediaDialog: (mode: "image" | "video") => void;
   openSpellingGrammarDialog?: () => void;
+  openTrackChangesDialog?: () => void;
 }
 
 export type { SelectOption, RibbonGroup, RibbonAction, RibbonMenuItem, RibbonActionHandlers, RibbonProps };

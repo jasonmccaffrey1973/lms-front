@@ -1,3 +1,5 @@
+import type React from "react";
+
 export type FileDialogType =
   | "newDocument"
   | "openDocument"
@@ -14,9 +16,12 @@ export interface FileDialogDocumentItem {
 
 export interface FileDialogProps {
   type: FileDialogType;
-  open: boolean;
-  popover?: boolean;
-  onClose: () => void;
+  dialogRef: React.RefObject<HTMLDialogElement>;
+  controls: {
+    isDialogOpen: boolean;
+    toggleDialog: () => void;
+    closeDialog: () => void;
+  };
   onConfirm: () => void | Promise<void>;
   filename: string;
   setFilename: (value: string) => void;

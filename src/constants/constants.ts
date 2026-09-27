@@ -414,23 +414,6 @@ const REVIEW_MENU_ITEMS = [
     },
 ];
 
-const VIEW_MENU_ITEMS = [
-    {
-        label: "Zoom",
-        value: "zoom",
-        action: "setZoom",
-        group: "view",
-        icon: "zoom",
-    },
-    {
-        label: "Full Screen",
-        value: "full_screen",
-        action: "toggleFullScreen",
-        group: "view",
-        icon: "fullscreen",
-    },
-];
-
 const HELP_MENU_ITEMS = [
     {
         label: "Help",
@@ -445,6 +428,13 @@ const HELP_MENU_ITEMS = [
         action: "openAbout",
         group: "help",
         icon: "about",
+    },
+    {
+        label: "Zoom",
+        value: "zoom",
+        action: "setZoom",
+        group: "view",
+        icon: "zoom",
     },
 ];
 
@@ -477,11 +467,6 @@ const EDITOR_TABS = {
         label: "Review",
         value: "review",
         items: REVIEW_MENU_ITEMS
-    },
-    VIEW: {
-        label: "View",
-        value: "view",
-        items: VIEW_MENU_ITEMS
     },
     HELP: {
         label: "Help",

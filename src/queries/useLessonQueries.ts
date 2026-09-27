@@ -1,11 +1,13 @@
 import { gql } from "@apollo/client";
 import type { TypedDocumentNode } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client/react";
+import type { JSONContent } from "@tiptap/react";
 
 export type Lesson = {
   id: string;
   title: string;
-  content: unknown;
+  content?: JSONContent | string | null; // Be explicit about nullable
+  // content: unknown;
   content_version: number;
   updated_at?: string;
 };

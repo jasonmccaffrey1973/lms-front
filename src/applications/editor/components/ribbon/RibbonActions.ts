@@ -374,6 +374,10 @@ const executeRibbonAction = (
       handlers.checkSpellingGrammar?.();
       break;
 
+    case "toggleTrackChanges":
+      handlers.toggleTrackChanges?.();
+      break;
+
     default:
       console.log(`Ribbon item clicked: ${item.label}`);
       break;

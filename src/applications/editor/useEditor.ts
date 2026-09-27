@@ -15,6 +15,7 @@ import {
 } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
+import { TrackInsertion, TrackDeletion } from "./extensions/TrackChanges";
 
 const useEditor = () =>
   useTiptapEditor({
@@ -50,6 +51,8 @@ const useEditor = () =>
       TableRow,
       TableHeader,
       TableCell,
+      TrackInsertion,
+      TrackDeletion,
     ],
     content: "<p>Start writing here...</p>",
     editorProps: {

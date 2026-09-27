@@ -16,6 +16,7 @@ const useRibbon = (
   openFileDialog: (type: FileDialogType) => void,
   openMediaDialog: (mode: "image" | "video") => void,
   openSpellingGrammarDialog?: () => void,
+  openTrackChangesDialog?: () => void,
 ) => {
   const { selection, activeTab, setActiveTab } = useEditorState();
 
@@ -56,6 +57,7 @@ const useRibbon = (
 
       openMediaDialog,
       checkSpellingGrammar: openSpellingGrammarDialog,
+      toggleTrackChanges: openTrackChangesDialog,
     });
   };
 

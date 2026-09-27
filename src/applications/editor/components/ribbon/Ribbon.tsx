@@ -26,6 +26,7 @@ const Ribbon = ({
   openFileDialog,
   openMediaDialog,
   openSpellingGrammarDialog,
+  openTrackChangesDialog,
 }: RibbonProps) => {
   const {
     activeTab,
@@ -33,7 +34,7 @@ const Ribbon = ({
     handleRibbonItemClick,
     isItemActive,
     getItemValue,
-  } = useRibbon(editor, openFileDialog, openMediaDialog, openSpellingGrammarDialog);
+  } = useRibbon(editor, openFileDialog, openMediaDialog, openSpellingGrammarDialog, openTrackChangesDialog);
 
   const tabs = Object.values(EDITOR_TABS);
 
