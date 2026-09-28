@@ -3,18 +3,18 @@ import styled from "styled-components";
 /** 
  * get height of header and footer to help eliminate overflow issues in the editor template
  */
-const headerHeight = document.querySelector(".header-wrapper")?.clientHeight || 0;
-const footerHeight = document.querySelector(".footer-content")?.parentElement?.clientHeight || 0; 
+// const headerHeight = document.querySelector(".header-wrapper")?.clientHeight || 0;
+// const footerHeight = document.querySelector(".footer-content")?.parentElement?.clientHeight || 0; 
 
 const StyledEditorTemplate = styled.div`
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas:
     'template-ribbon'
     'template-editor-shell';
-  /* inline-size: 100%; */
-  block-size: calc(100vh - (${headerHeight + footerHeight}px));
   flex: 1 1 auto;
+  min-block-size: 0;
+  min-inline-size: 0;
   gap: 0.5rem;
   background: var(--editor-surface);
   border: 1px solid var(--editor-border-strong);
@@ -22,19 +22,12 @@ const StyledEditorTemplate = styled.div`
 
   .editor-shell {
     grid-area: template-editor-shell;
-    display: flex;
-    inline-size: 100%;
-    border: 1px solid var(--editor-border-strong);
-    border-radius: 0.5rem;
     background: var(--editor-surface);
-    overflow: hidden;
-    padding: 0.75rem;
+    min-block-size: 0;
+    min-inline-size: 0;
+    overflow-x: hidden;
     overflow-y: auto;
-  }
-
-  .editor-shell > div {
-    inline-size: 100%;
-    flex: 1 1 auto;
+    scrollbar-gutter: stable;
   }
 
   .editor-shell__content,

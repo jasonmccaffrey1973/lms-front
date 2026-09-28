@@ -7,11 +7,11 @@ const StyledPageTemplate = styled.div`
      * Base layout
      * -------------------------------------------------------------------------- */
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas: 'template-header'
                          'template-main'
                          'template-footer';
-    min-block-size: 100dvh;
+    block-size: 100dvh;
 
     /* --------------------------------------------------------------------------
      * Header section
@@ -106,6 +106,7 @@ const StyledPageTemplate = styled.div`
         grid-template-columns: auto  1fr;
         position: relative;
         overflow: hidden;
+        min-block-size: 0;
 
         @media (max-width: ${mobileBreakpoint}) {
             grid-template-columns: 1fr;
@@ -138,6 +139,7 @@ const StyledPageTemplate = styled.div`
             align-items: stretch;
             flex: 1 1 auto;
             inline-size: 100%;
+            min-block-size: 0;
             box-shadow: inset 0 0 0 1px var(--app-border);
         }
     }

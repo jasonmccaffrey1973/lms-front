@@ -380,22 +380,22 @@ const INSERT_MENU_ITEMS = [
     },
 ];
 
-const LAYOUT_MENU_ITEMS = [
-    {
-        label: "Margins",
-        value: "margins",
-        action: "setMargins",
-        group: "layout",
-        icon: "margins",
-    },
-    {
-        label: "Orientation",
-        value: "orientation",
-        action: "setOrientation",
-        group: "layout",
-        icon: "orientation",
-    },
-];
+// const LAYOUT_MENU_ITEMS = [
+//     {
+//         label: "Margins",
+//         value: "margins",
+//         action: "setMargins",
+//         group: "layout",
+//         icon: "margins",
+//     },
+//     {
+//         label: "Orientation",
+//         value: "orientation",
+//         action: "setOrientation",
+//         group: "layout",
+//         icon: "orientation",
+//     },
+// ];
 
 const REVIEW_MENU_ITEMS = [
     {
@@ -459,10 +459,10 @@ const EDITOR_TABS = {
         value: "insert",
         items: INSERT_MENU_ITEMS
     },
-    LAYOUT: {
-        label: "Layout",
-        value: "layout",
-        items: LAYOUT_MENU_ITEMS},
+    // LAYOUT: {
+    //     label: "Layout",
+    //     value: "layout",
+    //     items: LAYOUT_MENU_ITEMS},
     REVIEW: {
         label: "Review",
         value: "review",
