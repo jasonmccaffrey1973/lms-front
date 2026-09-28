@@ -18,13 +18,21 @@ const useRibbon = (
   openSpellingGrammarDialog?: () => void,
   openTrackChangesDialog?: () => void,
 ) => {
-  const { selection, activeTab, setActiveTab } = useEditorState();
+  const { selection, activeTab, setActiveTab, zoomLevel, setZoomLevel } = useEditorState();
 
   const handleRibbonTabChange = (tab: EditorTab) => {
     setActiveTab(tab);
   };
 
   const handleRibbonItemClick = (item: RibbonMenuItem) => {
+    if (item.action === "setZoom") {
+      const nextZoom = Number(item.value);
+      if (Number.isFinite(nextZoom)) {
+        setZoomLevel(nextZoom);
+      }
+      return;
+    }
+
     if (!editor) {
       return;
     }
@@ -70,7 +78,7 @@ const useRibbon = (
       isRibbonItemActive(editor, item),
 
     getItemValue: (item: RibbonMenuItem) =>
-      getRibbonItemValue(item, selection),
+      getRibbonItemValue(item, selection, zoomLevel),
   };
 };
 

@@ -10,6 +10,7 @@ import ButtonDropDown from "../../../../../sharedComponents/buttonDropDown/Butto
 import ColorPicker from "../../../../../sharedComponents/colorPicker/ColorPicker";
 import AttachURL from "./attachURL/AttachURL";
 import InsertTable from "../../../../../sharedComponents/insertTable/InsertTable";
+import ZoomSelector from "../../zoomSelector/ZoomSelector";
 
 
 export interface RibbonItemProps {
@@ -33,6 +34,7 @@ const dropdownContent = ({
   value: string;
   action?: (val: string) => void;
 }) => {
+  console.log('dropdownContent called with:', { label, value });
   switch (label) {
     case "Text Color":
       return <ColorPicker value={value || "#000000"} onChange={(val) => action?.(val)} />;
@@ -42,6 +44,8 @@ const dropdownContent = ({
       return <AttachURL action={(url) => action?.(url)} recentURLs={["https://example.com", "https://another-example.com"]} />;
     case "Table":
       return <InsertTable initialRows={3} initialColumns={3} maxRows={10} maxColumns={10} onInsert={(rows, columns) => action?.(`${rows}x${columns}`)} />;
+    case "Zoom":
+      return <ZoomSelector value={Number(value) || 1} onChange={(val) => action?.(`${val}`)} />;
     default:
       return null;
   }
@@ -81,9 +85,9 @@ const RibbonItem = ({
   }
 
   // 3. Dropdowns with popovers (e.g. Color Picker)
-  const content = dropdownContent({ label, value, action });
+  const content = label === "Zoom" ? null : dropdownContent({ label, value, action });
 
-  if (elementType === "buttonDropdown" && content) {
+  if (elementType === "buttonDropdown" && (content || label === "Zoom")) {
     return (
       <ButtonDropDown
         label={label}
@@ -92,7 +96,16 @@ const RibbonItem = ({
         isActive={isActive}
         onPrimaryAction={(val) => action?.(val ?? "")}
       >
-        {content}
+        {label === "Zoom" ? (
+          ({ close }) => (
+            <ZoomSelector
+              key={value}
+              value={Number(value) || 1}
+              onChange={(val) => action?.(`${val}`)}
+              onCancel={close}
+            />
+          )
+        ) : content}
       </ButtonDropDown>
     );
   }

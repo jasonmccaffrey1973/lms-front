@@ -14,9 +14,9 @@ export const FONTS: Record<string, FontFaceConfig> = {
         weight: "100 900",
     },
     Barlow: {
-        normal: `${FONTS_PATH}/Barlow/Barlow-VariableFont_wght.ttf`,
-        italic: `${FONTS_PATH}/Barlow/Barlow-Italic-VariableFont_wght.ttf`,
-        weight: "100 900",
+        normal: `${FONTS_PATH}/Barlow/Barlow-Regular.ttf`,
+        italic: `${FONTS_PATH}/Barlow/Barlow-Italic.ttf`,
+        weight: "400",
     },
     "Great Vibes": {
         normal: `${FONTS_PATH}/Great_Vibes/GreatVibes-Regular.ttf`,
@@ -26,17 +26,17 @@ export const FONTS: Record<string, FontFaceConfig> = {
         normal: `${FONTS_PATH}/Hachi_Maru_Pop/HachiMaruPop-Regular.ttf`,
         weight: "400",
     },
-    "Indie Flower": {
-        normal: `${FONTS_PATH}/Indie_Flower/IndieFlower-Regular.ttf`,
-        weight: "400",
-    },
+    // "Indie Flower": {
+    //     normal: `${FONTS_PATH}/Indie_Flower/IndieFlower-Regular.ttf`,
+    //     weight: "400",
+    // },
     Inter: {
         normal: `${FONTS_PATH}/Inter/Inter-VariableFont_opsz,wght.ttf`,
         italic: `${FONTS_PATH}/Inter/Inter-Italic-VariableFont_opsz,wght.ttf`,
         weight: "100 900",
     },
     Italiana: {
-        normal: `${FONTS_PATH}/Italiana/Italiana-Regular.ttf`,
+        normal: `${FONTS_PATH}/Italianno/Italianno-Regular.ttf`,
         weight: "400",
     },
     Kalam: {
@@ -45,9 +45,9 @@ export const FONTS: Record<string, FontFaceConfig> = {
         weight: "400",
     },
     Kanit: {
-        normal: `${FONTS_PATH}/Kanit/Kanit-VariableFont_wght.ttf`,
-        italic: `${FONTS_PATH}/Kanit/Kanit-Italic-VariableFont_wght.ttf`,
-        weight: "100 900",
+        normal: `${FONTS_PATH}/Kanit/Kanit-Regular.ttf`,
+        italic: `${FONTS_PATH}/Kanit/Kanit-Italic.ttf`,
+        weight: "400",
     },
     Lato: {
         normal: `${FONTS_PATH}/Lato/Lato-Regular.ttf`,
@@ -59,9 +59,9 @@ export const FONTS: Record<string, FontFaceConfig> = {
         weight: "400",
     },
     Merriweather: {
-        normal: `${FONTS_PATH}/Merriweather/Merriweather-Regular.ttf`,
-        italic: `${FONTS_PATH}/Merriweather/Merriweather-Italic.ttf`,
-        weight: "400",
+        normal: `${FONTS_PATH}/Merriweather/Merriweather-VariableFont_opsz,wdth,wght.ttf`,
+        italic: `${FONTS_PATH}/Merriweather/Merriweather-Italic-VariableFont_opsz,wdth,wght.ttf`,
+        weight: "300 900",
     },
     Montserrat: {
         normal: `${FONTS_PATH}/Montserrat/Montserrat-VariableFont_wght.ttf`,
@@ -102,9 +102,9 @@ export const FONTS: Record<string, FontFaceConfig> = {
         weight: "400",
     },
     Prompt: {
-        normal: `${FONTS_PATH}/Prompt/Prompt-VariableFont_wght.ttf`,
-        italic: `${FONTS_PATH}/Prompt/Prompt-Italic-VariableFont_wght.ttf`,
-        weight: "100 900",
+        normal: `${FONTS_PATH}/Prompt/Prompt-Regular.ttf`,
+        italic: `${FONTS_PATH}/Prompt/Prompt-Italic.ttf`,
+        weight: "400",
     },
     Raleway: {
         normal: `${FONTS_PATH}/Raleway/Raleway-VariableFont_wght.ttf`,
@@ -131,14 +131,14 @@ export const FONTS: Record<string, FontFaceConfig> = {
         weight: "400",
     },
     "Titillium Web": {
-        normal: `${FONTS_PATH}/Titillium_Web/TitilliumWeb-VariableFont_wght.ttf`,
-        italic: `${FONTS_PATH}/Titillium_Web/TitilliumWeb-Italic-VariableFont_wght.ttf`,
-        weight: "100 900",
+        normal: `${FONTS_PATH}/Titillium_Web/TitilliumWeb-Regular.ttf`,
+        italic: `${FONTS_PATH}/Titillium_Web/TitilliumWeb-Italic.ttf`,
+        weight: "400",
     },
     Ubuntu: {
-        normal: `${FONTS_PATH}/Ubuntu/Ubuntu-VariableFont_wght.ttf`,
-        italic: `${FONTS_PATH}/Ubuntu/Ubuntu-Italic-VariableFont_wght.ttf`,
-        weight: "100 900",
+        normal: `${FONTS_PATH}/Ubuntu/Ubuntu-Regular.ttf`,
+        italic: `${FONTS_PATH}/Ubuntu/Ubuntu-Italic.ttf`,
+        weight: "400",
     },
     Zeyada: {
         normal: `${FONTS_PATH}/Zeyada/Zeyada-Regular.ttf`,

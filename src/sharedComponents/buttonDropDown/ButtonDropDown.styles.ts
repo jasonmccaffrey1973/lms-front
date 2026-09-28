@@ -39,11 +39,11 @@ export const StyledMainActionButton = styled.button`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.25rem; /* Matches the 0.25rem gap used in standard ribbon items */
+  gap: 0.2rem;
   flex: 1;
   min-width: 0;
   height: 100%;
-  padding: 0.25rem 0.1rem;
+  padding: 0.4rem 0.5rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -59,8 +59,8 @@ export const StyledMainActionButton = styled.button`
   }
 
   svg {
-    width: 1.85rem;
-    height: 1.85rem;
+    width: 2rem;
+    height: 2rem;
     flex-shrink: 0;
   }
 
@@ -118,4 +118,10 @@ export const StyledPopoverPanel = styled.div<{ $isOpen: boolean }>`
   border: 1px solid var(--_wrapper-border-color);
   border-radius: 0.375rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  &.zoom-dropdown {
+    inline-size: 23.5rem;
+    max-inline-size: calc(100vw - 1rem);
+    box-sizing: border-box;
+  }
 `;

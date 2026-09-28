@@ -1,5 +1,5 @@
 import { EditorContent } from "@tiptap/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 
 import type { EditorTemplateProps } from "./editor.template.types";
 import useEditorTemplate from "./useEditor.template";
@@ -13,10 +13,12 @@ import SpellingGrammarDialog from "../components/spellingGrammarDialog/SpellingG
 import TrackChangesDialog from "../components/trackChangesDialog/TrackChangesDialog";
 import useDialog from "../../../sharedComponents/dialog/useDialog";
 import useAutosave from "../hooks/useAutosave";
+import { useEditorState } from "../EditorState";
 
 const EditorTemplate = ({
   editor,
 }: EditorTemplateProps) => {
+  const { zoomLevel } = useEditorState();
   const {
     currentLessonId,
     selectedDocumentId,
@@ -138,6 +140,7 @@ const EditorTemplate = ({
         <div
           className="editor-shell"
           aria-label="Lesson editor body"
+          style={{ "--editor-zoom": zoomLevel } as CSSProperties}
         >
           {editor ? (
             <EditorContent editor={editor} />

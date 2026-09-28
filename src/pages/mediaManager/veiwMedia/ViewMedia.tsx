@@ -141,6 +141,7 @@ const MediaGallery = ({ items, type }: { items: MediaItem[]; type: "image" | "vi
 const ViewMedia = ({media, type, dialogRef, controls}: ViewMediaProps) => {
 
     const { dialogTitle, footerButtons, numberOfMediaItems } = useViewMedia({ media, type, dialogRef, controls });
+    const firstMedia = media[0];
 
     return (
         <Dialog title={dialogTitle} footerButtons={footerButtons} controls={controls} dialogRef={dialogRef}>
@@ -148,9 +149,9 @@ const ViewMedia = ({media, type, dialogRef, controls}: ViewMediaProps) => {
                 <Render if={numberOfMediaItems > 1}>
                     <MediaGallery key={media.map((item) => item.id).join(",")} items={media} type={type} />
                 </Render>
-                <Render if={numberOfMediaItems === 1}>
-                   <MediaPreview key={`${type}-${media[0].id}`} item={media[0]} type={type} />
-                </Render>
+                {numberOfMediaItems === 1 && firstMedia ? (
+                    <MediaPreview key={`${type}-${firstMedia.id}`} item={firstMedia} type={type} />
+                ) : null}
             </StyledMediaViewer>
         </Dialog>
     );

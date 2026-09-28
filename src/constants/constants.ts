@@ -435,6 +435,7 @@ const HELP_MENU_ITEMS = [
         action: "setZoom",
         group: "view",
         icon: "zoom",
+        elementType: "buttonDropdown",
     },
 ];
 

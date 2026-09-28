@@ -66,6 +66,7 @@ export const getEditorSelectionState = (
 export const getRibbonItemValue = (
   item: RibbonMenuItem,
   selection: Partial<EditorSelectionState>,
+  zoomLevel = 1,
 ): string => {
   switch (item.action) {
     case "setFontFamily":
@@ -76,6 +77,8 @@ export const getRibbonItemValue = (
       return selection.textColor || "#000000";
     case "toggleHighlight":
       return selection.highlightColor || "#ffff00";
+    case "setZoom":
+      return String(zoomLevel);
     default:
       return item.value ?? "";
   }
@@ -86,6 +89,8 @@ type EditorStateContextValue = {
   selection: EditorSelectionState;
   activeTab: EditorTab;
   setActiveTab: (tab: EditorTab) => void;
+  zoomLevel: number;
+  setZoomLevel: (level: number) => void;
 };
 
 const EditorStateContext = createContext<EditorStateContextValue | undefined>(undefined);
@@ -108,6 +113,7 @@ export const EditorStateProvider = ({
   );
 
   const [activeTab, setActiveTab] = useState<EditorTab>(DEFAULT_TAB);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   useEffect(() => {
     if (!editor) {
@@ -133,8 +139,10 @@ export const EditorStateProvider = ({
       selection,
       activeTab,
       setActiveTab,
+      zoomLevel,
+      setZoomLevel,
     }),
-    [editor, selection, activeTab],
+    [editor, selection, activeTab, zoomLevel],
   );
 
   return React.createElement(EditorStateContext.Provider, { value }, children);
@@ -149,6 +157,8 @@ export const useEditorState = () => {
       selection: getEditorSelectionState(null),
       activeTab: DEFAULT_TAB,
       setActiveTab: () => undefined,
+      zoomLevel: 1,
+      setZoomLevel: () => undefined,
     };
   }
 

@@ -16,7 +16,9 @@ const ButtonDropDown = ({
   isActive,
   children,
 }: ButtonDropDownProps) => {
-  const { isOpen, toggleDropDown, containerRef } = useButtonDropDown();
+  const { isOpen, toggleDropDown, closeDropDown, containerRef } = useButtonDropDown();
+  const dropdownContent =
+    typeof children === "function" ? children({ close: closeDropDown }) : children;
 
   return (
     <StyledButtonDropDownWrapper ref={containerRef}>
@@ -44,8 +46,13 @@ const ButtonDropDown = ({
       </StyledSplitButtonContainer>
 
       {/* Popover section rendering the injected component */}
-      <StyledPopoverPanel $isOpen={isOpen} role="dialog" aria-label={`${label} menu`}>
-        {children}
+      <StyledPopoverPanel
+        $isOpen={isOpen}
+        className={label === "Zoom" ? "zoom-dropdown" : undefined}
+        role="dialog"
+        aria-label={`${label} menu`}
+      >
+        {dropdownContent}
       </StyledPopoverPanel>
     </StyledButtonDropDownWrapper>
   );

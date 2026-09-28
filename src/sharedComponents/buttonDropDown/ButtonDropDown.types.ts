@@ -10,5 +10,5 @@ export interface ButtonDropDownProps {
   /** Primary action when clicking the main button area (e.g., apply current color) */
   onPrimaryAction?: (value?: string) => void;
   /** Custom dropdown content (e.g., ColorPicker, LinkForm, MenuList) */
-  children: ReactNode;
+  children: ReactNode | ((controls: { close: () => void }) => ReactNode);
 }

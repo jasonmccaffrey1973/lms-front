@@ -25,7 +25,7 @@ const StyledEditorTemplate = styled.div`
     background: var(--editor-surface);
     min-block-size: 0;
     min-inline-size: 0;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     scrollbar-gutter: stable;
   }
@@ -34,6 +34,7 @@ const StyledEditorTemplate = styled.div`
   .ProseMirror {
     inline-size: 100%;
     block-size: 100%;
+    zoom: var(--editor-zoom, 1);
     padding: 0.75rem;
     outline: none;
     font-size: 1rem;
