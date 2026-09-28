@@ -21,8 +21,8 @@ const StyledInsertTableWrapper = styled.div`
     flex-direction: column;
     gap: 3px;
     padding: 0.25rem;
-    background-color: var(--editor-bg-subtle, rgba(255, 255, 255, 0.03));
-    border: 1px solid var(--editor-border, rgba(255, 255, 255, 0.1));
+    background-color: var(--editor-surface, hsl(0, 0%, 100%));
+    border: 1px solid var(--editor-border-strong, hsl(214, 15%, 81%));
     border-radius: 0.25rem;
     transition: all 0.1s ease-out;
   }
@@ -38,8 +38,8 @@ const StyledInsertTableWrapper = styled.div`
     aspect-ratio: 1;
     border-radius: 2px;
     cursor: pointer;
-    background-color: var(--editor-surface-hover, rgba(255, 255, 255, 0.1));
-    border: 1px solid transparent;
+    background-color: var(--editor-surface-muted, hsl(210, 15%, 95%));
+    border: 0.25rem solid transparent;
     transition: background-color 0.05s ease, border-color 0.05s ease;
 
     &.highlighted {
@@ -50,7 +50,7 @@ const StyledInsertTableWrapper = styled.div`
 
   .insert-table-divider {
     border: none;
-    border-top: 1px solid var(--editor-border, rgba(255, 255, 255, 0.1));
+    border-top: 1px solid var(--editor-border, hsla(0, 0%, 100%, 0.10));
     margin: 0.125rem 0;
   }
 
@@ -62,7 +62,7 @@ const StyledInsertTableWrapper = styled.div`
     .manual-title {
       font-size: 0.75rem;
       font-weight: 500;
-      color: var(--editor-text-muted, rgba(255, 255, 255, 0.7));
+      color: var(--editor-text-muted, hsla(0, 0%, 100%, 0.70));
     }
 
     form {
@@ -83,8 +83,8 @@ const StyledInsertTableWrapper = styled.div`
         width: 100%;
         padding: 0.25rem 0.4rem;
         font-size: 0.8rem;
-        background: var(--editor-input-bg, rgba(0, 0, 0, 0.2));
-        border: 1px solid var(--editor-border, rgba(255, 255, 255, 0.2));
+        background: var(--editor-input-bg, hsla(0, 0%, 0%, 0.20));
+        border: 1px solid var(--editor-border, hsla(0, 0%, 100%, 0.20));
         border-radius: 0.25rem;
         color: inherit;
         box-sizing: border-box;

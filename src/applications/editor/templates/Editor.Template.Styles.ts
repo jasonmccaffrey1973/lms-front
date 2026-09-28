@@ -23,11 +23,14 @@ const StyledEditorTemplate = styled.div`
   .editor-shell {
     grid-area: template-editor-shell;
     background: var(--editor-surface);
-    min-block-size: 0;
-    min-inline-size: 0;
+    block-size: 100%;
     overflow-x: auto;
     overflow-y: auto;
     scrollbar-gutter: stable;
+
+    > div {
+      block-size: 100%;
+    }
   }
 
   .editor-shell__content,
