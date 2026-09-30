@@ -34,7 +34,6 @@ const dropdownContent = ({
   value: string;
   action?: (val: string) => void;
 }) => {
-  console.log('dropdownContent called with:', { label, value });
   switch (label) {
     case "Text Color":
       return <ColorPicker value={value || "#000000"} onChange={(val) => action?.(val)} />;

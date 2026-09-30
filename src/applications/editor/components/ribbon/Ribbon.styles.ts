@@ -14,8 +14,19 @@ const StyledEditorRibbon = styled.div`
     background-color: var(--editor-surface-muted);
     border: 1px solid var(--editor-border);
     border-bottom: none;
-    border-radius: 0.5rem 0.5rem 0 0;
 `;
+
+const StyledRibbonTopRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--editor-surface-muted);
+
+    .ribbon-right-area {
+        padding-inline: 0.5rem;
+        justify-content: flex-end;
+    }
+`
 
 const StyledEditorRibbonTabs = styled.ul`
     position: relative;
@@ -197,6 +208,7 @@ export {
     StyledEditorRibbonTab,
     StyledEditorRibbonTabLabel,
     StyledEditorRibbonTabItemsWrapper,
+    StyledRibbonTopRow,
     StyledEditorRibbonGroup,
     StyledEditorRibbonGroupLabel,
     StyledEditorRibbonGroupItems,

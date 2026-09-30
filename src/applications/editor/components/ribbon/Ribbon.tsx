@@ -4,9 +4,11 @@ import {
 } from "../../../../constants/constants";
 
 import type { SVGIconName } from "../../../../sharedComponents/SVG/SVGIcon";
+import type { RibbonMenuItem, RibbonProps } from "./Ribbon.types";
 
 import {
   StyledEditorRibbon,
+  StyledRibbonTopRow,
   StyledEditorRibbonGroup,
   StyledEditorRibbonGroupItems,
   StyledEditorRibbonGroupLabel,
@@ -17,7 +19,7 @@ import EditorRibbonTab from "./components/EditorRibbonTab";
 import RibbonItem from "./components/RibbonItem";
 import TabItemsWrapper from "./components/TabItemsWrapper";
 import useRibbon from "./useRibbon";
-import type { RibbonMenuItem, RibbonProps } from "./Ribbon.types";
+import RibbonRightArea from "./components/ribbonRightArea/RibbonRightArea";
 
 
 
@@ -55,23 +57,25 @@ const Ribbon = ({
 
   return (
     <StyledEditorRibbon>
-      <StyledEditorRibbonTabs
-        role="tablist"
-        aria-label="Editor ribbon tabs"
-      >
-        {tabs.map((tab, index) => (
-          <EditorRibbonTab
-            key={tab.value}
-            label={tab.label}
-            onClick={() =>
-              handleRibbonTabChange(tab.value)
-            }
-            isActive={activeTab === tab.value}
-            index={index}
-          />
-        ))}
-      </StyledEditorRibbonTabs>
-
+      <StyledRibbonTopRow >
+        <StyledEditorRibbonTabs
+          role="tablist"
+          aria-label="Editor ribbon tabs"
+        >
+          {tabs.map((tab, index) => (
+            <EditorRibbonTab
+              key={tab.value}
+              label={tab.label}
+              onClick={() =>
+                handleRibbonTabChange(tab.value)
+              }
+              isActive={activeTab === tab.value}
+              index={index}
+            />
+          ))}
+        </StyledEditorRibbonTabs>
+        <RibbonRightArea />
+      </StyledRibbonTopRow>
       <TabItemsWrapper
         aria-label={`${visibleTab.label} menu`}
       >

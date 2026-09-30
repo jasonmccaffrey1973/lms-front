@@ -3,9 +3,9 @@ import SVGIcon from "../../../../sharedComponents/SVG/SVGIcon";
 import { useZoomSelector } from "./useZoomSelector";
 import { StyledZoomForm, StyledZoomSelector } from "./zoomSelector.styles";
 
-const ZoomSelectorItem = ({ label, value, setZoom }: { label: string; value: number; setZoom: (value: number) => void }) => (
+const ZoomSelectorItem = ({ label, value, onClick }: { label: string; value: number;  onClick: (value: number) => void }) => (
     <li key={value}>
-        <Button color="transparent" className="standard-level-button" onClick={() => setZoom(value)}>{label}</Button>
+        <Button color="transparent" className="standard-level-button" onClick={() => onClick(value)}>{label}</Button>
     </li>
 );
 
@@ -19,8 +19,9 @@ const {
     incrementZoom,
     decrementZoom,
     resetZoom,
-    handleSubmit
-} = useZoomSelector({ value, onChange }); 
+    handleSubmit,
+    handleStaticValueClick
+} = useZoomSelector({ value, onChange, onCancel }); 
 
     return (
         <StyledZoomForm onSubmit={(e) => {
@@ -79,19 +80,14 @@ const {
                                 key={value}
                                 label={label}
                                 value={value}
-                                setZoom={setZoom}
+                                onClick={() => handleStaticValueClick(value)}
                             />
                         ))}
                     </ul>
                 </StyledZoomSelector>
             </div>
             <div className="zoom-footer">
-                <Button color="danger" onClick={() => {
-                    setZoom(value);
-                    onCancel?.();
-                }}> cancel </Button>
-                <Button color="success" type="submit"> set </Button>
-
+                <Button color="success" type="submit"> Done </Button>
             </div>
         </StyledZoomForm>
     );
