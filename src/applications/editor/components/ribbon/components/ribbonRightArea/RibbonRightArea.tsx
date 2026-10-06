@@ -4,7 +4,7 @@ import RibbonItem from "../RibbonItem";
 import { StyledRibbonRightArea } from "./ribbonRightArea.styles";
 import useRibbonRightArea from "./useRibbonRightArea";
 
-const RibbonRightArea = () => {
+const RibbonRightArea = ({ onOpenHelp }: { onOpenHelp?: () => void }) => {
   const { zoomLevel, handleZoomChange, zoomLabel } = useRibbonRightArea();
 
   return (
@@ -23,6 +23,7 @@ const RibbonRightArea = () => {
       <RibbonItem
         icon="help"
         label="Help"
+        action={() => onOpenHelp?.()}
       />
     </StyledRibbonRightArea>
   );

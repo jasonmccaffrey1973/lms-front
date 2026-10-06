@@ -29,6 +29,7 @@ const Ribbon = ({
   openMediaDialog,
   openSpellingGrammarDialog,
   openTrackChangesDialog,
+  openHelpDialog,
 }: RibbonProps) => {
   const {
     activeTab,
@@ -36,7 +37,7 @@ const Ribbon = ({
     handleRibbonItemClick,
     isItemActive,
     getItemValue,
-  } = useRibbon(editor, openFileDialog, openMediaDialog, openSpellingGrammarDialog, openTrackChangesDialog);
+  } = useRibbon(editor, openFileDialog, openMediaDialog, openSpellingGrammarDialog, openTrackChangesDialog, openHelpDialog);
 
   const tabs = Object.values(EDITOR_TABS);
 
@@ -74,7 +75,7 @@ const Ribbon = ({
             />
           ))}
         </StyledEditorRibbonTabs>
-        <RibbonRightArea />
+        <RibbonRightArea onOpenHelp={openHelpDialog} />
       </StyledRibbonTopRow>
       <TabItemsWrapper
         aria-label={`${visibleTab.label} menu`}

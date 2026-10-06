@@ -378,6 +378,10 @@ const executeRibbonAction = (
       handlers.toggleTrackChanges?.();
       break;
 
+    case "openHelp":
+      handlers.openHelp?.();
+      break;
+
     default:
       console.log(`Ribbon item clicked: ${item.label}`);
       break;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledZoomForm = styled.form`
-inline-size: 100%;
+inline-size: max-content;
 box-sizing: border-box;
 display: grid;
 grid-template-columns: minmax(0, 1fr);
@@ -10,8 +10,10 @@ grid-template-areas:    "zoom-header"
                         "zoom-body"
                         "zoom-footer";
 block-size: min-content;
-/* border: 1px solid var(--app-border); */
+border: 1px solid var(--app-border);
 border-radius: 0.5rem;
+margin: -0.5rem; // Adjust for border spacing
+
 
     .zoom-header {
         grid-area: zoom-header;
@@ -43,7 +45,8 @@ border-radius: 0.5rem;
 `;
 
 const StyledZoomSelector = styled.div`
-inline-size: 100%;
+inline-size: max-content;
+max-inline-size: 28rem;
 box-sizing: border-box;
 display: grid;
 grid-template-columns: minmax(4.5rem, auto) minmax(0, 1fr);
@@ -95,7 +98,7 @@ background-color: var(--app-surface);
         grid-area: custom-level;
         min-inline-size: 0;
         display: grid;
-        grid-template-columns: 2rem 1fr 2rem;
+        grid-template-columns: auto 1fr auto;
         grid-template-rows: 1fr;
         grid-template-areas: "zoom-out custom-level zoom-in";
         justify-content: center;

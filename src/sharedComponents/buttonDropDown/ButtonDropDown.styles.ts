@@ -17,8 +17,8 @@ export const StyledButtonDropDownWrapper = styled.div`
 export const StyledSplitButtonContainer = styled.div<{ $isActive?: boolean }>`
   display: flex;
   flex-direction: row;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   background-color: ${({ $isActive }) =>
     $isActive ? "var(--_item-active-background-color)" : "transparent"};
   border: 1px solid
@@ -120,7 +120,7 @@ export const StyledPopoverPanel = styled.div<{ $isOpen: boolean }>`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 
   &.zoom-dropdown {
-    inline-size: 23.5rem;
+    inline-size: max-content;
     max-inline-size: calc(100vw - 1rem);
     box-sizing: border-box;
   }

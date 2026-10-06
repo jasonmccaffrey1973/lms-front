@@ -41,7 +41,7 @@ gap: 0.5rem;
         right: 0;
         top: 100%;
         transform: translatex(calc(-100% + 5.375rem));
-        inline-size: 24rem;
+        inline-size: fit-content;
     }
 `;
 

@@ -17,6 +17,7 @@ const useRibbon = (
   openMediaDialog: (mode: "image" | "video") => void,
   openSpellingGrammarDialog?: () => void,
   openTrackChangesDialog?: () => void,
+  openHelpDialog?: () => void,
 ) => {
   const { selection, activeTab, setActiveTab, zoomLevel, setZoomLevel } = useEditorState();
 
@@ -25,6 +26,11 @@ const useRibbon = (
   };
 
   const handleRibbonItemClick = (item: RibbonMenuItem) => {
+    if (item.action === "openHelp") {
+      openHelpDialog?.();
+      return;
+    }
+
     if (item.action === "setZoom") {
       const nextZoom = Number(item.value);
       if (Number.isFinite(nextZoom)) {
@@ -66,6 +72,7 @@ const useRibbon = (
       openMediaDialog,
       checkSpellingGrammar: openSpellingGrammarDialog,
       toggleTrackChanges: openTrackChangesDialog,
+      openHelp: openHelpDialog,
     });
   };
 

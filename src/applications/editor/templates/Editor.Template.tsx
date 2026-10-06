@@ -11,6 +11,7 @@ import StyledEditorTemplate from "./Editor.Template.Styles";
 import MediaDialog from "../../media/components/MediaDialog";
 import SpellingGrammarDialog from "../components/spellingGrammarDialog/SpellingGrammarDialog";
 import TrackChangesDialog from "../components/trackChangesDialog/TrackChangesDialog";
+import HelpDialog from "../components/helpDialog/HelpDialog";
 import useDialog from "../../../sharedComponents/dialog/useDialog";
 import useAutosave from "../hooks/useAutosave";
 import { useEditorState } from "../EditorState";
@@ -122,6 +123,9 @@ const EditorTemplate = ({
       ref: trackChangesDialogRef,
     });
 
+  const helpDialogRef = useRef<HTMLDialogElement>(null!);
+  const helpDialogControls = useDialog({ ref: helpDialogRef });
+
   return (
     <>
       <StyledEditorTemplate>
@@ -135,6 +139,7 @@ const EditorTemplate = ({
           openTrackChangesDialog={
             trackChangesDialogControls.openDialog
           }
+          openHelpDialog={helpDialogControls.openDialog}
         />
 
         <div
@@ -158,6 +163,11 @@ const EditorTemplate = ({
         editor={editor}
         dialogRef={trackChangesDialogRef}
         controls={trackChangesDialogControls}
+      />
+
+      <HelpDialog
+        dialogRef={helpDialogRef}
+        controls={helpDialogControls}
       />
 
       <FileDialog

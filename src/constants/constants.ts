@@ -368,30 +368,6 @@ const REVIEW_MENU_ITEMS = [
     },
 ];
 
-// const HELP_MENU_ITEMS = [
-//     {
-//         label: "Help",
-//         value: "help",
-//         action: "openHelp",
-//         group: "help",
-//         icon: "help",
-//     },
-//     {
-//         label: "About",
-//         value: "about",
-//         action: "openAbout",
-//         group: "help",
-//         icon: "about",
-//     },
-//     {
-//         label: "Zoom",
-//         value: "zoom",
-//         action: "setZoom",
-//         group: "view",
-//         icon: "zoom",
-//         elementType: "buttonDropdown",
-//     },
-// ];
 
 /** ------------------------------------------------------------------------------------
  * Editor tabs - 
@@ -423,11 +399,6 @@ const EDITOR_TABS = {
         value: "review",
         items: REVIEW_MENU_ITEMS
     },
-    // HELP: {
-    //     label: "Help",
-    //     value: "help",
-    //     items: HELP_MENU_ITEMS
-    // }
 } as const;
 
 

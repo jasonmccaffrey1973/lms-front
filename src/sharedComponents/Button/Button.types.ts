@@ -1,6 +1,7 @@
 import type React from "react";
 
-export type VariantColor = "primary" | "danger" | "success" | "warning" | "info" | "light" | "dark" | "transparent" | (string & {});
+export type VariantColor = "primary" | "danger" | "success" | "warning" | "info" | "light" | "dark" | "transparent" | "secondary" | 
+(string & {});
 
 export type StyledButtonProps = {
     $color?: VariantColor;
