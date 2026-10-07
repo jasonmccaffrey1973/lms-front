@@ -3,9 +3,9 @@ import styled from "styled-components";
 export const StyledButtonDropDownWrapper = styled.div`
   --_wrapper-background-color: transparent;
   --_wrapper-border-color: var(--editor-border, hsl(30, 6%, 88%));
-  --_item-hover-background-color: var(--editor-item-hover, rgba(255, 255, 255, 0.08));
+  --_item-hover-background-color: var(--editor-item-hover, hsla(0, 0%, 100%, 0.08));
   --_item-hover-border-color: hsl(206, 100%, 42%);
-  --_item-active-background-color: var(--editor-item-active-bg, rgba(255, 255, 255, 0.15));
+  --_item-active-background-color: var(--editor-item-active-bg, hsla(0, 0%, 100%, 0.15));
 
   position: relative;
   display: inline-flex;
@@ -114,7 +114,7 @@ export const StyledPopoverPanel = styled.div<{ $isOpen: boolean }>`
   z-index: 100;
   min-width: 12rem;
   padding: 0.5rem;
-  background-color: var(--editor-surface-muted, #1e222d);
+  background-color: var(--editor-surface-muted, hsl(224, 20%, 15%));
   border: 1px solid var(--_wrapper-border-color);
   border-radius: 0.375rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);

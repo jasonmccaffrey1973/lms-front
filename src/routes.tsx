@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Dashboard, Login, LogoutPage, ErrorPage, MediaManagerPage } from './pages';
-import { Editor } from './applications';
+import { Editor, VideoProduction } from './applications';
+
 import { useAuth } from "./auth"
 
 const AppRoutes = () => {
@@ -19,6 +20,11 @@ const AppRoutes = () => {
 			{/* APPLICATIONS */}
 			<Route path="/media-manager" element={isAuthenticated ? <MediaManagerPage /> : <Navigate to="/unauthorized" replace />} />
 			<Route path="/lesson-editor" element={isAuthenticated ? <Editor /> : <Navigate to="/unauthorized" replace />} />
+			{/* AI ASSET GENERATION */}
+			<Route path="/assets" element={isAuthenticated ? <VideoProduction tab="characters" /> : <Navigate to="/unauthorized" replace />} />
+			<Route path="/assets/characters" element={isAuthenticated ? <VideoProduction tab="characters" /> : <Navigate to="/unauthorized" replace />} />
+			<Route path="/assets/locations" element={isAuthenticated ? <VideoProduction tab="locations" /> : <Navigate to="/unauthorized" replace />} />
+			<Route path="/assets/equipment" element={isAuthenticated ? <VideoProduction tab="equipment" /> : <Navigate to="/unauthorized" replace />} />
 			{/* ERROR PAGES */}
 			<Route path="/bad-request" element={isAuthenticated ? <ErrorPage statusCode={400} /> : <Navigate to="/login" replace />} />
 			<Route path="/not-found" element={isAuthenticated ? <ErrorPage statusCode={404} /> : <Navigate to="/login" replace />} />
