@@ -1,12 +1,12 @@
 
+import { Outlet } from "react-router-dom"
 import StyledPageTemplate from "./PageTemplate.styles"
 import Header from "../sharedComponents/header/Header"
 import Footer from "../sharedComponents/footer/Footer"
 import Navigation from "../sharedComponents/navigation/components/Navigation"
 import usePageTemplate from "./usePageTemplate"
 
-const PageTemplate = ({ children }: { children: React.ReactNode }) => {
-
+const PageTemplate = ({ children }: { children?: React.ReactNode }) => {
 
     const { sidebarOpen, toggleSidebar } = usePageTemplate()
 
@@ -36,7 +36,7 @@ const PageTemplate = ({ children }: { children: React.ReactNode }) => {
                     <Navigation />
                 </aside>
                 <main>
-                    {children}
+                    {children ?? <Outlet />}
                 </main>
             </section>
             <Footer />

@@ -1,4 +1,3 @@
-import PageTemplate from "../../templates/PageTemplate"
 import { StyledBackdropImage, StyledContentRibbon, StyledStatusCode, StyledMessage, StyledSearchWrapper, StyledLinksWrapper } from "./error.styles"
 import { STATUS_CODES } from "../../constants/constants"
 import ErrorSearch from "./ErrorSearch";
@@ -18,27 +17,25 @@ const ErrorPage = ({ statusCode }: { statusCode: number }) => {
 	const backdropImages = useErrorBackdropImages(statusCode);
 
 	return (
-		<PageTemplate>
-			<StyledBackdropImage
-				$horizontalImage={backdropImages.horizontal}
-				$verticalImage={backdropImages.vertical}
-			>
-				<StyledContentRibbon>
-					<StyledStatusCode>
-						<h1>{displayText}</h1>
-					</StyledStatusCode>
-					<StyledMessage>
-						<h2>{friendlyMessage}</h2>
-					</StyledMessage>
-					<StyledSearchWrapper>
-						<ErrorSearch />
-					</StyledSearchWrapper>
-					<StyledLinksWrapper>
-						<ErrorLinks />	
-					</StyledLinksWrapper>
-				</StyledContentRibbon>
-			</StyledBackdropImage>
-		</PageTemplate>
+		<StyledBackdropImage
+			$horizontalImage={backdropImages.horizontal}
+			$verticalImage={backdropImages.vertical}
+		>
+			<StyledContentRibbon>
+				<StyledStatusCode>
+					<h1>{displayText}</h1>
+				</StyledStatusCode>
+				<StyledMessage>
+					<h2>{friendlyMessage}</h2>
+				</StyledMessage>
+				<StyledSearchWrapper>
+					<ErrorSearch />
+				</StyledSearchWrapper>
+				<StyledLinksWrapper>
+					<ErrorLinks />	
+				</StyledLinksWrapper>
+			</StyledContentRibbon>
+		</StyledBackdropImage>
 	)
 }
 

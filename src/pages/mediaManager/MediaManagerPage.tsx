@@ -1,4 +1,3 @@
-import PageTemplate from "../../templates/PageTemplate";
 import Button from "../../sharedComponents/Button/Button";
 import Dialog from "../../sharedComponents/dialog/Dialog";
 import FileUploader from "../../sharedComponents/fileUploader/FileUploader";
@@ -217,7 +216,7 @@ const MediaManagerPage = () => {
 
 
   return (
-    <PageTemplate>
+    <>
       <StyledMediaManagerPage>
 
         <StyledTabBar>
@@ -312,7 +311,7 @@ const MediaManagerPage = () => {
         onDelete={deleteMedia}
       />
 
-    </PageTemplate>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import AppRoutes from './routes.tsx'
 import GlobalStyles from './assets/globalStyles.ts'
 import { ApolloProvider, AuthProvider, UserLinksProvider } from './auth'
 import { ThemeProvider } from './theme'
+import PageTemplate from './templates/PageTemplate.tsx'
 
 const getRootNode = () => document.createElement('div')
 
@@ -23,7 +24,9 @@ createRoot(rootNode).render(
           <UserLinksProvider>
             <BrowserRouter>
               <GlobalStyles />
-              <AppRoutes />
+              <PageTemplate>
+                <AppRoutes />
+              </PageTemplate>
             </BrowserRouter>
           </UserLinksProvider>
         </AuthProvider>

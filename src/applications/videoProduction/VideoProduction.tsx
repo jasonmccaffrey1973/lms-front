@@ -4,12 +4,10 @@ import Render from '../../sharedComponents/Render';
 import { TABS } from './constants';
 import VideoProductionTabs from './components/VideoProductionTabs';
 import { StyledVideoProductionPage } from './videoProduction.styles';
-import PageTemplate from '../../templates/PageTemplate';
 
 const VideoProduction = ({ tab } : { tab : string }) => {
     const { activeTab, handleTabChange } = useVideoProduction(tab);
 	return (    
-        <PageTemplate>
             <StyledVideoProductionPage>
                 <VideoProductionTabs activeTab={activeTab} handleTabChange={handleTabChange} />
                 <div className="page-body">
@@ -24,7 +22,6 @@ const VideoProduction = ({ tab } : { tab : string }) => {
                     </Render>
                 </div>
             </StyledVideoProductionPage>
-        </PageTemplate>
 	)
 }
 

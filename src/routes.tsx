@@ -31,8 +31,6 @@ const AppRoutes = () => {
 			<Route path="/unauthorized" element={isAuthenticated ? <ErrorPage statusCode={401} /> : <Navigate to="/login" replace />} />
 			<Route path="/forbidden" element={isAuthenticated ? <ErrorPage statusCode={403} /> : <Navigate to="/login" replace />} />
 			<Route path="*" element={isAuthenticated ? <ErrorPage statusCode={404} /> : <Navigate to="/login" replace />} />
-			
-			
 		</Routes>
 	)
 }
