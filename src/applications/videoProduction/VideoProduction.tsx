@@ -6,18 +6,18 @@ import VideoProductionTabs from './components/VideoProductionTabs';
 import { StyledVideoProductionPage } from './videoProduction.styles';
 
 const VideoProduction = ({ tab } : { tab : string }) => {
-    const { activeTab, handleTabChange } = useVideoProduction(tab);
+    const { activeTab } = useVideoProduction(tab);
 	return (    
             <StyledVideoProductionPage>
-                <VideoProductionTabs activeTab={activeTab} handleTabChange={handleTabChange} />
+                <VideoProductionTabs activeTab={activeTab} />
                 <div className="page-body">
-                    <Render if={activeTab === TABS.CHARACTERS.label}>
+                    <Render if={activeTab === TABS.CHARACTERS.label.toLowerCase()}>
                         <Characters />
                     </Render>
-                    <Render if={activeTab === TABS.LOCATIONS.label}>
+                    <Render if={activeTab === TABS.LOCATIONS.label.toLowerCase()}>
                         <Locations />
                     </Render>
-                    <Render if={activeTab === TABS.EQUIPMENT.label}>
+                    <Render if={activeTab === TABS.EQUIPMENT.label.toLowerCase()}>
                         <Equipment />
                     </Render>
                 </div>

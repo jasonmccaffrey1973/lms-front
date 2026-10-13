@@ -3,7 +3,11 @@ import Dashboard from "./dashboard/Dashboard";
 import Login from "./login/Login";
 import LogoutPage from "./logout/LogoutPage";
 import ErrorPage from "./error/ErrorPage";
-import MediaManagerPage from "./mediaManager/MediaManagerPage";
+import About from "./about/About";
+import Analytics from "./analytics/Analytics";
+import Contact from "./contact/Contact";
+import Reports from "./reports/Reports";
+import Settings from "./settings/Settings";
 
 
-export { Dashboard, Login, LogoutPage, ErrorPage, MediaManagerPage };
+export { Dashboard, Login, LogoutPage, ErrorPage, About, Analytics, Contact, Reports, Settings };

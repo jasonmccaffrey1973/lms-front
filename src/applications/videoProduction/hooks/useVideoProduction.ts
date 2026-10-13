@@ -1,15 +1,8 @@
-import { useState } from "react"
-
 const useVideoProduction = (initialTab: string) => {
-	const [activeTab, setActiveTab] = useState(initialTab ?? 'characters')
-
-    const handleTabChange = (tab: string) => {
-        setActiveTab(tab.toLowerCase())
-    }
+    const activeTab = (initialTab ?? 'characters').toLowerCase()
 
     return {
-        activeTab,
-        handleTabChange
+        activeTab
     }   
 }
 

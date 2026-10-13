@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import { Dashboard, Login, LogoutPage, ErrorPage, MediaManagerPage } from './pages';
-import { Editor, VideoProduction } from './applications';
+import { Dashboard, Login, LogoutPage, ErrorPage, About, Analytics, Contact, Reports, Settings } from './pages';
+import { Editor, VideoProduction, MediaManager } from './applications';
 
 import { useAuth } from "./auth"
 
@@ -14,11 +14,18 @@ const AppRoutes = () => {
 			<Route path="/login" element={<Login pageForm="login" />} />
 			<Route path="/forgot-password" element={<Login pageForm="forgot-password" />} />
 			<Route path="/register" element={<Login pageForm="create-account" />} />
+
+			{/* STATIC PAGES */}
+			<Route path="/about" element={isAuthenticated ? <About /> : <Navigate to="/unauthorized" replace />} />
+			<Route path="/contact" element={isAuthenticated ? <Contact /> : <Navigate to="/unauthorized" replace />} />
 			<Route path="/logout" element={<LogoutPage />} />
 			{/*  */}
 			<Route path="/dashboard" element={<Dashboard />} />
+			<Route path="/dashboard/analytics" element={isAuthenticated ? <Analytics /> : <Navigate to="/unauthorized" replace />} />
+			<Route path="/dashboard/reports" element={isAuthenticated ? <Reports /> : <Navigate to="/unauthorized" replace />} />
+			<Route path="/dashboard/settings" element={isAuthenticated ? <Settings /> : <Navigate to="/unauthorized" replace />} />
 			{/* APPLICATIONS */}
-			<Route path="/media-manager" element={isAuthenticated ? <MediaManagerPage /> : <Navigate to="/unauthorized" replace />} />
+			<Route path="/media-manager" element={isAuthenticated ? <MediaManager /> : <Navigate to="/unauthorized" replace />} />
 			<Route path="/lesson-editor" element={isAuthenticated ? <Editor /> : <Navigate to="/unauthorized" replace />} />
 			{/* AI ASSET GENERATION */}
 			<Route path="/assets" element={isAuthenticated ? <VideoProduction tab="characters" /> : <Navigate to="/unauthorized" replace />} />

@@ -5,7 +5,7 @@ const StyledMediaManagerPage = styled.section`
 --_tab-height: 1.5rem;
 
   display: grid;
-  padding: 1rem;
+  padding-block-start: 0.75rem;
   inline-size: 100%;
 
   grid-template-columns: auto 1fr;

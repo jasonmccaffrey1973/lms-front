@@ -1,8 +1,8 @@
-
+import { StyledDashboardWrapper } from "./Dashboard.styles";
 
 const Dashboard = () => {
 	return (
-		<div>Dashboard Content</div>
+		<StyledDashboardWrapper>Dashboard Content</StyledDashboardWrapper>
 	)
 }
 

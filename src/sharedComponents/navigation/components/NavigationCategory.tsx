@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Link } from "react-router-dom";
 import { StyledCategoryTrigger, StyledList } from "../Navigation.styles"
 
 type NavigationCategoryProps = {
@@ -20,7 +21,7 @@ const NavigationCategory = ({ obj, isOpen, onToggle }: NavigationCategoryProps) 
             <div className="list-wrapper">
                 {itemList.map((item) => (
                     <li key={item.name} className="nav-item">
-                        <a href={item.path} tabIndex={isOpen ? 0 : -1}>{item.name}</a>
+                        <Link to={item.path} tabIndex={isOpen ? 0 : -1}>{item.name}</Link>
                     </li>
                 ))}
             </div>

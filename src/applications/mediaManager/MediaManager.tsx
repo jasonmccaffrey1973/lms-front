@@ -148,7 +148,7 @@ const MediaManagerUploadDialog = ({
  * Renders the media manager page.
  * @returns The rendered media manager page component.
  ** =============================================================================== */
-const MediaManagerPage = () => {
+const MediaManager = () => {
   const {
     MEDIA_TYPES,
     ribbonIcons,
@@ -316,4 +316,4 @@ const MediaManagerPage = () => {
 };
 
 
-export default MediaManagerPage;
+export default MediaManager;

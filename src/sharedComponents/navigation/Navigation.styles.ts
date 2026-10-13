@@ -11,10 +11,7 @@ const StyledNavigationList = styled.ul<NavigationStylesProps>`
     margin: 0;
 
     .nav-item {
-
-        &:not(:last-child) {
-            border-bottom: 1px solid var(--app-border);
-        }
+        border-bottom: 1px solid var(--app-border);
 
         a {
             text-decoration: none;
