@@ -1,7 +1,7 @@
 const useProfileMenu = () => {
     const menuItems = [
         { label: "Profile", href: "/profile" },
-        { label: "Settings", href: "/settings" },
+        { label: "Settings", href: "/profile/settings" },
         { label: "Logout", href: "/logout" }
     ];
 

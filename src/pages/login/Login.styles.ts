@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const StyledLogin = styled.div`
+const StyledLogin = styled.div`
     --_column-width: 60ch;
     --_background-color: var(--app-surface-muted);
     inline-size: 100%;
@@ -10,41 +10,18 @@ export const StyledLogin = styled.div`
     grid-template-areas: "left-column right-column";
     gap: 0.33rem;
 
-    .left-column {
+    main.left-column {
         grid-area: left-column;
-        display: grid;
-        grid-template-rows: auto 1fr auto;
-        grid-template-areas: "header" "main" "footer";
-        background-color: var(--_background-color);
-        box-shadow: var(--app-shadow);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        margin-block-end: clamp(1.5rem, 8vh, 5rem);
 
-        header,
-        footer {
-            display: grid;
-            place-items: center;
-        }
-
-        header {
-            grid-area: header;
-        }
-
-        main {
-            grid-area: main;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 1rem;
-            margin-block-end: clamp(1.5rem, 8vh, 5rem);
-
-            form {
-                inline-size: min(100%, 34rem);
-                margin-inline: auto;
-            }
-        }
-
-        footer {
-            grid-area: footer;
+        form {
+            inline-size: min(100%, 34rem);
+            margin-inline: auto;
         }
     }
 
@@ -78,11 +55,7 @@ export const StyledLogin = styled.div`
     }
 `
 
-export const StyledLoginSection = styled.div`
-    block-size: clamp(4rem, 20vh, 20rem);
-`
-
-export const StyledFormGroup = styled.div`
+const StyledFormGroup = styled.div`
     display: grid;
     gap: 0.5rem;
     margin-bottom: 1rem;
@@ -108,17 +81,24 @@ export const StyledFormGroup = styled.div`
         padding-inline: 0.75rem;
         padding-block: 1.25rem;
         border: 1px solid var(--app-border);
-        border-radius: 0.5rem;
+        box-shadow: inset 0 0 0 5rem var(--app-surface); //Fix for autofill background color
 
         &:focus-visible {
             outline: 2px solid var(--clr-primary-light);
             outline-offset: 2px;
             border-color: var(--clr-primary);
         }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s;
+        }
     }
 `
 
-export const StyledFormLinks = styled.div`
+const StyledFormLinks = styled.div`
     grid-area: help-links;
     display: flex;
     flex-direction: column;
@@ -144,7 +124,7 @@ export const StyledFormLinks = styled.div`
     }
 `
 
-export const StyledButtonGroup = styled.div`
+const StyledButtonGroup = styled.div`
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas: "help-links submit-button";
@@ -166,3 +146,46 @@ export const StyledButtonGroup = styled.div`
         }
     }
 `
+
+const StyledPasswordInputWrapper = styled.div`
+
+--_button-width: 2rem;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input {
+        flex: 1;
+        position: relative;
+        padding-inline-end: calc(var(--_button-width) + 1rem);
+    }
+
+    svg {
+        fill: currentColor;
+        height: 1.25rem;
+    }
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        right: 0;
+        transform: translateX(-100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 3rem;
+        width: var(--_button-width);
+        border-inline-start: 1px solid var(--app-border);
+        color: var(--app-text-muted);
+        transition: color 200ms ease;
+
+        &:hover {
+            color: var(--app-text);
+        }
+    }
+`
+
+export { StyledLogin, StyledFormGroup, StyledFormLinks, StyledButtonGroup, StyledPasswordInputWrapper }

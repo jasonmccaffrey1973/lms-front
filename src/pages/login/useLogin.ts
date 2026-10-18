@@ -73,6 +73,7 @@ const getFieldValue = (formData: FormData, key: string) => {
 const useLogin = (initialErrorMessage?: string) => {
     const [hasError, setHasError] = useState(Boolean(initialErrorMessage))
     const [errorMsg, setErrorMsg] = useState(initialErrorMessage || "")
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
     const [isLoginSubmitting, setIsLoginSubmitting] = useState(false)
     const isMountedRef = useRef(true)
     const { setToken, logout } = useAuth()
@@ -87,6 +88,10 @@ const useLogin = (initialErrorMessage?: string) => {
             isMountedRef.current = false
         }
     }, [])
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(prev => !prev)
+    }
 
     const setLoginSubmitting = (value: boolean) => {
         if (isMountedRef.current) {
@@ -295,6 +300,8 @@ const useLogin = (initialErrorMessage?: string) => {
         handleLoginSubmit,
         handleForgotPasswordSubmit,
         handleCreateAccountSubmit,
+        togglePasswordVisibility,
+        isPasswordVisible,
     }
 }
 

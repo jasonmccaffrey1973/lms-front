@@ -2,15 +2,14 @@ import { Link } from "react-router-dom"
 import type { ComponentProps } from "react"
 import {
     StyledLogin,
-    StyledLoginSection,
     StyledFormGroup,
     StyledFormLinks,
     StyledButtonGroup,
+    StyledPasswordInputWrapper,
 } from "./Login.styles"
 import useLogin from "./useLogin"
-import Footer from "../../sharedComponents/footer/Footer"
 import Render from "../../sharedComponents/Render"
-import Logo from "../../sharedComponents/logo/Logo"
+import SVGIcon from "../../sharedComponents/SVG/SVGIcon"
 
 type LoginProps = {
     pageForm?: "login" | "forgot-password" | "create-account" | "logout",
@@ -23,6 +22,10 @@ type FormProps = {
     isSubmitting?: boolean
 }
 
+type LoginFormProps = Omit<FormProps, "PasswordInput"> & {
+    togglePasswordVisibility: () => void
+    isPasswordVisible: boolean
+}
 
 /** ---------------------------------------------------------------------------------------
  * Renders the login page with different forms based on the `pageForm` prop.
@@ -38,42 +41,39 @@ const Login = ({ pageForm = "login", errorMessage }: LoginProps) => {
         handleLoginSubmit,
         handleForgotPasswordSubmit,
         handleCreateAccountSubmit,
+        togglePasswordVisibility,
+        isPasswordVisible,
     } = useLogin(errorMessage)
 
+    
     return (
         <StyledLogin>
-            <div className="left-column">
-                <StyledLoginSection as="header">
-                    <Logo />
-                </StyledLoginSection>
-                <main>
-                    <Render if={hasError}>
-                        <div className="error-message">{errorMsg}</div>
-                    </Render>
-                    <Render if={pageForm === "forgot-password"}>
-                        <ForgotPasswordForm
-                            onSubmit={handleForgotPasswordSubmit}
-                            clearError={clearError}
-                        />
-                    </Render>
-                    <Render if={pageForm === "create-account"}>
-                        <CreateAccountForm
-                            onSubmit={handleCreateAccountSubmit}
-                            clearError={clearError}
-                        />
-                    </Render>
-                    <Render if={pageForm === "login"}>
-                        <LoginForm
-                            onSubmit={handleLoginSubmit}
-                            clearError={clearError}
-                            isSubmitting={isLoginSubmitting}
-                        />
-                    </Render>
-                </main>
-                <StyledLoginSection as="footer">
-                    <Footer />
-                </StyledLoginSection>
-            </div>
+            <main className="left-column">
+                <Render if={hasError}>
+                    <div className="error-message">{errorMsg}</div>
+                </Render>
+                <Render if={pageForm === "forgot-password"}>
+                    <ForgotPasswordForm
+                        onSubmit={handleForgotPasswordSubmit}
+                        clearError={clearError}
+                    />
+                </Render>
+                <Render if={pageForm === "create-account"}>
+                    <CreateAccountForm
+                        onSubmit={handleCreateAccountSubmit}
+                        clearError={clearError}
+                    />
+                </Render>
+                <Render if={pageForm === "login"}>
+                    <LoginForm
+                        onSubmit={handleLoginSubmit}
+                        clearError={clearError}
+                        isSubmitting={isLoginSubmitting}
+                        togglePasswordVisibility={togglePasswordVisibility}
+                        isPasswordVisible={isPasswordVisible}
+                    />
+                </Render>
+            </main>
             <div className="right-column">Right Column</div>
         </StyledLogin>
     )
@@ -82,7 +82,8 @@ const Login = ({ pageForm = "login", errorMessage }: LoginProps) => {
 /** ---------------------------------------------------------------------------------------
  * Renders the login form with username/email, password, and helper links. 
  ** --------------------------------------------------------------------------------------- */
-const LoginForm = ({ onSubmit, clearError, isSubmitting = false }: FormProps) => {
+const LoginForm = ({ onSubmit, clearError, isSubmitting = false, togglePasswordVisibility, isPasswordVisible }: LoginFormProps) => {
+    const passwordInputType = isPasswordVisible ? "text" : "password";
     return (
         <form method="post" onSubmit={onSubmit} onChange={clearError}>
             <StyledFormGroup>
@@ -91,7 +92,12 @@ const LoginForm = ({ onSubmit, clearError, isSubmitting = false }: FormProps) =>
             </StyledFormGroup>
             <StyledFormGroup>
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" name="password" />
+                <StyledPasswordInputWrapper>
+                    <input type={passwordInputType} id="password" name="password" />
+                    <button type="button" onClick={togglePasswordVisibility}>
+                        <SVGIcon icon={isPasswordVisible ? "visibilityOff" : "visibilityOn"} />
+                    </button>
+                </StyledPasswordInputWrapper>
             </StyledFormGroup>
             <StyledButtonGroup>
                 <LoginLinks />
