@@ -4,6 +4,9 @@ import { ThemeContext, type ThemeMode } from "../context/ThemeContext"
 const THEME_STORAGE_KEY = "app-theme"
 
 const getStoredTheme = (): ThemeMode => {
+  if (typeof window === "undefined" || !window.localStorage) {
+    return "system"
+  }
   const value = window.localStorage.getItem(THEME_STORAGE_KEY)
   if (value === "light" || value === "dark" || value === "system") {
     return value
@@ -12,6 +15,9 @@ const getStoredTheme = (): ThemeMode => {
 }
 
 const applyThemeToRoot = (theme: ThemeMode) => {
+  if (typeof document === "undefined") {
+    return
+  }
   const root = document.documentElement
 
   if (theme === "system") {
@@ -29,7 +35,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     applyThemeToRoot(theme)
-    window.localStorage.setItem(THEME_STORAGE_KEY, theme)
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem(THEME_STORAGE_KEY, theme)
+    }
   }, [theme])
 
   const value = useMemo(() => ({ theme, setTheme }), [theme])

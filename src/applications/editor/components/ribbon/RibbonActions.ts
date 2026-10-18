@@ -4,14 +4,14 @@ import type { RibbonMenuItem, RibbonAction, RibbonActionHandlers } from "./Ribbo
 const copyToClipboard = async (editor: Editor) => {
   const selection = editor.state.selection;
   const selectedText = editor.state.doc.textBetween(selection.from, selection.to, "\n");
-  const fallbackText = window.getSelection?.()?.toString() ?? "";
+  const fallbackText = typeof window !== "undefined" ? window.getSelection?.()?.toString() ?? "" : "";
   const text = selectedText || fallbackText;
 
   if (!text) {
     return;
   }
 
-  if (navigator.clipboard?.writeText) {
+  if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
     try {
       await navigator.clipboard.writeText(text);
       return;
@@ -20,11 +20,13 @@ const copyToClipboard = async (editor: Editor) => {
     }
   }
 
-  document.execCommand("copy");
+  if (typeof document !== "undefined") {
+    document.execCommand("copy");
+  }
 };
 
 const pasteFromClipboard = async (editor: Editor) => {
-  if (navigator.clipboard?.readText) {
+  if (typeof navigator !== "undefined" && navigator.clipboard?.readText) {
     try {
       const text = await navigator.clipboard.readText();
       if (text) {
@@ -36,7 +38,9 @@ const pasteFromClipboard = async (editor: Editor) => {
     }
   }
 
-  document.execCommand("paste");
+  if (typeof document !== "undefined") {
+    document.execCommand("paste");
+  }
 };
 
 const parseTableDimensions = (value?: string): { rows: number; cols: number } | null => {
