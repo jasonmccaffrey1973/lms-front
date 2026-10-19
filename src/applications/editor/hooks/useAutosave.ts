@@ -14,6 +14,7 @@ export interface UseAutosaveReturn {
   lastSavedAt: Date | null;
   hasUnsavedChanges: boolean;
   triggerManualSave: () => Promise<void>;
+  markSaved: () => void;
 }
 
 export const useAutosave = ({
@@ -56,12 +57,16 @@ export const useAutosave = ({
   };
 
   useEffect(() => {
-    if (!editor || !enabled || !currentLessonId) {
+    if (!editor || !enabled) {
       return;
     }
 
     const handleUpdate = () => {
       setHasUnsavedChanges(true);
+
+      if (!currentLessonId) {
+        return;
+      }
 
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -89,11 +94,21 @@ export const useAutosave = ({
     await performSave();
   };
 
+  const markSaved = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    setHasUnsavedChanges(false);
+    setLastSavedAt(new Date());
+  };
+
   return {
     isSaving,
     lastSavedAt,
     hasUnsavedChanges,
     triggerManualSave,
+    markSaved,
   };
 };
 

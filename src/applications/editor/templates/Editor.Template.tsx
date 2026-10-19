@@ -15,6 +15,8 @@ import HelpDialog from "../components/helpDialog/HelpDialog";
 import useDialog from "../../../sharedComponents/dialog/useDialog";
 import useAutosave from "../hooks/useAutosave";
 import { useEditorState } from "../EditorState";
+import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { handleSaveShortcut } from "../editorShortcuts";
 
 const EditorTemplate = ({
   editor,
@@ -22,6 +24,7 @@ const EditorTemplate = ({
   const { zoomLevel } = useEditorState();
   const {
     currentLessonId,
+    currentLessonTitle,
     selectedDocumentId,
     setSelectedDocumentId,
 
@@ -43,6 +46,21 @@ const EditorTemplate = ({
     editor,
   });
 
+  const {
+    isSaving,
+    lastSavedAt,
+    hasUnsavedChanges,
+    triggerManualSave,
+    markSaved,
+  } = useAutosave({
+    editor,
+    currentLessonId,
+    onSave: async () => {
+      await saveLesson(currentLessonTitle);
+    },
+    delayMs: 2500,
+  });
+
   /*
    * File dialog
    */
@@ -58,10 +76,54 @@ const EditorTemplate = ({
     searchFileName,
     setSearchFileName,
   } = useFileDialog({
-    openDocument: openLesson,
-    saveDocument: saveLesson,
-    saveDocumentAs: saveLessonAs,
+    openDocument: async (name) => {
+      if (await openLesson(name)) {
+        markSaved();
+      }
+    },
+    saveDocument: async (name) => {
+      await saveLesson(name);
+      markSaved();
+    },
+    saveDocumentAs: async (name) => {
+      await saveLessonAs(name);
+      markSaved();
+    },
   });
+
+  const handleSaveDocument = () => {
+    if (currentLessonId) {
+      void triggerManualSave();
+    } else {
+      openFileDialog("saveDocumentAs");
+    }
+  };
+
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+
+    const saveShortcutPluginKey = new PluginKey("editorSaveShortcut");
+    const saveShortcutPlugin = new Plugin({
+      key: saveShortcutPluginKey,
+      props: {
+        handleKeyDown: (_view, event) => {
+          return handleSaveShortcut(event, {
+            currentLessonId,
+            currentLessonTitle,
+            saveLesson: () => triggerManualSave(),
+            openSaveDialog: () => openFileDialog("saveDocumentAs"),
+          });
+        },
+      },
+    });
+
+    editor.registerPlugin(saveShortcutPlugin);
+    return () => {
+      editor.unregisterPlugin(saveShortcutPluginKey);
+    };
+  }, [editor, currentLessonId, currentLessonTitle, triggerManualSave, openFileDialog]);
 
   /*
    * Confirm file dialog action.
@@ -86,20 +148,6 @@ const EditorTemplate = ({
     fileDialogType,
     refetchLessons,
   ]);
-
-  /*
-   * Autosave
-   */
-  useAutosave({
-    editor,
-    currentLessonId,
-    onSave: async () => {
-      if (filename) {
-        await saveLesson(filename);
-      }
-    },
-    delayMs: 2500,
-  });
 
   /*
    * Spelling / Grammar dialog
@@ -132,6 +180,16 @@ const EditorTemplate = ({
         <Ribbon
           editor={editor}
           openFileDialog={openFileDialog}
+          onSaveDocument={handleSaveDocument}
+          saveStatus={
+            isSaving
+              ? "Saving…"
+              : hasUnsavedChanges
+                ? "Unsaved changes"
+                : lastSavedAt
+                  ? "Saved"
+                  : undefined
+          }
           openMediaDialog={openMediaDialog}
           openSpellingGrammarDialog={
             spellingGrammarDialogControls.openDialog

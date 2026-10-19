@@ -30,6 +30,8 @@ const Ribbon = ({
   openSpellingGrammarDialog,
   openTrackChangesDialog,
   openHelpDialog,
+  onSaveDocument,
+  saveStatus,
 }: RibbonProps) => {
   const {
     activeTab,
@@ -37,7 +39,7 @@ const Ribbon = ({
     handleRibbonItemClick,
     isItemActive,
     getItemValue,
-  } = useRibbon(editor, openFileDialog, openMediaDialog, openSpellingGrammarDialog, openTrackChangesDialog, openHelpDialog);
+  } = useRibbon(editor, openFileDialog, openMediaDialog, openSpellingGrammarDialog, openTrackChangesDialog, openHelpDialog, onSaveDocument);
 
   const tabs = Object.values(EDITOR_TABS);
 
@@ -75,6 +77,11 @@ const Ribbon = ({
             />
           ))}
         </StyledEditorRibbonTabs>
+        {saveStatus ? (
+          <span className="document-save-status" role="status" aria-live="polite">
+            {saveStatus}
+          </span>
+        ) : null}
         <RibbonRightArea onOpenHelp={openHelpDialog} />
       </StyledRibbonTopRow>
       <TabItemsWrapper

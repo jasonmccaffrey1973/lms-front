@@ -221,6 +221,26 @@ describe("useRibbon hook", () => {
     expect(openHelpDialog).toHaveBeenCalledOnce();
   });
 
+  it("routes ribbon Save to the provided save-current action", () => {
+    const saveCurrentDocument = vi.fn();
+    const ribbon = useRibbon(
+      mockEditor,
+      openFileDialog,
+      openMediaDialog,
+      openSpellingGrammarDialog,
+      openTrackChangesDialog,
+      openHelpDialog,
+      saveCurrentDocument,
+    );
+
+    ribbon.handleRibbonItemClick({ label: "Bold", action: "toggleBold" });
+    const handlersPassed = vi.mocked(executeRibbonAction).mock.calls[0]?.[2];
+    handlersPassed.saveDocument();
+
+    expect(saveCurrentDocument).toHaveBeenCalledOnce();
+    expect(openFileDialog).not.toHaveBeenCalledWith("saveDocument");
+  });
+
   it("delegates isItemActive to isRibbonItemActive", () => {
     const ribbon = useRibbon(
       mockEditor,

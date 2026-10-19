@@ -184,10 +184,12 @@ const DialogInput = ({
   label,
   value,
   onChange,
+  error,
 }: {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string | null;
 }) => {
   return (
     <div className="input-wrapper">
@@ -198,11 +200,18 @@ const DialogInput = ({
         type="text"
         name="fileName"
         id="filename"
-        className="file-name-input"
+        className={`file-name-input ${error ? "input-error" : ""}`}
         placeholder={label}
         value={value}
         onChange={onChange}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? "filename-error-msg" : undefined}
       />
+      {error ? (
+        <span id="filename-error-msg" className="error-message" role="alert">
+          {error}
+        </span>
+      ) : null}
     </div>
   );
 };
@@ -219,6 +228,7 @@ const FileDialog = ({
   documents = [],
   selectedDocumentId,
   setSelectedDocumentId,
+  errorMessage,
 }: FileDialogProps) => {
   const elementData = DIALOG_UI_ELEMENTS[type];
 
@@ -271,6 +281,7 @@ const FileDialog = ({
             label={elementData.inputLabel}
             value={filename}
             onChange={(e) => setFilename(e.target.value)}
+            error={errorMessage}
           />
         </div>
       </StyledFileDialog>

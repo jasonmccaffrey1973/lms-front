@@ -114,6 +114,9 @@ const useEditorTemplate = ({
   const [currentLessonId, setCurrentLessonId] =
     useState<string | null>(null);
 
+  const [currentLessonTitle, setCurrentLessonTitle] =
+    useState<string>("");
+
   const [selectedDocumentId, setSelectedDocumentId] =
     useState<string | null>(null);
 
@@ -142,7 +145,7 @@ const useEditorTemplate = ({
     label: string
   ) => {
     if (!editor) {
-      return;
+      return false;
     }
 
     const safeLabel = label || "Video";
@@ -250,6 +253,13 @@ const useEditorTemplate = ({
     );
   };
 
+  const isDocumentNameTaken = (name: string): boolean => {
+    const trimmed = name.trim().toLowerCase();
+    return lessons.some(
+      (lesson) => lesson.title.trim().toLowerCase() === trimmed
+    );
+  };
+
   const createNewLesson = async (
     name: string
   ) => {
@@ -260,10 +270,11 @@ const useEditorTemplate = ({
       return;
     }
 
+    const trimmed = name.trim();
     const result = await createLesson({
       variables: {
         input: {
-          title: name,
+          title: trimmed,
           content: editor.getJSON(),
         },
       },
@@ -274,11 +285,14 @@ const useEditorTemplate = ({
 
     if (createdId) {
       setCurrentLessonId(createdId);
+      setCurrentLessonTitle(trimmed);
     }
+    await refetchLessons();
+    return result;
   };
 
   const saveLesson = async (
-    name: string
+    name?: string
   ) => {
     if (!editor) {
       console.error(
@@ -287,8 +301,14 @@ const useEditorTemplate = ({
       return;
     }
 
+    const titleToSave = (name || currentLessonTitle).trim();
+
     if (!currentLessonId) {
-      await createNewLesson(name);
+      if (!titleToSave) {
+        console.error("No document name provided to save.");
+        return;
+      }
+      await createNewLesson(titleToSave);
       return;
     }
 
@@ -296,17 +316,29 @@ const useEditorTemplate = ({
       variables: {
         id: currentLessonId,
         input: {
-          title: name,
+          title: titleToSave || currentLessonTitle,
           content: editor.getJSON(),
         },
       },
     });
+
+    if (titleToSave) {
+      setCurrentLessonTitle(titleToSave);
+    }
+    await refetchLessons();
   };
 
   const saveLessonAs = async (
     name: string
   ) => {
-    await createNewLesson(name);
+    const trimmed = name.trim();
+    if (!trimmed) {
+      throw new Error("Document name cannot be empty.");
+    }
+    if (isDocumentNameTaken(trimmed)) {
+      throw new Error(`A document with the name "${trimmed}" already exists.`);
+    }
+    await createNewLesson(trimmed);
   };
 
   const openLesson = async (
@@ -316,7 +348,7 @@ const useEditorTemplate = ({
       console.error(
         "Editor is not available. Cannot open lesson."
       );
-      return;
+      return false;
     }
 
     const lessonToOpen =
@@ -333,7 +365,7 @@ const useEditorTemplate = ({
       console.error(
         "No matching lesson found to open."
       );
-      return;
+      return false;
     }
 
     let content: LessonContent =
@@ -367,7 +399,7 @@ const useEditorTemplate = ({
           "<p>Unable to load document content because the stored JSON is invalid.</p>"
         );
 
-        return;
+        return false;
       }
     }
 
@@ -401,7 +433,7 @@ const useEditorTemplate = ({
         "<p>Unable to load document content.</p>"
       );
 
-      return;
+      return false;
     }
 
     setCurrentLessonId(
@@ -411,6 +443,11 @@ const useEditorTemplate = ({
     setSelectedDocumentId(
       lessonToOpen.id
     );
+
+    setCurrentLessonTitle(
+      lessonToOpen.title
+    );
+    return true;
   };
 
   const documents = lessons.map(
@@ -431,6 +468,8 @@ const useEditorTemplate = ({
     // Lesson state
     currentLessonId,
     setCurrentLessonId,
+    currentLessonTitle,
+    setCurrentLessonTitle,
 
     selectedDocumentId,
     setSelectedDocumentId,
@@ -455,6 +494,7 @@ const useEditorTemplate = ({
     saveLesson,
     saveLessonAs,
     openLesson,
+    isDocumentNameTaken,
   };
 };
 

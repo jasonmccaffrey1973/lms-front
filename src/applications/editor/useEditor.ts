@@ -54,7 +54,7 @@ const useEditor = () =>
       TrackInsertion,
       TrackDeletion,
     ],
-    content: "<p>Start writing here...</p>",
+    content: "",
     editorProps: {
       attributes: {
         class: "editor-shell__content",

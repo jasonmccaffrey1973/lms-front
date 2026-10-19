@@ -35,6 +35,8 @@ const StyledEditorTemplate = styled.div`
 
   .editor-shell__content,
   .ProseMirror {
+    /* position: fixed; */
+    overflow-y: auto;
     inline-size: 100%;
     block-size: 100%;
     zoom: var(--editor-zoom, 1);
@@ -44,6 +46,7 @@ const StyledEditorTemplate = styled.div`
     line-height: 1.6;
     color: var(--editor-text);
     background: var(--editor-surface);
+    border: 1px solid transparent;
   }
 
   .ProseMirror p {
@@ -51,7 +54,7 @@ const StyledEditorTemplate = styled.div`
   }
 
   .ProseMirror:focus {
-    box-shadow: inset 0 0 0 1px var(--editor-focus-ring);
+    border: 1px solid var(--clr-primary-light);
   }
 
   .ProseMirror ins[data-track-change="insertion"],

@@ -98,6 +98,8 @@ interface RibbonProps {
   openSpellingGrammarDialog?: () => void;
   openTrackChangesDialog?: () => void;
   openHelpDialog?: () => void;
+  onSaveDocument?: () => void;
+  saveStatus?: string;
 }
 
 export type { SelectOption, RibbonGroup, RibbonAction, RibbonMenuItem, RibbonActionHandlers, RibbonProps };

@@ -30,6 +30,7 @@ export interface FileDialogProps {
   documents?: FileDialogDocumentItem[];
   selectedDocumentId?: string | null;
   setSelectedDocumentId?: (id: string) => void;
+  errorMessage?: string | null;
 }
 
 export interface FileDialogState {

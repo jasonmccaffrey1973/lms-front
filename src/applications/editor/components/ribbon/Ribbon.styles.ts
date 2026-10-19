@@ -26,6 +26,14 @@ const StyledRibbonTopRow = styled.div`
         padding-inline: 0.5rem;
         justify-content: flex-end;
     }
+
+    .document-save-status {
+        margin-inline-start: auto;
+        padding-inline: 0.75rem;
+        color: var(--editor-text-muted);
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
 `
 
 const StyledEditorRibbonTabs = styled.ul`

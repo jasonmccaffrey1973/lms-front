@@ -177,6 +177,17 @@ const StyledFileDialog = styled.div`
         padding: 0.375rem 0.5rem;
         font-size: 1rem;
         width: 100%;
+
+        &.input-error {
+          border-color: var(--clr-danger, #dc3545);
+        }
+      }
+
+      .error-message {
+        color: var(--clr-danger, #dc3545);
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-top: 0.25rem;
       }
     }
   }

@@ -18,6 +18,7 @@ const useRibbon = (
   openSpellingGrammarDialog?: () => void,
   openTrackChangesDialog?: () => void,
   openHelpDialog?: () => void,
+  onSaveDocument?: () => void,
 ) => {
   const { selection, activeTab, setActiveTab, zoomLevel, setZoomLevel } = useEditorState();
 
@@ -62,7 +63,11 @@ const useRibbon = (
       },
 
       saveDocument: () => {
-        openFileDialog("saveDocument");
+        if (onSaveDocument) {
+          onSaveDocument();
+        } else {
+          openFileDialog("saveDocument");
+        }
       },
 
       saveDocumentAs: () => {

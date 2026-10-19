@@ -1,18 +1,22 @@
 import { useRef, useState } from "react";
-import type { FileDialogType } from "./fileDialog.types";
+import type { FileDialogDocumentItem, FileDialogType } from "./fileDialog.types";
 import useDialog from "../../../../sharedComponents/dialog/useDialog";
 
 type FileDialogAction = (filename: string) => void | Promise<void>;
 
 type FileDialogActions = Partial<Record<FileDialogType, FileDialogAction>>;
 
-const useFileDialog = (actions: FileDialogActions = {}) => {
+const useFileDialog = (
+  actions: FileDialogActions = {},
+  documents: FileDialogDocumentItem[] = [],
+) => {
   const dialogRef = useRef<HTMLDialogElement>(null!);
   const dialogControls = useDialog({ ref: dialogRef });
 
-  const [filename, setFilename] = useState("");
+  const [filename, setFilenameState] = useState("");
   const [searchFileName, setSearchFileName] = useState("");
   const [fileDialogType, setFileDialogType] = useState<FileDialogType>("openDocument");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const CLOSE_DIALOG_ACTIONS: Record<FileDialogType, FileDialogAction> = {
     newDocument: actions.newDocument ?? (() => undefined),
@@ -52,12 +56,21 @@ const useFileDialog = (actions: FileDialogActions = {}) => {
     },
   };
 
+  const setFilename = (value: string) => {
+    setFilenameState(value);
+    if (errorMessage) {
+      setErrorMessage(null);
+    }
+  };
+
   const openFileDialog = (type: FileDialogType) => {
     setFileDialogType(type);
+    setErrorMessage(null);
     dialogControls.openDialog();
   };
 
   const closeFileDialog = () => {
+    setErrorMessage(null);
     dialogControls.closeDialog();
   };
 
@@ -67,14 +80,32 @@ const useFileDialog = (actions: FileDialogActions = {}) => {
       return;
     }
 
-    if (!filename) {
-      console.error("Filename is not set.");
+    const trimmed = filename.trim();
+    if (!trimmed) {
+      setErrorMessage("Please enter a document name.");
       return;
     }
 
-    const action = CLOSE_DIALOG_ACTIONS[fileDialogType];
-    await action(filename);
-    closeFileDialog();
+    // Verify duplicate document name for Save As
+    if (fileDialogType === "saveDocumentAs") {
+      const isDuplicate = documents.some(
+        (doc) => doc.title.trim().toLowerCase() === trimmed.toLowerCase(),
+      );
+      if (isDuplicate) {
+        setErrorMessage(`A document with the name "${trimmed}" already exists.`);
+        return;
+      }
+    }
+
+    try {
+      const action = CLOSE_DIALOG_ACTIONS[fileDialogType];
+      await action(trimmed);
+      setErrorMessage(null);
+      closeFileDialog();
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to process document action.";
+      setErrorMessage(message);
+    }
   };
 
   return {
@@ -89,6 +120,8 @@ const useFileDialog = (actions: FileDialogActions = {}) => {
     setFilename,
     searchFileName,
     setSearchFileName,
+    errorMessage,
+    setErrorMessage,
     DIALOG_UI_ELEMENTS,
   };
 };
