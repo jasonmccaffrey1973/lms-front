@@ -6,9 +6,11 @@ type dialogProps = {
 
 interface dialogFooterButton {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   color?: string;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+  form?: string;
 }
 
 
@@ -19,7 +21,7 @@ interface dialogComponentProps {
    * The Dialog component uses a native <dialog>
    * element, so the ref must target HTMLDialogElement.
    */
-  dialogRef: React.RefObject<HTMLDialogElement>;
+  dialogRef: React.RefObject<HTMLDialogElement | null>;
 
   /** @deprecated Dialog closes through controls.closeDialog. */
   closeDialog?: () => void;

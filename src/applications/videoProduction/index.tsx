@@ -1,6 +1,6 @@
 import Characters from './pages/characters/Characters'
-import Locations from './pages/locations/Locations'
+import Scenes from './pages/scenes/Scenes'
 import Equipment from './pages/equipment/Equipment'
 import VideoProduction from './VideoProduction'
 
-export { Characters, Locations, Equipment, VideoProduction }
+export { Characters, Scenes, Equipment, VideoProduction }

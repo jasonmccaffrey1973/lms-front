@@ -36,7 +36,7 @@ const AppRoutes = () => {
 			{/* AI ASSET GENERATION */}
 			<Route path="/assets" element={ isAuthenticated ? <VideoProduction tab="characters" /> : <Navigate to="/unauthorized" replace />} />
 			<Route path="/assets/characters" element={ isAuthenticated ? <VideoProduction tab="characters" /> : <Navigate to="/unauthorized" replace />} />
-			<Route path="/assets/locations" element={ isAuthenticated ? <VideoProduction tab="locations" /> : <Navigate to="/unauthorized" replace />} />
+			<Route path="/assets/scenes" element={ isAuthenticated ? <VideoProduction tab="scenes" /> : <Navigate to="/unauthorized" replace />} />
 			<Route path="/assets/equipment" element={ isAuthenticated ? <VideoProduction tab="equipment" /> : <Navigate to="/unauthorized" replace />} />
 			
 			{/* ERROR PAGES */}

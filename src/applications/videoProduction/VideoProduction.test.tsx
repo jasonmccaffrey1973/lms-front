@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("./index", () => ({
     Characters: () => <div>characters-panel</div>,
-    Locations: () => <div>locations-panel</div>,
+    Scenes: () => <div>scenes-panel</div>,
     Equipment: () => <div>equipment-panel</div>,
 }));
 
@@ -19,15 +19,15 @@ describe("VideoProduction route tab rendering", () => {
 
         expect(html).toContain("characters-panel");
         expect(html).toContain('data-active-tab="characters"');
-        expect(html).not.toContain("locations-panel");
+        expect(html).not.toContain("scenes-panel");
         expect(html).not.toContain("equipment-panel");
     });
 
-    it("renders the locations panel for the locations route tab", () => {
-        const html = renderToStaticMarkup(<VideoProduction tab="locations" />);
+    it("renders the scenes panel for the scenes route tab", () => {
+        const html = renderToStaticMarkup(<VideoProduction tab="scenes" />);
 
-        expect(html).toContain("locations-panel");
-        expect(html).toContain('data-active-tab="locations"');
+        expect(html).toContain("scenes-panel");
+        expect(html).toContain('data-active-tab="scenes"');
         expect(html).not.toContain("characters-panel");
         expect(html).not.toContain("equipment-panel");
     });
@@ -38,6 +38,6 @@ describe("VideoProduction route tab rendering", () => {
         expect(html).toContain("equipment-panel");
         expect(html).toContain('data-active-tab="equipment"');
         expect(html).not.toContain("characters-panel");
-        expect(html).not.toContain("locations-panel");
+        expect(html).not.toContain("scenes-panel");
     });
 });

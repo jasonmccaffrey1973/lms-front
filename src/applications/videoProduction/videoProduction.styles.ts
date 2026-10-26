@@ -8,17 +8,43 @@ ul[role="tablist"] {
     list-style: none;
     padding: 0;
     display: flex;
-    border-bottom: 1px solid var(--app-border);
     background-color: var(--app-surface);
-    padding-block-start: 1rem;
-    padding-inline: 0.5rem;
-    gap: 0.33rem;
+    border-bottom: 1px solid var(--app-border);
+    
+    .left-area {
+        flex: 1;
+        display: flex;
+        padding-block-start: 1rem;
+        padding-inline: 0.5rem;
+        gap: 0.33rem;
+    
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
 
-    a {
-        text-decoration: none;
-        color: inherit;
+    .right-area {
+        display: flex;
+        align-items: center;
+        padding-inline: 0.5rem;
+        gap: 0.33rem;
+
+        button {
+            display: flex;
+            align-items: center;
+
+            svg {
+                width: 1.33rem;
+                height: 1.33rem;
+                margin-inline-end: 0.33rem;
+            }
+        }
+
+
     }
 }
+
 
 li[role="tab"] {
 --_border-color: 'transparent';
@@ -52,4 +78,28 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
 `;
 
-export { StyledVideoProductionPage };
+const StyledFormItem = styled.div`
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "label input";
+    gap: 0.5rem;
+    width: 100%;
+    min-width: 20rem;
+    margin-block: 0.75rem;
+
+    label {
+        grid-area: label;
+        width: max-content;
+        min-width: 5rem;
+    }
+    input {
+        grid-area: input;
+        flex: 1 1 0%;
+        padding: 0.33rem 0.625rem;
+        font-size: 1rem;
+        border-radius: 0;
+        border: 1px solid var(--app-border);
+    }
+`;
+
+export { StyledVideoProductionPage, StyledFormItem };

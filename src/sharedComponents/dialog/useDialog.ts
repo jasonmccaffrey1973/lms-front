@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { RefObject } from "react";
 
-const useDialog = ({ ref }: { ref: RefObject<HTMLDialogElement> }) => {
+const useDialog = ({ ref }: { ref: RefObject<HTMLDialogElement | null> }) => {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const openDialog = () => setIsDialogOpen(true);

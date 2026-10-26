@@ -21,7 +21,7 @@ const ButtonDropDown = ({
     typeof children === "function" ? children({ close: closeDropDown }) : children;
 
   return (
-    <StyledButtonDropDownWrapper ref={containerRef}>
+    <StyledButtonDropDownWrapper ref={containerRef} $isOpen={isOpen}>
       <StyledSplitButtonContainer $isActive={isActive} onClick={toggleDropDown}>
         {/* Primary action target */}
         <StyledMainActionButton

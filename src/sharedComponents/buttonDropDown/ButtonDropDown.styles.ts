@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledButtonDropDownWrapper = styled.div`
+export const StyledButtonDropDownWrapper = styled.div<{ $isOpen: boolean }>`
   --_wrapper-background-color: transparent;
   --_wrapper-border-color: var(--editor-border, hsl(30, 6%, 88%));
   --_item-hover-background-color: var(--editor-item-hover, hsla(0, 0%, 100%, 0.08));
@@ -8,6 +8,7 @@ export const StyledButtonDropDownWrapper = styled.div`
   --_item-active-background-color: var(--editor-item-active-bg, hsla(0, 0%, 100%, 0.15));
 
   position: relative;
+  z-index: ${({ $isOpen }) => ($isOpen ? 101 : "auto")};
   display: inline-flex;
   align-self: stretch;
   inline-size: 5.5rem;

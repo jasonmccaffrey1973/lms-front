@@ -3,7 +3,7 @@ import styled from "styled-components";
 const StyledDialog = styled.dialog`
   border: 1px solid var(--editor-border, #ccc);
   max-inline-size: 90%;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 0.5rem;
   padding: 0;
 
