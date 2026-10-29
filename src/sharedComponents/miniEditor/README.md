@@ -38,6 +38,8 @@ value through `onChange`, and editing the textarea updates MiniEditor through
 
 | Prop | Type | Description |
 | --- | --- | --- |
+| `label` | `string` | Optional visible label, also used as the editable surface's accessible name. |
+| `labelPlacement` | `"top" \| "start"` | Label placement. Defaults to `top`; use `start` to put it in a left column. |
 | `value` | `string` | Controlled HTML document value. Pass an empty string for a blank document. |
 | `onChange` | `(html: string) => void` | Receives the document HTML after edits in MiniEditor. |
 | `height` | `CSSProperties["height"]` | Optional editable-surface height. Defaults to `240px`. |

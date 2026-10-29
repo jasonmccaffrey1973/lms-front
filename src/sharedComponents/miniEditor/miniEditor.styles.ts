@@ -1,14 +1,54 @@
 import styled from "styled-components";
 import type { CSSProperties } from "react";
 
-const StyledMiniEditor = styled.div<{ $height: CSSProperties["height"] }>`
+const StyledMiniEditor = styled.div<{
+  $height: CSSProperties["height"];
+  $labelPlacement: "top" | "start";
+}>`
+  display: ${({ $labelPlacement }) => ($labelPlacement === "start" ? "grid" : "block")};
+  grid-template-columns: ${({ $labelPlacement }) =>
+    $labelPlacement === "start" ? "5rem minmax(0, 1fr)" : "minmax(0, 1fr)"};
+  column-gap: ${({ $labelPlacement }) => ($labelPlacement === "start" ? "0.5rem" : "0")};
+  grid-template-rows: auto;
   min-inline-size: 0;
-  border: 1px solid var(--editor-border-strong, #cbd5e1);
+  border: ${({ $labelPlacement }) =>
+    $labelPlacement === "start" ? "none" : "1px solid var(--editor-border-strong, #cbd5e1)"};
   border-radius: 0.5rem;
-  background: var(--editor-surface, #fff);
+  background: ${({ $labelPlacement }) =>
+    $labelPlacement === "start" ? "transparent" : "var(--editor-surface, #fff)"};
   color: var(--editor-text, #1f2937);
 
+  .mini-editor__body {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-column: ${({ $labelPlacement }) => ($labelPlacement === "start" ? "2" : "1")};
+    grid-row: 1;
+    min-inline-size: 0;
+    border: ${({ $labelPlacement }) =>
+      $labelPlacement === "start" ? "1px solid var(--editor-border-strong, #cbd5e1)" : "none"};
+    border-radius: 0.5rem;
+    background: var(--editor-surface, #fff);
+  }
+
+  .mini-editor__label {
+    display: block;
+    width: max-content;
+    min-width: 5rem;
+    margin: ${({ $labelPlacement }) =>
+      $labelPlacement === "start" ? "0" : "0.75rem 0 0.35rem"};
+    padding-top: ${({ $labelPlacement }) => ($labelPlacement === "start" ? "0.35rem" : "0")};
+    color: var(--editor-text, #1f2937);
+    font-size: inherit;
+    font-weight: inherit;
+    cursor: pointer;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+  }
+
   .mini-editor__toolbar {
+    grid-column: 1;
+    grid-row: 1;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
@@ -43,6 +83,8 @@ const StyledMiniEditor = styled.div<{ $height: CSSProperties["height"] }>`
   }
 
   .mini-editor__surface {
+    grid-column: 1;
+    grid-row: 2;
     height: ${({ $height }) => typeof $height === "number" ? `${$height}px` : $height ?? "240px"};
     min-height: 4rem;
     overflow: auto;
