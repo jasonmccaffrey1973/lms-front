@@ -141,7 +141,29 @@ const StyledPageTemplate = styled.div`
             inline-size: 100%;
             min-block-size: 0;
             box-shadow: inset 0 0 0 1px var(--app-border);
+
+            &[aria-hidden="true"] {
+                animation: slideOut 300ms ease forwards;
+            }
+            &[aria-hidden="false"] {
+                animation: slideIn 300ms ease forwards;
+            }
         }
+
+        .right-sidebar-wrapper {
+            grid-area: right-sidebar;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 99999;
+            padding-inline: 1rem;
+            overflow-y: auto;
+            min-width: 20rem;
+            max-width: 90vw;
+            border-inline-start: 1px solid #e5e5e5;
+        }
+
     }
 
     /* --------------------------------------------------------------------------
@@ -158,5 +180,29 @@ const StyledPageTemplate = styled.div`
         }
 
     }
+
+    /* --------------------------------------------------------------------------
+     * Animation keyframes
+     * -------------------------------------------------------------------------- */
+    @keyframes slideIn {
+        from {
+            transform: translateX(120%);
+            display: block;
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(120%);
+            display: none;
+        }
+    }
+    
 `
 export default StyledPageTemplate

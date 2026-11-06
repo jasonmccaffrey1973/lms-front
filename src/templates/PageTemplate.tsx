@@ -5,10 +5,14 @@ import Header from "../sharedComponents/header/Header"
 import Footer from "../sharedComponents/footer/Footer"
 import Navigation from "../sharedComponents/navigation/components/Navigation"
 import usePageTemplate from "./usePageTemplate"
+import Render from "../sharedComponents/Render"
 
-const PageTemplate = ({ children }: { children?: React.ReactNode }) => {
+const PageTemplate = ({ rightSideBarComponent, children }: { rightSideBarComponent?: React.ReactNode, children?: React.ReactNode }) => {
 
-    const { sidebarOpen, toggleSidebar } = usePageTemplate()
+    const { sidebarOpen, toggleSidebar, rightSideBarOpen, toggleRightSideBar } = usePageTemplate()
+
+    const hasRightSideBar = rightSideBarComponent !== undefined
+
 
     return (
         <StyledPageTemplate>
@@ -23,7 +27,13 @@ const PageTemplate = ({ children }: { children?: React.ReactNode }) => {
                 >
                     <span className="hamburger-menu"></span>
                 </button>
-                <Header />
+
+                <Header 
+                    hasRightSideBar={hasRightSideBar}
+                    rightSideBarOpen={rightSideBarOpen}
+                    toggleRightSideBar={toggleRightSideBar} 
+                />
+                
             </div>
             <section className="middle">
                 <aside
@@ -38,6 +48,11 @@ const PageTemplate = ({ children }: { children?: React.ReactNode }) => {
                 <main>
                     {children ?? <Outlet />}
                 </main>
+                <Render if={hasRightSideBar}>
+                    <div className="right-sidebar-wrapper" aria-hidden={!rightSideBarOpen} >
+                        {rightSideBarComponent}
+                    </div>
+                </Render>
             </section>
             <Footer />
         </StyledPageTemplate>
