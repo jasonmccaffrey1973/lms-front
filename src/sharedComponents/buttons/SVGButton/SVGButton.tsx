@@ -1,9 +1,15 @@
 import StyledSVGButton from "./SVGButton.styles";
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-const SVGButton = ({image, color, hover, disabled}: {image: ReactNode, color?: string, hover?: string, disabled?: boolean}) => {
+type SVGButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "color"> & {
+	image: ReactNode;
+	color?: string;
+	hover?: string;
+};
+
+const SVGButton = ({ image, color, hover, type = "button", ...buttonProps }: SVGButtonProps) => {
 	return (
-		<StyledSVGButton color={color} hover={hover} disabled={disabled}>
+		<StyledSVGButton color={color} hover={hover} type={type} {...buttonProps}>
 			{image}
 		</StyledSVGButton>
 	)

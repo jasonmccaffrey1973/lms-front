@@ -5,6 +5,7 @@ import StyledHeader from "./Header.styles"
 import ProfileMenu from "../menu/ProfileMenu/ProfileMenu"
 import { useTheme, type ThemeMode } from "../../theme"
 import Render from "../Render"
+import SVGButton from "../buttons/SVGButton/SVGButton"
 
 const Header = ( { hasRightSideBar, rightSideBarOpen, toggleRightSideBar }: { hasRightSideBar: boolean, rightSideBarOpen: boolean, toggleRightSideBar: () => void} ) => {
 	const { theme, setTheme } = useTheme()
@@ -29,15 +30,12 @@ const Header = ( { hasRightSideBar, rightSideBarOpen, toggleRightSideBar }: { ha
 				</label>
 				<ProfileMenu />
 				<Render if={hasRightSideBar}>
-					<button
-						className="right-sidebar-toggle"
+					<SVGButton 
+						image={rightSideBarOpen ? "arrowLeft" : "ellipsisHroz"}  
 						aria-expanded={rightSideBarOpen}
 						aria-label={rightSideBarOpen ? "Close right sidebar" : "Open right sidebar"}
 						onClick={toggleRightSideBar}
-						type="button"
-					>
-						<span className="hamburger-menu"></span>
-					</button>
+					/>
 				</Render>
 			</div>
 		</StyledHeader>
