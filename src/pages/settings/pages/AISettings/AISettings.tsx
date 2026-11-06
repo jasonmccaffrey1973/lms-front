@@ -1,8 +1,10 @@
+import { StyledSettingsPageWrapper } from "../../settings.styles";
+
 const AISettings = () => {
     return (
-        <div>
+        <StyledSettingsPageWrapper>
             AI Settings Page
-        </div>
+        </StyledSettingsPageWrapper>
     );
 };
 

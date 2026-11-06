@@ -151,7 +151,6 @@ const StyledPageTemplate = styled.div`
         }
 
         .right-sidebar-wrapper {
-            grid-area: right-sidebar;
             position: absolute;
             top: 0;
             right: 0;
@@ -161,7 +160,7 @@ const StyledPageTemplate = styled.div`
             overflow-y: auto;
             min-width: 20rem;
             max-width: 90vw;
-            border-inline-start: 1px solid #e5e5e5;
+            border-inline-start: 1px solid var(--app-border);
         }
 
     }

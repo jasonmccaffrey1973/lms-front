@@ -1,12 +1,10 @@
 import { StyledTab } from '../../settings/settings.styles';
-import useSettings from '../../settings/useSettings';
 
-const Tab = ({ label, isActive = false }: { label: string; isActive?: boolean }) => {
+const Tab = ({ label, isActive = false, onClick }: { label: string; isActive?: boolean; onClick?: () => void }) => {
     
-    const { handleTabChange } = useSettings();
 
     return (
-        <StyledTab role="tab" aria-selected={isActive} aria-controls={label} onClick={() => handleTabChange(label)}>
+        <StyledTab role="tab" aria-selected={isActive} aria-controls={label} onClick={onClick}>
             {label}
         </StyledTab>
     );
