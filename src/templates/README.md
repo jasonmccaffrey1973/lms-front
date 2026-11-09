@@ -21,40 +21,76 @@ function AppLayout() {
 
 The existing router uses the same pattern in `src/main.tsx`.
 
-## Add a right sidebar
+## Set the right sidebar from a page
 
-Pass the sidebar UI through the optional `rightSideBarComponent` prop. It accepts any `React.ReactNode`, so it can be a component, an element, or a fragment. The header shows its right-sidebar toggle only when this prop is provided.
+`PageTemplate` owns the sidebar state and provides `PageTemplateContext` around the route content. A route reads that context through `useRightSidebar`; it does not need to pass sidebar content through `main.tsx` or the route tree. The hook returns `setRightSidebarContent`, which accepts a React node or `null`.
+
+- Setting a React node displays it in the right panel and makes the Header toggle available.
+- Setting a different React node replaces the panel content and keeps its current open/closed state.
+- Setting `null` removes the panel, hides the Header toggle, and closes the panel.
+- Calling `useRightSidebar` outside `PageTemplate` throws an error.
+
+### Register page tools and update them dynamically
+
+For a route-specific panel, register the content in an effect and clear it when the page unmounts. When the page's state changes what the panel displays, call the setter again with the updated React element.
 
 ```tsx
-function PageTools() {
+// Example path: src/pages/dashboard/Dashboard.tsx
+import { useEffect, useState } from "react"
+import useRightSidebar from "../../templates/useRightSidebar"
+
+function DashboardTools({ section }: { section: string }) {
   return (
-    <aside aria-label="Page tools">
-      <h2>Page tools</h2>
-      <button type="button">Add item</button>
+    <aside aria-label="Dashboard tools">
+      <h2>{section} tools</h2>
+      <button type="button">Add to {section}</button>
     </aside>
   )
 }
 
-function AppLayout() {
+export default function Dashboard() {
+  const { setRightSidebarContent } = useRightSidebar()
+  const [section, setSection] = useState("overview")
+
+  useEffect(() => {
+    setRightSidebarContent(<DashboardTools section={section} />)
+  }, [section, setRightSidebarContent])
+
+  useEffect(() => {
+    return () => setRightSidebarContent(null)
+  }, [setRightSidebarContent])
+
   return (
-    <PageTemplate rightSideBarComponent={<PageTools />}>
-      <section>{/* Route or page content */}</section>
-    </PageTemplate>
+    <section>
+      <h1>Dashboard</h1>
+      <button type="button" onClick={() => setSection("reports")}>
+        Show report tools
+      </button>
+    </section>
   )
 }
 ```
 
-The right panel is placed at the right edge of the main content area, scrolls vertically when needed, and has a minimum width of `20rem` and maximum width of `90vw`. The header button's accessible label and `aria-expanded` value follow the open state.
+The example uses two effects deliberately: updating `section` replaces the panel content without clearing it first, while the cleanup effect only removes the panel when the route unmounts. The Header toggle opens and closes the panel. It is positioned at the right edge of the main content area, scrolls vertically when needed, and has a minimum width of `20rem` and maximum width of `90vw`.
+
+### Clear the sidebar early
+
+Call the setter with `null` from an event handler when the panel should disappear before the page unmounts:
+
+```tsx
+<button type="button" onClick={() => setRightSidebarContent(null)}>
+  Close tools
+</button>
+```
+
+The `useRightSidebar` hook must always be called at the top level of a component; do not call it inside an event handler or condition.
 
 ## Notes
 
-- The prop name is `rightSideBarComponent` (capital "B" in "Bar"); use that exact spelling.
-- Omitting the prop leaves the right sidebar and its header button out of the page. Passing `null` still counts as providing the prop, so pass nothing when no sidebar is needed.
 - The left navigation has its own menu button, shown at viewport widths of `1400px` or less.
-- The current right-sidebar wrapper receives `aria-hidden` as its toggle state changes, but the styles do not yet visually hide or reveal it. Add matching styles for `[aria-hidden="true"]` and `[aria-hidden="false"]` in `PageTemplate.styles.ts` if the toggle should animate or conceal the panel.
 
 ## Related files
 
-- `PageTemplate.tsx` - shell markup, optional sidebar slot, and header wiring.
+- `PageTemplate.tsx` - shell markup, sidebar display, and header wiring.
 - `PageTemplate.styles.ts` - responsive layout and sidebar sizing/position.
-- `usePageTemplate.ts` - local open/close state for both sidebars.
+- `useRightSidebar.ts` - hook for setting and clearing route-owned sidebar content.

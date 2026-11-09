@@ -161,6 +161,16 @@ const StyledPageTemplate = styled.div`
             min-width: 20rem;
             max-width: 90vw;
             border-inline-start: 1px solid var(--app-border);
+            transform: translateX(100%);
+            visibility: hidden;
+            pointer-events: none;
+            transition: transform 300ms ease-in-out, visibility 300ms ease-in-out;
+
+            &[aria-hidden="false"] {
+                transform: translateX(0);
+                visibility: visible;
+                pointer-events: auto;
+            }
         }
 
     }

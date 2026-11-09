@@ -78,5 +78,20 @@ const StyledHeader = styled.header`
             background-color: var(--clr-primary-dark);
         }
     }
+
+    .right-sidebar-toggle {
+
+        color: var(--editor-text);
+
+        &:hover {
+            cursor: pointer;
+            color: var(--editor-text-muted);
+        }
+
+        svg {
+            inline-size: 1.5rem;
+            aspect-ratio: 1 / 1;
+        }
+    }
 `;
 export default StyledHeader;

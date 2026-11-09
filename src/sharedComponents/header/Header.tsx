@@ -6,6 +6,7 @@ import ProfileMenu from "../menu/ProfileMenu/ProfileMenu"
 import { useTheme, type ThemeMode } from "../../theme"
 import Render from "../Render"
 import SVGButton from "../buttons/SVGButton/SVGButton"
+import SVGIcon from "../SVG/SVGIcon"
 
 const Header = ( { hasRightSideBar, rightSideBarOpen, toggleRightSideBar }: { hasRightSideBar: boolean, rightSideBarOpen: boolean, toggleRightSideBar: () => void} ) => {
 	const { theme, setTheme } = useTheme()
@@ -29,13 +30,15 @@ const Header = ( { hasRightSideBar, rightSideBarOpen, toggleRightSideBar }: { ha
 					</select>
 				</label>
 				<ProfileMenu />
-				<Render if={hasRightSideBar}>
-					<SVGButton 
-						image={rightSideBarOpen ? "arrowLeft" : "ellipsisHroz"}  
+				<Render if={hasRightSideBar}>		
+					<SVGButton
+						image={<SVGIcon icon={ rightSideBarOpen ? "arrowRight" : "ellipsisVert"} />}
+						className="right-sidebar-toggle"
 						aria-expanded={rightSideBarOpen}
 						aria-label={rightSideBarOpen ? "Close right sidebar" : "Open right sidebar"}
 						onClick={toggleRightSideBar}
 					/>
+					
 				</Render>
 			</div>
 		</StyledHeader>
@@ -43,5 +46,3 @@ const Header = ( { hasRightSideBar, rightSideBarOpen, toggleRightSideBar }: { ha
 }
 
 export default Header
-
-
