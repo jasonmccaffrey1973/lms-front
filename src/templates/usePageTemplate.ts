@@ -15,7 +15,7 @@ const usePageTemplate = () => {
 
     const closeRightSideBar = () => setRightSideBarOpen(false)
 
-    const openRightSideBar = () => setRightSideBarOpen(true)
+    const openRightSideBar = useCallback(() => setRightSideBarOpen(true), [])
 
     const setRightSidebarContent = useCallback((component: ReactNode | null) => {
         setRightSidebarComponent(component)

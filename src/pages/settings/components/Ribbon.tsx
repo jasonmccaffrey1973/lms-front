@@ -13,8 +13,8 @@ const Ribbon = ({ activeTab, handleTabChange, children }: RibbonTabProps) => {
                 {orderedTabs.map((tab) => (
                     <Tab key={tab.label} label={tab.label} isActive={activeTab === tab.path} onClick={() => handleTabChange(tab.path)} />
                 ))}
+                {children && <li className="tab-actions">{children}</li>}
             </StyledTabWrapper>
-            {children}
         </div>
     );
 }

@@ -165,6 +165,7 @@ const StyledPageTemplate = styled.div`
             visibility: hidden;
             pointer-events: none;
             transition: transform 300ms ease-in-out, visibility 300ms ease-in-out;
+            background-color: var(--app-surface);
 
             &[aria-hidden="false"] {
                 transform: translateX(0);

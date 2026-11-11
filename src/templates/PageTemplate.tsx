@@ -18,9 +18,10 @@ const PageTemplate = ({ children }: PageTemplateProps) => {
         toggleRightSideBar,
         rightSidebarComponent,
         setRightSidebarContent,
+        openRightSideBar,
         hasRightSidebar,
     } = usePageTemplate()
-    const contextValue = useMemo(() => ({ setRightSidebarContent }), [setRightSidebarContent])
+    const contextValue = useMemo(() => ({ setRightSidebarContent, openRightSideBar, rightSideBarOpen }), [setRightSidebarContent, openRightSideBar, rightSideBarOpen])
 
 
     return (

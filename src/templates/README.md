@@ -23,7 +23,7 @@ The existing router uses the same pattern in `src/main.tsx`.
 
 ## Set the right sidebar from a page
 
-`PageTemplate` owns the sidebar state and provides `PageTemplateContext` around the route content. A route reads that context through `useRightSidebar`; it does not need to pass sidebar content through `main.tsx` or the route tree. The hook returns `setRightSidebarContent`, which accepts a React node or `null`.
+`PageTemplate` owns the sidebar state and provides `PageTemplateContext` around the route content. A route reads that context through `useRightSidebar`; it does not need to pass sidebar content through `main.tsx` or the route tree. The hook returns `setRightSidebarContent`, which accepts a React node or `null`, and `openRightSideBar`, which opens the panel after registering its content.
 
 - Setting a React node displays it in the right panel and makes the Header toggle available.
 - Setting a different React node replaces the panel content and keeps its current open/closed state.
