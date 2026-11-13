@@ -64,17 +64,54 @@ const StyledTabWrapper = styled.ul`
   `;
 
 const StyledSettingsPageWrapper = styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "ai-settings-heading"
+    "ai-settings-body"
+    "ai-settings-footer";
+  grid-gap: 1rem;
+  overflow: hidden;
+
+  block-size: 100%;
+  inline-size: 100%;
   padding-inline: 1rem;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   background-color: var(--_background-color);
   color: var(--app-text);
 
-  .ai-settings-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-  .ai-settings-heading h1 { margin-block: 0.75rem 0.25rem; font-size: 1.4rem; }
-  .ai-settings-heading p { margin-block: 0 0.75rem; color: var(--app-text-muted); }
-  @media (max-width: 540px) { .ai-settings-heading { align-items: flex-start; flex-direction: column; } }
+  .ai-settings-heading {
+    grid-area: ai-settings-heading;
+    border-block-end: 1px solid var(--app-border);
+
+    h1 {
+      margin-block: 0.75rem 0.25rem;
+      font-size: 1.4rem;
+    }
+  }
+
+  .ai-settings-body {
+    grid-area: ai-settings-body;
+    overflow-y: auto;
+  }
+
+  .ai-settings-footer {
+    grid-area: ai-settings-footer;
+    border-block-start: 1px solid var(--app-border);
+  }
+
+
+  .ai-settings-heading p {
+    margin-block: 0 0.75rem;
+    color: var(--app-text-muted);
+  }
+
+  @media (max-width: 540px) {
+    .ai-settings-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
 `;
 
 export {StyledSettingsWrapper, StyledTab, StyledTabWrapper, StyledSettingsPageWrapper};

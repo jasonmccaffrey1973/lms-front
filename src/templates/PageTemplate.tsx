@@ -7,7 +7,6 @@ import Header from "../sharedComponents/header/Header"
 import Footer from "../sharedComponents/footer/Footer"
 import Navigation from "../sharedComponents/navigation/components/Navigation"
 import usePageTemplate from "./usePageTemplate"
-import Render from "../sharedComponents/Render"
 
 const PageTemplate = ({ children }: PageTemplateProps) => {
 
@@ -58,11 +57,9 @@ const PageTemplate = ({ children }: PageTemplateProps) => {
                     <main>
                         {children ?? <Outlet />}
                     </main>
-                    <Render if={hasRightSidebar}>
-                        <div className="right-sidebar-wrapper" aria-hidden={!rightSideBarOpen}>
-                            {rightSidebarComponent}
-                        </div>
-                    </Render>
+                    <div className="right-sidebar-wrapper" aria-hidden={!rightSideBarOpen}>
+                        {rightSidebarComponent}
+                    </div>
                 </section>
                 <Footer />
             </StyledPageTemplate>

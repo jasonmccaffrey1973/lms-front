@@ -5,14 +5,20 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      '/graphql': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-        ws: true,
-      },
+  host: '127.0.0.1',
+  port: 5173,
+  strictPort: true,
+  allowedHosts: ['lms.test'],
+
+  proxy: {
+    '/graphql': {
+      target: 'http://127.0.0.1:8000',
+      changeOrigin: true,
+      ws: true,
     },
   },
+},
+  
   test: {
     environment: 'node',
     globals: true,

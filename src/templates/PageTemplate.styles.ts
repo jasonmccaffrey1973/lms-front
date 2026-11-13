@@ -155,7 +155,6 @@ const StyledPageTemplate = styled.div`
             top: 0;
             right: 0;
             bottom: 0;
-            z-index: 99999;
             padding-inline: 1rem;
             overflow-y: auto;
             min-width: 20rem;

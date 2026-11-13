@@ -1,15 +1,28 @@
-import type { AISettingsHookValue } from './aISettings.types';
+import type { AISettingsPageProps } from './aISettings.types';
 import ExistingAI from './components/existingAI/ExistingAI';
 import { StyledSettingsPageWrapper } from '../../settings.styles';
+import Render from '../../../../sharedComponents/Render';
+import EmptyConnections from './components/EmptyConnections/EmptyConnections';
 
-type AISettingsProps = Pick<AISettingsHookValue, 'connections' | 'editConnection' | 'deleteConnection'>;
-
-const AISettings = ({ connections, editConnection, deleteConnection }: AISettingsProps) => (
+const AISettings = ({ connections, editConnection, deleteConnection, startNewConnection, isLoading, loadError, operationError }: AISettingsPageProps) => (
   <StyledSettingsPageWrapper>
     <div className="ai-settings-heading">
-      <div><h1>AI connections</h1><p>Configure provider credentials and the services your LMS can use.</p></div>
+      <h1>AI connections</h1>
+      <p>Configure provider credentials and the services your LMS can use.</p>
     </div>
-    <ExistingAI connections={connections} onEdit={editConnection} onDelete={deleteConnection} />
+    <div className="ai-settings-body">
+      {loadError && <p role="alert">Unable to load AI connections: {loadError}</p>}
+      {operationError && <p role="alert">{operationError}</p>}
+      <Render if={isLoading && connections.length === 0 && !loadError}>
+        <p role="status">Loading AI connections...</p>
+      </Render>
+      <Render if={connections.length > 0}>
+        <ExistingAI connections={connections} onEdit={editConnection} onDelete={deleteConnection} />
+      </Render>
+      <Render if={!isLoading && !loadError && connections.length === 0}>
+        <EmptyConnections onNew={startNewConnection}  />
+      </Render>
+    </div>
   </StyledSettingsPageWrapper>
 );
 
