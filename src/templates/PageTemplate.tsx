@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import { useMemo } from "react"
+import { useMemo, useRef, useEffect } from "react"
 import type { PageTemplateProps } from "./pageTemplate.types"
 import PageTemplateContext from "./PageTemplateContext"
 import StyledPageTemplate from "./PageTemplate.styles"
@@ -19,8 +19,26 @@ const PageTemplate = ({ children }: PageTemplateProps) => {
         setRightSidebarContent,
         openRightSideBar,
         hasRightSidebar,
+        closeRightSideBar,
     } = usePageTemplate()
     const contextValue = useMemo(() => ({ setRightSidebarContent, openRightSideBar, rightSideBarOpen }), [setRightSidebarContent, openRightSideBar, rightSideBarOpen])
+
+    const rightSidebarRef = useRef<HTMLDivElement | null>(null)
+
+    useEffect(() => {
+        if (!rightSideBarOpen) return
+
+        const handlePointerDown = (e: PointerEvent) => {
+            const clickedInsideSidebar = rightSidebarRef.current?.contains(e.target as Node)
+            const clickedToggle = (e.target as Element).closest?.('[data-right-sidebar-toggle]')
+            if (!clickedInsideSidebar && !clickedToggle) {
+                closeRightSideBar()
+            }
+        }
+
+        document.addEventListener('pointerdown', handlePointerDown)
+        return () => document.removeEventListener('pointerdown', handlePointerDown)
+    }, [rightSideBarOpen, closeRightSideBar])
 
 
     return (
@@ -57,7 +75,7 @@ const PageTemplate = ({ children }: PageTemplateProps) => {
                     <main>
                         {children ?? <Outlet />}
                     </main>
-                    <div className="right-sidebar-wrapper" aria-hidden={!rightSideBarOpen}>
+                    <div ref={rightSidebarRef} className="right-sidebar-wrapper" aria-hidden={!rightSideBarOpen}>
                         {rightSidebarComponent}
                     </div>
                 </section>

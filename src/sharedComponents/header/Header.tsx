@@ -4,7 +4,6 @@ import Logo from "../logo/Logo"
 import StyledHeader from "./Header.styles"
 import ProfileMenu from "../menu/ProfileMenu/ProfileMenu"
 import { useTheme, type ThemeMode } from "../../theme"
-import Render from "../Render"
 import SVGButton from "../buttons/SVGButton/SVGButton"
 import SVGIcon from "../SVG/SVGIcon"
 
@@ -30,16 +29,15 @@ const Header = ( { hasRightSideBar, rightSideBarOpen, toggleRightSideBar }: { ha
 					</select>
 				</label>
 				<ProfileMenu />
-				<Render if={hasRightSideBar}>		
-					<SVGButton
-						image={<SVGIcon icon={ rightSideBarOpen ? "arrowRight" : "ellipsisVert"} />}
-						className="right-sidebar-toggle"
-						aria-expanded={rightSideBarOpen}
-						aria-label={rightSideBarOpen ? "Close right sidebar" : "Open right sidebar"}
-						onClick={toggleRightSideBar}
-					/>
-					
-				</Render>
+				<SVGButton
+					image={<SVGIcon icon={ rightSideBarOpen ? "arrowRight" : "ellipsisVert"} />}
+					className="right-sidebar-toggle"
+					data-right-sidebar-toggle
+					aria-expanded={rightSideBarOpen}
+					aria-label={rightSideBarOpen ? "Close right sidebar" : "Open right sidebar"}
+					onClick={toggleRightSideBar}
+					style={{ visibility: hasRightSideBar ? "visible" : "hidden" }}
+				/>
 			</div>
 		</StyledHeader>
 	)
