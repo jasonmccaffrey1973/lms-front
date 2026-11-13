@@ -7,7 +7,6 @@ const StyledMediaDialogOverlay = styled.div`
   display: grid;
   place-items: center;
   z-index: 50;
-  background: red;
 `;
 
 const StyledMediaDialog = styled.section`

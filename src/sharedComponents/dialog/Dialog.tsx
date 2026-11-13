@@ -7,8 +7,15 @@ const Dialog = ({title, children, footerButtons, controls, dialogRef }: dialogCo
 
   const { closeDialog } = controls;
 
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDialogElement>) => {
+    const dialog = dialogRef.current;
+    if (dialog && event.target === dialog) {
+      closeDialog();
+    }
+  };
+
   return (
-    <StyledDialog ref={dialogRef} onClose={closeDialog}>
+    <StyledDialog ref={dialogRef} onClose={closeDialog} onClick={handleBackdropClick}>
     <div className="dialog-wrapper">
       <div className="dialog-header">
         <h2>{title}</h2>
