@@ -1,6 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AI_PROVIDERS } from '../../aiProviders';
 
 const { mockedUseQuery, mockedUseMutation } = vi.hoisted(() => ({
   mockedUseQuery: vi.fn(),
@@ -17,51 +16,55 @@ import useNewAIForm from './useNewAIForm';
 import type { UseNewAIFormReturn } from './newAIForm.types';
 import type { AIConnection } from '../../aISettings.types';
 
+const providerCatalogFixture = [
+  {
+    id: '1',
+    key: 'openai',
+    name: 'OpenAI',
+    services: ['text', 'image', 'voice'],
+    defaultBaseUrl: 'https://api.openai.com/v1',
+    authType: 'api-key',
+    credentialFields: [{ key: 'apiKey', label: 'API key', secret: true }],
+    credentialHeader: 'Authorization: Bearer',
+    apiKeyUrl: 'https://platform.openai.com/api-keys',
+    is_enabled: true,
+  },
+  {
+    id: '2',
+    key: 'custom',
+    name: 'Custom provider',
+    services: ['text'],
+    defaultBaseUrl: 'https://custom.example.com/v1',
+    authType: 'bearer',
+    credentialFields: [{ key: 'token', label: 'Bearer token', secret: true }],
+    credentialHeader: null,
+    apiKeyUrl: null,
+    is_enabled: true,
+  },
+];
+
 describe('NewAIForm - Presentation and Logic Separation', () => {
   beforeEach(() => {
     mockedUseQuery.mockReturnValue({
-      data: {
-        aiProviders: [
-          { id: '1', key: 'openai', name: 'OpenAI', is_enabled: true },
-          { id: '2', key: 'runway', name: 'Runway', is_enabled: true },
-          { id: '3', key: 'kling', name: 'Kling', is_enabled: true },
-          { id: '4', key: 'elevenlabs', name: 'ElevenLabs', is_enabled: true },
-          { id: '5', key: 'custom', name: 'Custom provider', is_enabled: true },
-        ],
-      },
+      data: { aiProviders: providerCatalogFixture },
       loading: false,
       error: undefined,
     });
     mockedUseMutation.mockReturnValue([vi.fn(), { loading: false }]);
   });
 
-  describe('AI Providers configuration', () => {
-    it('defines valid apiKeyUrl for OpenAI, Runway, Kling, and ElevenLabs', () => {
-      const openai = AI_PROVIDERS.find((p) => p.id === 'openai');
-      const runway = AI_PROVIDERS.find((p) => p.id === 'runway');
-      const kling = AI_PROVIDERS.find((p) => p.id === 'kling');
-      const elevenlabs = AI_PROVIDERS.find((p) => p.id === 'elevenlabs');
-      const custom = AI_PROVIDERS.find((p) => p.id === 'custom');
+  describe('AI Providers catalog usage', () => {
+    it('maps provider options from backend catalog', () => {
+      const result = renderHookHarness({ onSave: vi.fn() });
 
-      expect(openai?.apiKeyUrl).toBe('https://platform.openai.com/api-keys');
-      expect(runway?.apiKeyUrl).toBe('https://dev.runwayml.com');
-      expect(kling?.apiKeyUrl).toBe('https://klingai.com/dev/api-key');
-      expect(elevenlabs?.apiKeyUrl).toBe('https://elevenlabs.io/app/settings/api-keys');
-      expect(custom?.apiKeyUrl).toBeUndefined();
+      expect(result.providerOptions).toEqual([
+        { value: 'openai', label: 'OpenAI' },
+        { value: 'custom', label: 'Custom provider' },
+      ]);
     });
   });
 
   describe('useNewAIForm hook separation of concerns', () => {
-    const renderHookHarness = (props: Parameters<typeof useNewAIForm>[0]) => {
-      let result!: UseNewAIFormReturn;
-      const Harness = () => {
-        result = useNewAIForm(props);
-        return null;
-      };
-      renderToStaticMarkup(<Harness />);
-      return result;
-    };
-
     it('computes create-mode presentation states correctly', () => {
       const result = renderHookHarness({ onSave: vi.fn() });
 
@@ -121,6 +124,53 @@ describe('NewAIForm - Presentation and Logic Separation', () => {
       } finally {
         vi.unstubAllGlobals();
       }
+    });
+
+    it('creates a provider through GraphQL and selects it', async () => {
+      const createProvider = vi.fn().mockResolvedValue({
+        data: {
+          createAiProvider: {
+            key: 'anthropic',
+          },
+        },
+      });
+      mockedUseMutation
+        .mockReturnValueOnce([createProvider, { loading: false }])
+        .mockReturnValueOnce([vi.fn(), { loading: false }]);
+
+      const result = renderHookHarness({ onSave: vi.fn() });
+      const created = await result.onCreateProvider({
+        key: 'anthropic',
+        name: 'Anthropic Claude',
+        services: ['text'],
+        defaultBaseUrl: 'https://api.anthropic.com/v1',
+        authType: 'api-key',
+        credentialFields: [{ key: 'apiKey', label: 'API key', secret: true }],
+        credentialHeader: 'x-api-key',
+        apiKeyUrl: 'https://console.anthropic.com/settings/keys',
+      });
+
+      expect(created).toBe(true);
+      expect(createProvider).toHaveBeenCalledOnce();
+    });
+
+    it('surfaces provider creation failures', async () => {
+      const createProvider = vi.fn().mockRejectedValue(new Error('Provider key already exists.'));
+      mockedUseMutation
+        .mockReturnValueOnce([createProvider, { loading: false }])
+        .mockReturnValueOnce([vi.fn(), { loading: false }]);
+
+      const result = renderHookHarness({ onSave: vi.fn() });
+      const created = await result.onCreateProvider({
+        key: 'openai',
+        name: 'OpenAI Duplicate',
+        services: ['text'],
+        defaultBaseUrl: 'https://api.openai.com/v1',
+        authType: 'api-key',
+        credentialFields: [{ key: 'apiKey', label: 'API key', secret: true }],
+      });
+
+      expect(created).toBe(false);
     });
   });
 
@@ -189,5 +239,15 @@ describe('NewAIForm - Presentation and Logic Separation', () => {
       expect(html).toContain('Save changes');
     });
   });
+
+  const renderHookHarness = (props: Parameters<typeof useNewAIForm>[0]) => {
+    let result!: UseNewAIFormReturn;
+    const Harness = () => {
+      result = useNewAIForm(props);
+      return null;
+    };
+    renderToStaticMarkup(<Harness />);
+    return result;
+  };
 });
 

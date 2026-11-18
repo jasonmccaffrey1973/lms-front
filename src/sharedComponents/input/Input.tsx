@@ -2,8 +2,11 @@ import { StyledInputWrapper } from "./Input.styles";
 import type { InputProps } from "./Input.types";
 import useInput from "./useInput";
 
-const Input = ({ value, onChange, placeholder, label, type = "text" }: InputProps) => {
-    const { id: inputId, onChange: handleChange, value: inputValue } = useInput({value, onChange});
+const Input = ({ value, onChange, placeholder, label, type = "text", required, disabled }: InputProps) => {
+    const { id: inputId } = useInput();
+    
+    const shouldDisableAutocomplete = type === 'password';
+
     return (
         <StyledInputWrapper>
             <label htmlFor={inputId}>
@@ -11,13 +14,13 @@ const Input = ({ value, onChange, placeholder, label, type = "text" }: InputProp
             </label>
             <input
                 id={inputId}
-                value={inputValue}
-                onChange={(e) => {
-                    onChange(e.target.value);
-                    handleChange(e.target.value);
-                }}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
                 type={type}
+                required={required}
+                disabled={disabled}
+                autoComplete={shouldDisableAutocomplete ? 'new-password' : 'off'}
             />
 
         </StyledInputWrapper>

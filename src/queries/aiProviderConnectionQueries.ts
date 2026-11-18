@@ -8,8 +8,20 @@ export interface AIProviderRecord {
   id: string;
   key: string;
   name: string;
+  services: AIProviderService[];
+  defaultBaseUrl: string;
+  authType: AIProviderAuthType;
+  credentialFields: AIProviderCredentialFieldRecord[];
+  credentialHeader?: string | null;
+  apiKeyUrl?: string | null;
   capabilities?: unknown;
-  is_enabled: boolean;
+  is_enabled?: boolean;
+}
+
+export interface AIProviderCredentialFieldRecord {
+  key: string;
+  label: string;
+  secret?: boolean;
 }
 
 /** Safe connection fields returned by the API. Secret values are never queried. */
@@ -50,6 +62,25 @@ export interface AIProviderConnectionsQueryData {
 
 export interface AIProvidersQueryData {
   aiProviders: AIProviderRecord[];
+}
+
+export interface CreateAIProviderMutationData {
+  createAiProvider: AIProviderRecord;
+}
+
+export interface CreateAIProviderInput {
+  key: string;
+  name: string;
+  services: AIProviderService[];
+  defaultBaseUrl: string;
+  authType: AIProviderAuthType;
+  credentialFields: AIProviderCredentialFieldRecord[];
+  credentialHeader?: string;
+  apiKeyUrl?: string;
+}
+
+export interface CreateAIProviderMutationVariables {
+  input: CreateAIProviderInput;
 }
 
 export interface AIProviderConnectionMutationData {
@@ -118,11 +149,43 @@ export const AI_PROVIDERS_GQL = gql`
       id
       key
       name
+      services
+      defaultBaseUrl
+      authType
+      credentialFields {
+        key
+        label
+        secret
+      }
+      credentialHeader
+      apiKeyUrl
       capabilities
       is_enabled
     }
   }
 ` as TypedDocumentNode<AIProvidersQueryData>;
+
+export const CREATE_AI_PROVIDER_GQL = gql`
+  mutation CreateAIProvider($input: CreateAiProviderInput!) {
+    createAiProvider(input: $input) {
+      id
+      key
+      name
+      services
+      defaultBaseUrl
+      authType
+      credentialFields {
+        key
+        label
+        secret
+      }
+      credentialHeader
+      apiKeyUrl
+      capabilities
+      is_enabled
+    }
+  }
+` as TypedDocumentNode<CreateAIProviderMutationData, CreateAIProviderMutationVariables>;
 
 export const AI_PROVIDER_CONNECTIONS_GQL = gql`
   query AIProviderConnections {

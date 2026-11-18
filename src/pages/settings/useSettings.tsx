@@ -21,15 +21,14 @@ const useSettings = () => {
   }, [aiSettings.closeForm, aiSettings.isFormOpen]);
 
   useEffect(() => {
-    if (!isAISettingsActive || !aiSettings.isFormOpen) {
+    if (!isAISettingsActive || !aiSettings.isFormOpen || aiSettings.editingConnection) {
       setRightSidebarContent(null);
       return;
     }
 
     setRightSidebarContent(
       <NewAIForm
-        key={aiSettings.editingConnection?.id ?? 'new'}
-        initialConnection={aiSettings.editingConnection}
+        key="new"
         onSave={aiSettings.saveConnection}
         onCancel={aiSettings.closeForm}
         isSaving={aiSettings.isSaving}

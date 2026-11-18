@@ -4,7 +4,8 @@ import { StyledSettingsPageWrapper } from '../../settings.styles';
 import Render from '../../../../sharedComponents/Render';
 import EmptyConnections from './components/EmptyConnections/EmptyConnections';
 
-const AISettings = ({ connections, editConnection, deleteConnection, startNewConnection, isLoading, loadError, operationError }: AISettingsPageProps) => (
+
+const AISettings = ({ connections, saveConnection, deleteConnection, startNewConnection, isLoading, isSaving, loadError, operationError }: AISettingsPageProps) => (
   <StyledSettingsPageWrapper>
     <div className="ai-settings-heading">
       <h1>AI connections</h1>
@@ -17,7 +18,13 @@ const AISettings = ({ connections, editConnection, deleteConnection, startNewCon
         <p role="status">Loading AI connections...</p>
       </Render>
       <Render if={connections.length > 0}>
-        <ExistingAI connections={connections} onEdit={editConnection} onDelete={deleteConnection} />
+        <ExistingAI
+          connections={connections}
+          onSave={saveConnection}
+          onDelete={deleteConnection}
+          isSaving={isSaving}
+          saveError={operationError}
+        />
       </Render>
       <Render if={!isLoading && !loadError && connections.length === 0}>
         <EmptyConnections onNew={startNewConnection}  />

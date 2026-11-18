@@ -9,7 +9,7 @@ import SVGIcon from '../../sharedComponents/SVG/SVGIcon';
 
 const Settings = () => {
   const { activeTab, handleTabChange, isAISettingsActive, aiSettings } = useSettings();
-  const { isFormOpen, startNewConnection, connections, editConnection, deleteConnection } = aiSettings;
+  const { isFormOpen, startNewConnection, connections, saveConnection, deleteConnection } = aiSettings;
 
   return (
     <StyledSettingsWrapper>
@@ -25,10 +25,11 @@ const Settings = () => {
           connections={connections}
           isFormOpen={isFormOpen}
           isLoading={aiSettings.isLoading}
+          isSaving={aiSettings.isSaving}
           loadError={aiSettings.loadError}
           operationError={aiSettings.operationError}
           startNewConnection={startNewConnection}
-          editConnection={editConnection}
+          saveConnection={saveConnection}
           deleteConnection={deleteConnection}
         />
       </Render>

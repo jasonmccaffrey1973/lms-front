@@ -33,7 +33,7 @@ const useAISettings = (): AISettingsHookValue => {
     setOperationError(null);
   }, []);
 
-  const saveConnection = useCallback(async (input: AIConnectionInput) => {
+  const saveConnection = useCallback(async (input: AIConnectionInput, id?: string) => {
     setOperationError(null);
     const credentials = Object.entries(input.credentials).map(([key, value]) => ({ key, value }));
     const baseInput = {
@@ -46,11 +46,12 @@ const useAISettings = (): AISettingsHookValue => {
     };
 
     try {
-      if (editingConnection) {
+      const connectionId = id ?? editingConnection?.id;
+      if (connectionId) {
         await updateConnection({
           variables: {
-            id: editingConnection.id,
-            input: { ...baseInput, ...(credentials.length ? { credentials } : {}) },
+            id: connectionId,
+            input: credentials.length ? { ...baseInput, credentials } : baseInput,
           },
           refetchQueries: [{ query: AI_PROVIDER_CONNECTIONS_GQL }],
           awaitRefetchQueries: true,
@@ -63,8 +64,10 @@ const useAISettings = (): AISettingsHookValue => {
         });
       }
       closeForm();
+      return true;
     } catch (error) {
       setOperationError(getErrorMessage(error));
+      return false;
     }
   }, [closeForm, createConnection, editingConnection, updateConnection]);
 
@@ -77,7 +80,7 @@ const useAISettings = (): AISettingsHookValue => {
   const editConnection = useCallback((connection: AIConnection) => {
     setOperationError(null);
     setEditingConnection(connection);
-    setIsFormOpen(true);
+    setIsFormOpen(false);
   }, []);
 
   const deleteConnection = useCallback(async (id: string) => {

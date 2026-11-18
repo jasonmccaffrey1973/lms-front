@@ -106,6 +106,74 @@ const StyledSettingsPageWrapper = styled.div`
     color: var(--app-text-muted);
   }
 
+  form {
+    --_border-color: var(--app-border);
+    --_background-color: var(--app-background);
+    ---_pointer-events: auto;
+
+    &[data-form-mode='readonly'] {
+      --_border-color: transparent;
+      --_background-color: transparent;
+      ---_pointer-events: none;
+    }
+
+    &[data-form-mode='edit'] {
+      --_border-color: var(--app-border);
+      --_background-color: var(--app-background);
+      ---_pointer-events: auto;
+    }
+
+    .form-group > * {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(2, auto);
+      grid-template-areas:
+        "label"
+        "input";
+      gap: 0.5rem;
+  
+      label {
+        grid-area: label;
+      }
+  
+      input, .select {
+        display: block;
+        grid-area: input;
+        width: 100%;
+        padding-block: 0.5rem;
+        border: 1px solid var(--_border-color);
+        border-radius: 4px;
+        font-size: 1rem;
+        background-color: var(--_background-color);
+        color: var(--app-text);
+        pointer-events: var(---_pointer-events);
+  
+        /* Webkit browsers (Chrome, Safari, Edge) */
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover, 
+        &:-webkit-autofill:focus, 
+        &:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 1000px var(--app-background) inset !important;
+          -webkit-text-fill-color: var(--app-text) !important;
+          caret-color: var(--app-text);
+        }
+  
+        /* Firefox - delay transition to override autofill after rendering */
+        &:-moz-autofill {
+          transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+        }
+  
+        &:-moz-autofill:hover,
+        &:-moz-autofill:focus,
+        &:-moz-autofill:active {
+          transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+        }
+      } 
+    }
+
+  }
+
+
   @media (max-width: 540px) {
     .ai-settings-heading {
       align-items: flex-start;

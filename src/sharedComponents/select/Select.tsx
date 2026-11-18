@@ -70,7 +70,7 @@ const Select = ({ value, onChange, options, label, disabled }: SelectProps) => {
   return (
     <div className="select-container">
       {label && <label htmlFor={inputId}>{label}</label>}
-      <StyledSelect $isOpen={selectOpen} onBlur={handleBlur} tabIndex={-1}>
+      <StyledSelect $isOpen={selectOpen} $isDisabled={disabled} onBlur={handleBlur} tabIndex={-1}>
         <input
           id={inputId}
           type="text"

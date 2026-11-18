@@ -2,26 +2,44 @@ import styled from "styled-components";
 
 interface StyledSelectProps {
   $isOpen?: boolean;
+  $isDisabled?: boolean;
 }
 
 const StyledSelect = styled.div<StyledSelectProps>`
-  --_border-color: var(--border-color, #ccc);
-  --_menu-bg: var(--app-bg, #fff);
+  --_border-color: var(--app-border);
+  --_menu-bg: var(--app-surface);
   --_option-padding: 0.5rem;
   --_font-size: 0.875rem;
   --_block-size: calc(var(--_font-size) + var(--_option-padding) * 2);
   --_menu-items: 3;
 
   /* Layout & Sizing */
-  inline-size: fit-content;
-  max-width: 12rem;
+  inline-size: 100%;
   border: 1px solid var(--_border-color);
+  border-radius: 4px;
   position: relative;
   block-size: var(--_block-size);
   box-sizing: border-box;
+  transition: border-color 150ms ease-in-out;
+
+  ${({ $isDisabled }) => $isDisabled && `
+    border-color: transparent;
+    background: transparent;
+
+    &::after {
+      display: none;
+    }
+
+    input[type="text"] {
+      color: var(--app-text);
+      opacity: 1;
+      -webkit-text-fill-color: var(--app-text);
+      cursor: default;
+    }
+  `}
 
   &:focus-within {
-    border-color: var(--primary-color, #007bff);
+    border-color: var(--clr-primary);
   }
 
   /* Chevron Indicator (Replaces ::after using original aspect ratio & size logic) */
@@ -59,11 +77,16 @@ const StyledSelect = styled.div<StyledSelectProps>`
     white-space: nowrap;
     overflow: hidden;
     text-transform: capitalize;
+    font-family: inherit;
 
     &::placeholder {
       font-family: inherit;
-      color: inherit;
+      color: #999;
       opacity: 1;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
     }
   }
 
@@ -76,6 +99,7 @@ const StyledSelect = styled.div<StyledSelectProps>`
     background: var(--_menu-bg, #fff);
     border: 1px solid var(--_border-color);
     border-block-start: none;
+    border-radius: 0 0 4px 4px;
     position: absolute;
     top: 100%;
     left: 0;

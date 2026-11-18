@@ -14,7 +14,7 @@ const StyledAICard = styled.article`
     background: var(--editor-surface-muted);
     transition: background 300ms ease;
 
-    &:hover {
+    &:hover:not(:has(> .action-wrapper button:hover)) {
       background: var(--app-hover);
     }
 
@@ -101,11 +101,13 @@ const StyledAICard = styled.article`
       display: flex;
       align-items: center;
       gap: 0.33rem;
+      padding-block: 0.25rem;
 
       .icon-wrapper {
         --_border_color: rgb(from currentColor r g b / 0.4);
         display: block;
         border-inline-end: 1px solid var(--_border_color);
+        padding-block: 0.33rem;
 
         svg {
           display: block;
@@ -125,38 +127,79 @@ const StyledAICard = styled.article`
     transition: grid-template-rows 300ms cubic-bezier(0.4, 0, 0.2, 1),
                 padding-block 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    dt {
-      color: var(--app-text-muted);
-      font-size: 0.8rem;
-    }
-  
-    dd {
-      overflow-wrap: anywhere;
-      margin: 0.2rem 0 0;
+    &[aria-expanded='true'] {
+      grid-template-rows: 1fr;
+      padding-block: 0.75rem;
+
+      .card-fields {
+        opacity: 1;
+        transition: opacity 250ms ease 80ms;
+      }
     }
 
-    dl {
+    .card-fields {
       min-height: 0;
       overflow: hidden;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.75rem;
-      margin: 0;
       opacity: 0;
       transition: opacity 200ms ease;
 
       & > * {
         min-width: 0;
       }
-    }
 
-    &[aria-expanded='true'] {
-      grid-template-rows: 1fr;
-      padding-block: 0.75rem;
+      .save-error {
+        grid-column: 1 / -1;
+        margin: 0;
+        color: var(--clr-danger, #b42318);
+        overflow-wrap: anywhere;
+      }
 
-      dl {
-        opacity: 1;
-        transition: opacity 250ms ease 80ms;
+      .form-group {
+        display: grid;
+        gap: 0.35rem;
+
+        > * {
+          display: grid;
+          grid-template-areas:
+            'label'
+            'input';
+          grid-template-columns: 1fr;
+          gap: 0.35rem;
+        }
+
+        label {
+          grid-area: label;
+          color: var(--app-text-muted);
+          font-size: 0.8rem;
+        }
+
+        input {
+          grid-area: input;
+          width: 100%;
+          box-sizing: border-box;
+          padding: 0.6rem 0.7rem;
+          color: var(--app-text);
+          background: var(--app-surface);
+          border: 1px solid var(--app-border);
+          border-radius: 0.25rem;
+          font-size: 1rem;
+        }
+
+        .select-container,
+        .select-container > div {
+          width: 100%;
+        }
+
+        input:disabled {
+          border-color: transparent;
+          background: transparent;
+          color: var(--app-text);
+          opacity: 1;
+          -webkit-text-fill-color: var(--app-text);
+        }
       }
     }
   }
@@ -166,7 +209,7 @@ const StyledAICard = styled.article`
       flex-wrap: wrap;
     }
 
-    dl {
+    .card-fields {
       grid-template-columns: 1fr;
     }
   }

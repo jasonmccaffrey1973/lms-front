@@ -151,6 +151,71 @@ const StyledAIForm = styled.form`
       overflow-wrap: anywhere;
     }
 
+  .provider-editor {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--app-border);
+      display: grid;
+      gap: 0.75rem;
+    }
+
+  .provider-editor-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+  .provider-editor-checkbox {
+      grid-column: 1 / -1;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: none;
+    }
+
+  .provider-editor-checkbox input {
+      inline-size: auto;
+      margin: 0;
+    }
+
+  .provider-editor-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+  .service-chip-group {
+      grid-column: 1 / -1;
+    }
+
+  .service-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+  .service-chip {
+      border: 1px solid var(--app-border);
+      border-radius: 9999px;
+      background: var(--app-surface);
+      color: var(--app-text);
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+      text-transform: none;
+      cursor: pointer;
+    }
+
+  .service-chip[data-selected='true'] {
+      border-color: var(--clr-primary);
+      background: var(--editor-item-hover);
+      color: var(--clr-primary);
+    }
+
+  .service-chip:focus-visible {
+      outline: 2px solid var(--clr-primary);
+      outline-offset: 1px;
+    }
+
   .actions {
       display: flex;
       justify-content: flex-end;
@@ -159,6 +224,9 @@ const StyledAIForm = styled.form`
 
   @media (max-width: 640px) {
     .fields {
+      grid-template-columns: 1fr;
+    }
+    .provider-editor-fields {
       grid-template-columns: 1fr;
     }
     .wide {
