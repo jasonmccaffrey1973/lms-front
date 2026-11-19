@@ -27,6 +27,7 @@ ${FontStyles}
     --clr-warning: hsl(45, 100%, 50%);
     --clr-info: hsl(200, 100%, 50%);
     --clr-link: hsl(212, 100%, 48%);
+    --clr-inverse: hsl(0, 0%, 15%);
 
     /* TYPEFACES */
     --font-family-base:
@@ -88,9 +89,8 @@ ${FontStyles}
         --app-text-muted: rgba(255, 255, 255, 0.72);
         --app-hover: hsla(0, 0%, 100%, 0.08);
         --app-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.4);
-            --app-link: hsl(214, 100%, 78%);
-            --app-link-hover: hsl(206, 100%, 84%);
-
+        --app-link: hsl(214, 100%, 78%);
+        --app-link-hover: hsl(206, 100%, 84%);
         --editor-surface: hsl(216, 20%, 14%);
         --editor-surface-muted: hsl(216, 16%, 19%);
         --editor-surface-subtle: rgba(255, 255, 255, 0.05);
@@ -105,6 +105,7 @@ ${FontStyles}
         --editor-item-active-bg: rgba(122, 162, 255, 0.2);
         --editor-item-active-border: rgba(122, 162, 255, 0.45);
         --editor-focus-ring: rgba(122, 162, 255, 0.75);
+        --clr-inverse: hsl(0, 0%, 75%);
     }
 }
 
@@ -177,7 +178,7 @@ label,
 button,
 input,
 a {
-  line-block-size: var(--line-block-size-normal);
+  line-height: var(--line-block-size-normal);
 }
 
 body {

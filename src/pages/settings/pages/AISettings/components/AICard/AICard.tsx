@@ -9,6 +9,7 @@ import useDeleteConfirm from './useDeleteConfirm';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import SVGIcon from '../../../../../../sharedComponents/SVG/SVGIcon';
 import FormElement from '../AIForm/FormElement';
+import Render from '../../../../../../sharedComponents/Render';
 
 const AICard = ({ model, onSave, onDelete, isSaving = false, saveError }: AICardProps) => {
   const { isExpanded, toggleExpanded, isEditing, editCard, stopEditing, fields, form, handleSubmit } = useAICard({
@@ -52,8 +53,10 @@ const AICard = ({ model, onSave, onDelete, isSaving = false, saveError }: AICard
             </Button>
             <div className="action-wrapper">
               <span className="status" data-status={model.status}>{model.status.replace('-', ' ')}</span>
-              {isEditing ? (
-                <Button
+            <Render if={isEditing}>
+
+{/** Save button for submitting the form and saving changes to the server */}
+              <Button
                   color="success"
                   type="submit"
                   disabled={form.isSubmitDisabled}
@@ -61,7 +64,23 @@ const AICard = ({ model, onSave, onDelete, isSaving = false, saveError }: AICard
                 >
                   <span className="icon-wrapper"><SVGIcon icon="save" /></span> Save
                 </Button>
-              ) : (
+
+{/** Cancel button for stopping editing and reverting changes */}
+              <Button
+                color="var(--app-surface-muted)"
+                textColor="var(--editor-text)"
+                type="button"
+                onClick={stopEditing}
+                aria-label="Stop Editing"
+              >
+                <span className="icon-wrapper"><SVGIcon icon="close" /></span> Cancel
+              </Button>
+
+            </Render>
+
+            <Render if={!isEditing}>
+
+{/** Edit button for enabling editing mode */}
                 <Button
                   color="warning"
                   type="button"
@@ -70,16 +89,19 @@ const AICard = ({ model, onSave, onDelete, isSaving = false, saveError }: AICard
                 >
                   <span className="icon-wrapper"><SVGIcon icon="edit" /></span> Edit
                 </Button>
-              )}
-              <Button
-                color="danger"
-                type="button"
-                onClick={isEditing ? stopEditing : openDialog}
-                aria-label={isEditing ? 'Stop Editing' : `Delete ${model.name}`}
-              >
-                <span className="icon-wrapper"><SVGIcon icon={isEditing ? 'close' : 'trash'} /></span>
-                {isEditing ? 'Cancel' : 'Delete'}
-              </Button>
+
+{/** Delete button for removing the connection */}
+                <Button
+                  color='danger'
+                  type="button"
+                  onClick={openDialog}
+                  aria-label={`Delete ${model.name}`}
+                >
+                  <span className="icon-wrapper"><SVGIcon icon='trash' /></span>
+                  Delete
+                </Button>
+              </Render>
+
             </div>
           </header>
           <div id={contentId} className="content" aria-expanded={isExpanded} aria-hidden={!isExpanded}>

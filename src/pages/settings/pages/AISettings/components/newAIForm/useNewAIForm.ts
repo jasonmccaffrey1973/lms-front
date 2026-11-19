@@ -11,7 +11,6 @@ const useNewAIForm = ({ initialConnection, onSave, isSaving = false }: UseNewAIF
   });
   const providerCatalog = useMemo<AIProviderDefinition[]>(
     () => (providerData?.aiProviders ?? [])
-      .filter((item) => item.is_enabled !== false)
       .map((item) => ({
         id: item.id,
         key: item.key,
@@ -22,14 +21,16 @@ const useNewAIForm = ({ initialConnection, onSave, isSaving = false }: UseNewAIF
         credentialFields: item.credentialFields,
         credentialHeader: item.credentialHeader,
         apiKeyUrl: item.apiKeyUrl ?? undefined,
-        isEnabled: item.is_enabled !== false,
       })),
     [providerData?.aiProviders],
   );
   const effectiveProviderKey = providerKey || providerCatalog[0]?.key || '';
   const selectedProvider = providerCatalog.find((item) => item.key === effectiveProviderKey);
   const provider = selectedProvider ?? providerCatalog[0];
-  const providerOptions = providerCatalog.map((item) => ({ value: item.key, label: item.name }));
+  const missingSelectedProviderOption = effectiveProviderKey && !selectedProvider
+    ? [{ value: effectiveProviderKey, label: `${effectiveProviderKey} (unavailable)` }]
+    : [];
+  const providerOptions = [...missingSelectedProviderOption, ...providerCatalog.map((item) => ({ value: item.key, label: item.name }))];
   const [name, setName] = useState(initialConnection?.name ?? '');
   const [service, setService] = useState<AIServiceType>(initialConnection?.service ?? 'text');
   const [baseUrl, setBaseUrl] = useState(initialConnection?.baseUrl ?? '');
@@ -167,7 +168,10 @@ const useNewAIForm = ({ initialConnection, onSave, isSaving = false }: UseNewAIF
   const isTestingDisabled = isTestingConnection || isLoadingProviders || !hasSelectedProvider;
   const isCredentialRequired = !initialConnection || initialConnection.providerKey !== effectiveProviderKey;
   const credentialPlaceholder = isEditMode ? 'Enter a new value to rotate this credential' : '';
-  const showCatalogWarning = !isLoadingProviders && !providerError && providerCatalog.length > 0 && !hasSelectedProvider;
+  const showCatalogWarning = !isLoadingProviders && !providerError && providerCatalog.length > 0 && Boolean(effectiveProviderKey) && !hasSelectedProvider;
+  const catalogWarningMessage = showCatalogWarning
+    ? `This connection uses "${effectiveProviderKey}", which is no longer in the backend provider catalog. Select a replacement provider and save to migrate it.`
+    : 'This provider is not available in the backend provider catalog.';
   const hasApiKeyUrl = Boolean(selectedProvider?.apiKeyUrl);
   const apiKeyButtonTitle = selectedProvider ? `Open ${selectedProvider.name} API key portal in a new tab` : 'Get API key';
   const apiKeyButtonAriaLabel = selectedProvider ? `Get API key for ${selectedProvider.name}` : 'Get API key';
@@ -180,6 +184,7 @@ const useNewAIForm = ({ initialConnection, onSave, isSaving = false }: UseNewAIF
     providerLoadError: providerError?.message ?? null,
     hasSelectedProvider,
     showCatalogWarning,
+    catalogWarningMessage,
     isCreatingProvider,
     providerCreateError,
     name,

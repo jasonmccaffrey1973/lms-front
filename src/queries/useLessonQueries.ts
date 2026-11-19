@@ -8,7 +8,6 @@ export type Lesson = {
   title: string;
   content?: JSONContent | string | null; // Be explicit about nullable
   // content: unknown;
-  content_version: number;
   updated_at?: string;
 };
 
@@ -50,7 +49,6 @@ const CREATE_LESSON_GQL = gql`
     createLesson(input: $input) {
       id
       title
-      content_version
     }
   }
 ` as TypedDocumentNode<CreateLessonMutationData, CreateLessonMutationVariables>;
@@ -60,7 +58,6 @@ const UPDATE_LESSON_GQL = gql`
     updateLesson(id: $id, input: $input) {
       id
       title
-      content_version
     }
   }
 ` as TypedDocumentNode<UpdateLessonMutationData, UpdateLessonMutationVariables>;
@@ -71,7 +68,6 @@ const LESSONS_GQL = gql`
       id
       title
       content
-      content_version
       updated_at
     }
   }

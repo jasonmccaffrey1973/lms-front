@@ -22,6 +22,7 @@ const NewAIForm = ({ initialConnection, onSave, onCancel, isSaving = false, save
     isLoadingProviders,
     providerLoadError,
     showCatalogWarning,
+    catalogWarningMessage,
     isCreatingProvider,
     providerCreateError,
     title,
@@ -163,7 +164,7 @@ const NewAIForm = ({ initialConnection, onSave, onCancel, isSaving = false, save
           <p role="alert">Unable to load providers: {providerLoadError}</p>
         </Render>
         <Render if={showCatalogWarning}>
-          <p role="alert">This provider is not available in the backend provider catalog.</p>
+          <p role="alert">{catalogWarningMessage}</p>
         </Render>
         <div className="provider-editor">
           <Render if={isProviderEditorOpen}>
@@ -273,7 +274,7 @@ const NewAIForm = ({ initialConnection, onSave, onCancel, isSaving = false, save
         <div className="connection-test">
           <Button
             type="button"
-            color="secondary"
+            color="info"
             disabled={isTestingDisabled}
             onClick={onTestConnection}
           >
@@ -281,7 +282,7 @@ const NewAIForm = ({ initialConnection, onSave, onCancel, isSaving = false, save
           </Button>
           <Button
             type="button"
-            color="secondary"
+            color={isProviderEditorOpen ? 'danger' : 'success'}
             onClick={toggleProviderEditor}
             disabled={isCreatingProvider}
           >
@@ -298,7 +299,7 @@ const NewAIForm = ({ initialConnection, onSave, onCancel, isSaving = false, save
         </Render>
         <div className="actions">
           <Button type="button" color="danger" onClick={onCancel}>Cancel</Button>
-          <Button type="submit" color="primary" disabled={isSubmitDisabled}>{submitButtonLabel}</Button>
+          <Button type="submit" color="success" disabled={isSubmitDisabled}>{submitButtonLabel}</Button>
         </div>
       </div>
     </StyledAIForm>

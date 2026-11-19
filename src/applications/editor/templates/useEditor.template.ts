@@ -455,8 +455,6 @@ const useEditorTemplate = ({
       id: lesson.id,
       title: lesson.title,
       updatedAt: lesson.updated_at,
-      contentVersion:
-        lesson.content_version,
       previewText:
         extractPreviewText(
           lesson.content

@@ -89,6 +89,7 @@ Output is written to the `dist/` directory. Serve with Vite preview or any stati
 - **Token Storage**: JWT stored in `localStorage` under key `auth_token`
 - **Auto-recovery**: On app load, token is read from localStorage and session restored
 - **Persistence**: Tokens are persisted across reloads by default; can be cleared via logout
+- **Centralized auth-expiry handling**: Apollo error handling in [src/auth/providers/ApolloProvider.tsx](./src/auth/providers/ApolloProvider.tsx) clears `auth_token` + persisted user and redirects to `/login` when GraphQL returns unauthenticated errors (for example `Authentication is required.`/`Unauthenticated.` or HTTP 401)
 
 ### Protected Routes
 
@@ -188,6 +189,21 @@ server: {
   },
 }
 ```
+
+### AI Provider Settings GraphQL
+
+AI Settings provider/catalog behavior is backend-driven:
+
+- Provider options come from `aiProviders` (no built-in frontend `custom` provider option).
+- New providers are created via `createAiProvider`.
+- Existing AI connections use:
+  - `aiProviderConnections`
+  - `createAIProviderConnection`
+  - `updateAIProviderConnection`
+  - `deleteAIProviderConnection`
+  - `testAIProviderConnection`
+
+If an existing connection references a provider key missing from backend catalog, the UI keeps the connection editable and prompts the user to pick a replacement provider and save.
 
 ### Auth Endpoints (assumed)
 

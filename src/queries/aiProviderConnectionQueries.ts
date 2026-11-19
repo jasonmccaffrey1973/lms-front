@@ -14,8 +14,6 @@ export interface AIProviderRecord {
   credentialFields: AIProviderCredentialFieldRecord[];
   credentialHeader?: string | null;
   apiKeyUrl?: string | null;
-  capabilities?: unknown;
-  is_enabled?: boolean;
 }
 
 export interface AIProviderCredentialFieldRecord {
@@ -137,8 +135,6 @@ const AI_PROVIDER_CONNECTION_FIELDS = gql`
       id
       key
       name
-      capabilities
-      is_enabled
     }
   }
 `;
@@ -159,8 +155,6 @@ export const AI_PROVIDERS_GQL = gql`
       }
       credentialHeader
       apiKeyUrl
-      capabilities
-      is_enabled
     }
   }
 ` as TypedDocumentNode<AIProvidersQueryData>;
@@ -181,8 +175,6 @@ export const CREATE_AI_PROVIDER_GQL = gql`
       }
       credentialHeader
       apiKeyUrl
-      capabilities
-      is_enabled
     }
   }
 ` as TypedDocumentNode<CreateAIProviderMutationData, CreateAIProviderMutationVariables>;

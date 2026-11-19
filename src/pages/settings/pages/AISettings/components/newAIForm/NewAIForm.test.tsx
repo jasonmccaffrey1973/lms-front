@@ -27,19 +27,17 @@ const providerCatalogFixture = [
     credentialFields: [{ key: 'apiKey', label: 'API key', secret: true }],
     credentialHeader: 'Authorization: Bearer',
     apiKeyUrl: 'https://platform.openai.com/api-keys',
-    is_enabled: true,
   },
   {
     id: '2',
-    key: 'custom',
-    name: 'Custom provider',
-    services: ['text'],
-    defaultBaseUrl: 'https://custom.example.com/v1',
+    key: 'internal',
+    name: 'Internal Gateway',
+    services: ['text', 'image'],
+    defaultBaseUrl: 'https://internal.example.com/v1',
     authType: 'bearer',
     credentialFields: [{ key: 'token', label: 'Bearer token', secret: true }],
     credentialHeader: null,
     apiKeyUrl: null,
-    is_enabled: true,
   },
 ];
 
@@ -59,7 +57,7 @@ describe('NewAIForm - Presentation and Logic Separation', () => {
 
       expect(result.providerOptions).toEqual([
         { value: 'openai', label: 'OpenAI' },
-        { value: 'custom', label: 'Custom provider' },
+        { value: 'internal', label: 'Internal Gateway' },
       ]);
     });
   });
@@ -186,23 +184,23 @@ describe('NewAIForm - Presentation and Logic Separation', () => {
       expect(html).toContain('get-api-key-btn');
     });
 
-    it('does not render the Get API key button when the provider has no apiKeyUrl (Custom)', () => {
-      const customConnection: AIConnection = {
+    it('does not render the Get API key button when the provider has no apiKeyUrl', () => {
+      const internalConnection: AIConnection = {
         id: 'conn-1',
-        providerId: '5',
-        providerKey: 'custom',
-        name: 'My Custom Provider',
+        providerId: '2',
+        providerKey: 'internal',
+        name: 'Internal Provider',
         service: 'text',
-        baseUrl: 'https://my-custom-provider.example.com',
+        baseUrl: 'https://internal.example.com/v1',
         authType: 'bearer',
         credentials: { token: 'secret' },
-        modelIds: ['custom-model-1'],
+        modelIds: ['internal-model-1'],
         status: 'connected',
       };
 
       const html = renderToStaticMarkup(
         <NewAIForm
-          initialConnection={customConnection}
+          initialConnection={internalConnection}
           onSave={vi.fn()}
           onCancel={vi.fn()}
         />
@@ -210,6 +208,32 @@ describe('NewAIForm - Presentation and Logic Separation', () => {
 
       expect(html).not.toContain('Get API key');
       expect(html).not.toContain('get-api-key-btn');
+    });
+
+    it('renders migration warning for legacy custom connections missing from catalog', () => {
+      const legacyCustomConnection: AIConnection = {
+        id: 'conn-legacy',
+        providerId: 'legacy-custom-id',
+        providerKey: 'custom',
+        name: 'Legacy Custom Provider',
+        service: 'text',
+        baseUrl: 'https://legacy-custom.example.com/v1',
+        authType: 'bearer',
+        credentials: {},
+        modelIds: ['legacy-model'],
+        status: 'error',
+      };
+
+      const html = renderToStaticMarkup(
+        <NewAIForm
+          initialConnection={legacyCustomConnection}
+          onSave={vi.fn()}
+          onCancel={vi.fn()}
+        />
+      );
+
+      expect(html).toContain('which is no longer in the backend provider catalog');
+      expect(html).toContain('Select a replacement provider and save to migrate it');
     });
 
     it('renders edit mode title and rotating credential placeholder when initialConnection is provided', () => {

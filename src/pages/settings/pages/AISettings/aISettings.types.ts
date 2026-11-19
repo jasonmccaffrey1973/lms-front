@@ -17,7 +17,6 @@ export interface AIProviderDefinition {
   credentialFields: AIProviderCredentialField[];
   credentialHeader?: string | null;
   apiKeyUrl?: string;
-  isEnabled: boolean;
 }
 
 export interface AIConnection {

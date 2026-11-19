@@ -58,6 +58,7 @@ export interface UseNewAIFormReturn {
   providerLoadError: string | null;
   hasSelectedProvider: boolean;
   showCatalogWarning: boolean;
+  catalogWarningMessage: string;
   isCreatingProvider: boolean;
   providerCreateError: string | null;
   name: string;
