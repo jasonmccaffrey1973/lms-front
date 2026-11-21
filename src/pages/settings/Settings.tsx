@@ -1,6 +1,6 @@
 import { TABS } from './settings.constants';
 import useSettings from './useSettings';
-import { AISettings, GeneralSettings } from './pages';
+import { AISettings, GeneralSettings, UserSettings } from './pages';
 import Render from '../../sharedComponents/Render';
 import Ribbon from './components/Ribbon';
 import { StyledSettingsWrapper } from './settings.styles';
@@ -35,6 +35,10 @@ const Settings = () => {
       </Render>
       <Render if={activeTab === TABS.GENERAL.path}>
         <GeneralSettings />
+      </Render>
+
+      <Render if={activeTab === TABS.USER.path}>
+        <UserSettings />
       </Render>
     </StyledSettingsWrapper>
   );

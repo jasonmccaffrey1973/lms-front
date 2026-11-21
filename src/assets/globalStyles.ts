@@ -53,6 +53,7 @@ ${FontStyles}
         --app-bg: hsl(0, 0%, 98%);
         --app-surface: #ffffff;
         --app-surface-muted: hsl(0, 0%, 94%);
+        --app-surface-muted-active: hsl(0, 0%, 88%);
         --app-border: rgba(0, 0, 0, 0.1);
         --app-text: hsl(0, 0%, 16%);
         --app-text-muted: rgba(0, 0, 0, 0.65);
@@ -84,6 +85,7 @@ ${FontStyles}
         --app-bg: hsl(216, 20%, 10%);
         --app-surface: hsl(216, 20%, 14%);
         --app-surface-muted: hsl(216, 16%, 19%);
+        --app-surface-muted-active: hsl(216, 16%, 14%);
         --app-border: rgba(255, 255, 255, 0.14);
         --app-text: hsl(220, 14%, 93%);
         --app-text-muted: rgba(255, 255, 255, 0.72);
@@ -113,6 +115,7 @@ ${FontStyles}
     --app-bg: hsl(0, 0%, 98%);
     --app-surface: #ffffff;
     --app-surface-muted: hsl(0, 0%, 94%);
+    --app-surface-muted-active: hsl(0, 0%, 88%);
     --app-border: rgba(0, 0, 0, 0.1);
     --app-text: hsl(0, 0%, 16%);
     --app-text-muted: rgba(0, 0, 0, 0.65);
@@ -141,6 +144,7 @@ ${FontStyles}
     --app-bg: hsl(216, 20%, 10%);
     --app-surface: hsl(216, 20%, 14%);
     --app-surface-muted: hsl(216, 16%, 19%);
+    --app-surface-muted-active: hsl(216, 16%, 14%);
     --app-border: rgba(255, 255, 255, 0.14);
     --app-text: hsl(220, 14%, 93%);
     --app-text-muted: rgba(255, 255, 255, 0.72);

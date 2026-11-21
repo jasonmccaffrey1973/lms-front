@@ -2,7 +2,7 @@ const TABS = {
     AI_SETTINGS: {
         label: 'AI Settings',
         path: '/ai-settings',
-        tabOrder: 2,
+        tabOrder: 3,
         initial: false
     },
     GENERAL: {
@@ -11,6 +11,12 @@ const TABS = {
         tabOrder: 1,
         initial: true
     },
+    USER: {
+        label: 'User',
+        path: '/user',
+        tabOrder: 2,
+        initial: false
+    }
 };
 
 export { TABS };
