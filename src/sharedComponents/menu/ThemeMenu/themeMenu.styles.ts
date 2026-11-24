@@ -35,6 +35,18 @@ const StyledThemeMenu = styled.div`
     }
 
     .theme-trigger {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--app-text-muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+
+        svg {
+            width: 1rem;
+            aspect-ratio: 1 / 1;
+        }
+
         &:focus {
             outline: none;
         }

@@ -35,7 +35,8 @@ const ThemeMenu = () => {
             aria-controls="theme-menu"
             aria-haspopup="menu"
             aria-expanded={isMenuOpen}
-        >
+            >
+            Theme:
             <SVGIcon icon={getTrigger} />
         </Button>
         <ul id="theme-menu" ref={menuListRef} className="dropdown-wrapper" aria-label="Theme menu" aria-expanded={isMenuOpen} role="menu">

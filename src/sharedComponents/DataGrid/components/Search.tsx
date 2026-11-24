@@ -1,19 +1,19 @@
 import SVGIcon from "../../SVG/SVGIcon"
 
 type SearchProps = {
-  serchValue: string
+  searchValue: string
   handleSearch: (value: string) => void
-  clearSearch: () => void
 }
 
-const Search = ({ serchValue, handleSearch }: SearchProps) => {
+const Search = ({ searchValue, handleSearch }: SearchProps) => {
   return (
     <>
       <input
         id="search"
         type="search"
-        value={serchValue || ""}
+        value={searchValue}
         onChange={(e) => handleSearch(e.target.value)}
+        aria-label="Search all fields"
       />
       <label htmlFor="search">
         <SVGIcon icon="search" />

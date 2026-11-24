@@ -21,7 +21,14 @@ const useSettings = () => {
   }, [aiSettings.closeForm, aiSettings.isFormOpen]);
 
   useEffect(() => {
-    if (!isAISettingsActive || !aiSettings.isFormOpen || aiSettings.editingConnection) {
+    if (!isAISettingsActive) {
+      if (activeTab !== TABS.USER.path) {
+        setRightSidebarContent(null);
+      }
+      return;
+    }
+
+    if (!aiSettings.isFormOpen || aiSettings.editingConnection) {
       setRightSidebarContent(null);
       return;
     }
@@ -36,7 +43,7 @@ const useSettings = () => {
       />,
     );
     openRightSideBar();
-  }, [aiSettings.closeForm, aiSettings.editingConnection, aiSettings.isFormOpen, aiSettings.isSaving, aiSettings.operationError, aiSettings.saveConnection, isAISettingsActive, openRightSideBar, setRightSidebarContent]);
+  }, [activeTab, aiSettings.closeForm, aiSettings.editingConnection, aiSettings.isFormOpen, aiSettings.isSaving, aiSettings.operationError, aiSettings.saveConnection, isAISettingsActive, openRightSideBar, setRightSidebarContent]);
 
   useEffect(() => {
     const sidebarWasClosedByUser = previousSidebarState.current && !rightSideBarOpen;

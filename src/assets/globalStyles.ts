@@ -24,6 +24,7 @@ ${FontStyles}
     --clr-success-dark: hsl(120, 100%, 18%);
     --clr-success-light: hsl(120, 70%, 45%);
     --clr-error: hsl(0, 100%, 50%);
+    --clr-danger: hsl(0, 100%, 50%);
     --clr-warning: hsl(45, 100%, 50%);
     --clr-info: hsl(200, 100%, 50%);
     --clr-link: hsl(212, 100%, 48%);

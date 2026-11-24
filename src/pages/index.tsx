@@ -10,6 +10,7 @@ import Reports from "./reports/Reports";
 import Settings from "./settings/Settings";
 import Profile from "./profile/Profile";
 import ProfileSettings from "./profile/settings/ProfileSettings";
+import AdminUsers from "./admin.users/AdminUsers";
 
 
-export { Dashboard, Login, LogoutPage, ErrorPage, About, Analytics, Contact, Reports, Settings, Profile, ProfileSettings };
+export { Dashboard, Login, LogoutPage, ErrorPage, About, Analytics, Contact, Reports, Settings, Profile, ProfileSettings, AdminUsers };

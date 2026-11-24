@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import { Dashboard, Login, LogoutPage, ErrorPage, About, Analytics, Contact, Reports, Settings, Profile, ProfileSettings } from './pages';
+import { Dashboard, Login, LogoutPage, ErrorPage, About, Analytics, Contact, Reports, Settings, Profile, ProfileSettings, AdminUsers } from './pages';
 import { Editor, VideoProduction, MediaManager } from './applications';
 
 import { useAuth } from "./auth"
@@ -40,6 +40,17 @@ const AppRoutes = () => {
 			<Route path="/assets/characters" element={ isAuthenticated ? <VideoProduction tab="characters" /> : <Navigate to="/unauthorized" replace />} />
 			<Route path="/assets/scenes" element={ isAuthenticated ? <VideoProduction tab="scenes" /> : <Navigate to="/unauthorized" replace />} />
 			<Route path="/assets/equipment" element={ isAuthenticated ? <VideoProduction tab="equipment" /> : <Navigate to="/unauthorized" replace />} />
+
+			{/* ADMINISTRATION PAGES */}
+			<Route path="/admin" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />} />
+			<Route path="/admin/users" element={ isAuthenticated ? <AdminUsers /> : <Navigate to="/login" replace />} />
+			<Route path="/admin/roles" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />} />
+			<Route path="/admin/permissions" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />} />
+			<Route path="/admin/courses" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />} />
+			<Route path="/admin/chapters" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />} />
+			<Route path="/admin/lessons" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />} />
+			<Route path="/admin/quizzes" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />} />
+
 			
 			{/* ERROR PAGES */}
 			<Route path="/bad-request" element={ isAuthenticated ? <ErrorPage statusCode={400} /> : <Navigate to="/login" replace />} />
