@@ -1,6 +1,6 @@
 import { useApolloClient } from "@apollo/client/react"
-import { useCallback } from "react"
-import type { DataGridFetchPage, DataGridSort } from "../../sharedComponents/DataGrid/dataGrid.types"
+import { useCallback, useMemo } from "react"
+import type { DataGridColumn, DataGridFetchPage, DataGridFooterAction, DataGridSort } from "../../sharedComponents/DataGrid/dataGrid.types"
 import {
   USERS_WITH_META_CONNECTION_QUERY,
   type SortDirection,
@@ -65,8 +65,59 @@ const useAdminUsers = () => {
     [apolloClient]
   )
 
+  const columns = useMemo<DataGridColumn<UserDataGridRow>[]>(
+    () => [
+      { key: "id", header: "ID", visible: false, sortable: false },
+      { key: "name", header: "Name", sortable: true },
+      { key: "email", header: "Email", sortable: true },
+      {
+        key: "__typename",
+        header: "Role",
+        sortable: false,
+        render: (row) => row.__typename ?? "",
+      },
+    ],
+    []
+  )
+
+  const footerActions = useMemo<DataGridFooterAction<UserDataGridRow>[]>(
+    () => [
+      {
+        id: "impersonate-user",
+        label: "Impersonate User",
+        isVisible: (selectedRows) => selectedRows.length === 1,
+        onClick: (selectedRows) => {
+          console.log("Impersonate user", selectedRows[0])
+        },
+        svg: 'profile'
+      },
+      {
+        id: "edit-users",
+        label: "Edit",
+        isVisible: (selectedRows) => selectedRows.length > 1,
+        onClick: (selectedRows) => {
+          console.log("Edit users", selectedRows)
+        },
+        svg: 'edit'
+      },
+      {
+        id: "delete-users",
+        label: "Delete",
+        isVisible: (selectedRows) => selectedRows.length > 1,
+        onClick: (selectedRows) => {
+          console.log("Delete users", selectedRows)
+        },
+        svg: 'trash'
+      },
+    ],
+    []
+  )
+
+
   return {
     fetchPage,
+    columns,
+    footerActions,
   }
 }
 

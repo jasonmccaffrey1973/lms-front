@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import type { SVGIconName } from "../SVG/SVGIcon"
 
 type RowId = string
 type DataGridSortDirection = "asc" | "desc"
@@ -44,6 +45,7 @@ type DataGridSelectionMode = "none" | "single" | "multiple"
 type DataGridFooterAction<TData> = {
   id: string
   label: string
+  svg?: SVGIconName
   onClick: (selectedRows: TData[]) => void | Promise<void>
   isVisible?: (selectedRows: TData[]) => boolean
   isDisabled?: (selectedRows: TData[]) => boolean

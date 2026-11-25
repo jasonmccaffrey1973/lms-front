@@ -99,7 +99,7 @@ const DataGridFooter = <TData extends Record<string, unknown>,>({
             >
               {actions.map((action) => (
                 <li key={action.id} className="dropdown-item">
-                  <button
+                  <Button
                     type="button"
                     role="menuitem"
                     onClick={() => {
@@ -110,8 +110,15 @@ const DataGridFooter = <TData extends Record<string, unknown>,>({
                     onKeyDown={handleMenuKeyDown}
                     disabled={isActionDisabled(action)}
                   >
-                    {action.label}
-                  </button>
+                    <span className="action-menu-svg-wrapper">
+                      <Render if={Boolean(action.svg)}>
+                        <SVGIcon icon={action.svg ?? "empty"} />
+                      </Render>
+                    </span>
+                    <span className="action-menu-label">
+                      {action.label}
+                    </span>
+                  </Button>
                 </li>
               ))}
             </ul>

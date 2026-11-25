@@ -199,7 +199,7 @@ border: 1px solid var(--app-border);
     
     th {
       position: sticky;
-      top: 1px;
+      top: 0;
       background-color: var(--app-surface);
       z-index: 1;
       text-transform: uppercase;
@@ -377,15 +377,46 @@ border: 1px solid var(--app-border);
       }
 
       .dropdown-item button {
-        inline-size: 100%;
+        --_icon-background: var(--app-surface-muted);
+        padding: 0;
         border: 0;
+        border-radius: 0;
         background: transparent;
         text-align: left;
-        padding: 0.5rem 0.75rem;
         color: var(--app-text);
+        display: grid;
+        grid-template-columns: 2.75rem 1fr;
+        inline-size: 100%;
+
+        .action-menu-svg-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: var(--_icon-background);
+          block-size: 100%;
+          inline-size: 100%;
+          border-inline-end: 1px solid var(--app-border);
+          padding: 0.5rem;
+          transition: background-color 250ms ease;
+
+          svg {
+            aspect-ratio: 1 / 1;
+            width: 1rem;
+            fill: currentColor;
+          }
+
+        }
+
+        .action-menu-label {
+          justify-self: flex-start;
+          white-space: nowrap;
+          padding: 0.75rem;
+        }
+
 
         &:hover,
         &:focus-visible {
+          --_icon-background: var(--clr-primary);
           outline: none;
           cursor: pointer;
           background: var(--clr-primary);
