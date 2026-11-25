@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react"
-import type { KeyboardEvent } from "react"
+import useDataGridFooter from "./useDataGridFooter"
 import Button from "../../../Button/Button"
 import Render from "../../../Render"
 import SVGIcon from "../../../SVG/SVGIcon"
@@ -18,117 +17,22 @@ const DataGridFooter = <TData extends Record<string, unknown>,>({
   visibleColumnKeys,
   onToggleColumn,
 }: DataGridFooterProps<TData>) => {
-  const [showColumnMenu, setShowColumnMenu] = useState(false)
-  const [showActionMenu, setShowActionMenu] = useState(false)
-  const actionMenuRef = useRef<HTMLDivElement | null>(null)
-  const actionTriggerRef = useRef<HTMLButtonElement | null>(null)
-  const actionMenuListRef = useRef<HTMLUListElement | null>(null)
 
   const hasData = totalCount > 0
   const hasFilteredData = filteredCount > 0 && filteredCount !== totalCount
   const selectedLabel = selectedCount === 1 ? "1 selected" : `${selectedCount} selected`
 
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      const container = actionMenuRef.current
-      if (!container) {
-        return
-      }
-      if (event.target instanceof Node && !container.contains(event.target)) {
-        setShowActionMenu(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleOutsideClick)
-    return () => document.removeEventListener("mousedown", handleOutsideClick)
-  }, [])
-
-  const focusMenuItem = (direction: 1 | -1, startFromEdge = false) => {
-    const items = actionMenuListRef.current?.querySelectorAll<HTMLButtonElement>(".dropdown-item button") ?? []
-    if (!items.length) {
-      return
-    }
-
-    if (startFromEdge) {
-      const targetIndex = direction > 0 ? 0 : items.length - 1
-      items[targetIndex]?.focus()
-      return
-    }
-
-    const currentIndex = [...items].findIndex((item) => item === document.activeElement)
-    const nextIndex =
-      currentIndex === -1
-        ? direction > 0
-          ? 0
-          : items.length - 1
-        : (currentIndex + direction + items.length) % items.length
-
-    items[nextIndex]?.focus()
-  }
-
-  const openActionMenu = () => setShowActionMenu(true)
-  const closeActionMenu = () => setShowActionMenu(false)
-
-  const handleTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === "ArrowDown") {
-      event.preventDefault()
-      openActionMenu()
-      requestAnimationFrame(() => focusMenuItem(1, true))
-      return
-    }
-
-    if (event.key === "ArrowUp") {
-      event.preventDefault()
-      openActionMenu()
-      requestAnimationFrame(() => focusMenuItem(-1, true))
-      return
-    }
-
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault()
-      setShowActionMenu((prev) => !prev)
-      if (!showActionMenu) {
-        requestAnimationFrame(() => focusMenuItem(1, true))
-      }
-    }
-  }
-
-  const handleMenuKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === "ArrowDown") {
-      event.preventDefault()
-      focusMenuItem(1)
-      return
-    }
-
-    if (event.key === "ArrowUp") {
-      event.preventDefault()
-      focusMenuItem(-1)
-      return
-    }
-
-    if (event.key === "Home") {
-      event.preventDefault()
-      focusMenuItem(1, true)
-      return
-    }
-
-    if (event.key === "End") {
-      event.preventDefault()
-      focusMenuItem(-1, true)
-      return
-    }
-
-    if (event.key === "Escape") {
-      event.preventDefault()
-      closeActionMenu()
-      actionTriggerRef.current?.focus()
-      return
-    }
-
-    if (event.key === "Tab") {
-      closeActionMenu()
-    }
-  }
+  const {
+    showColumnMenu,
+    setShowColumnMenu,
+    showActionMenu,
+    setShowActionMenu,
+    actionMenuRef,
+    actionTriggerRef,
+    actionMenuListRef,
+    handleTriggerKeyDown,
+    handleMenuKeyDown
+  } = useDataGridFooter()
 
   return (
     <>
@@ -162,7 +66,7 @@ const DataGridFooter = <TData extends Record<string, unknown>,>({
           </Render>
           {totalCount} {recordLabel}
         </Render>
-        <Render if={selectedCount > 0}>
+        <Render if={selectedCount > 0}> |
           <span className="selected-count">{selectedLabel}</span>
         </Render>
       </div>
@@ -173,7 +77,7 @@ const DataGridFooter = <TData extends Record<string, unknown>,>({
             <Button
               ref={actionTriggerRef}
               type="button"
-              color="transparent"
+              color="primary"
               className="action-menu-trigger"
               onClick={() => setShowActionMenu((prev) => !prev)}
               onKeyDown={handleTriggerKeyDown}

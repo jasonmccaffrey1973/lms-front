@@ -1,9 +1,10 @@
-import StyledDataGrid from "./dataGrid.styles"
+import { StyledDataGrid, StyledTableBody } from "./dataGrid.styles"
 import type { DataGridProps } from "./dataGrid.types"
 import useDataGrid from "./useDataGrid"
 import DataGridHeader from "./components/DataGridHeader/DataGridHeader"
 import DataGridFooter from "./components/DataGridFooter/DataGridFooter"
 import SVGIcon from "../SVG/SVGIcon"
+import Button from "../Button/Button"
 
 const DataGrid = <TData extends Record<string, unknown>,>({
   initialData,
@@ -63,6 +64,7 @@ const DataGrid = <TData extends Record<string, unknown>,>({
 
   return (
     <StyledDataGrid>
+      
       <div className="grid-header">
         <DataGridHeader
           title={title}
@@ -95,25 +97,19 @@ const DataGrid = <TData extends Record<string, unknown>,>({
                 {resolvedColumns.map((column) => (
                   <th key={column.key}>
                     {column.sortable ? (
-                      <button
+                      <Button
                         type="button"
                         className="sort-button"
                         onClick={() => toggleSort(column.key)}
                         aria-label={`Sort by ${column.header ?? column.key}`}
+                        data-sorted={Boolean(sort?.field && sort?.field.toUpperCase() === column.header?.toUpperCase())}
+                        data-sort-direction={sort?.field?.toUpperCase() === column.header?.toUpperCase() ? sort?.direction.toLowerCase() : undefined}
                       >
-                        {column.header ?? column.key}
-                        <span className="sort-indicator" aria-hidden="true">
-                          {sort?.field === column.key ? (
-                            sort.direction === "asc" ? (
-                              <SVGIcon icon="chevronUp" />
-                            ) : (
-                              <SVGIcon icon="chevronDown" />
-                            )
-                          ) : (
-                            <SVGIcon icon="chevronDown" />
-                          )}
+                        <span className="column-header-label">{column.header ?? column.key}</span>
+                        <span className="sort-indicator" aria-hidden="true" >
+                          <SVGIcon icon="chevronUp" />
                         </span>
-                      </button>
+                      </Button>
                     ) : (
                       column.header ?? column.key
                     )}
@@ -121,14 +117,14 @@ const DataGrid = <TData extends Record<string, unknown>,>({
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <StyledTableBody>
               {rows.map((row, index) => {
                 const rowIdCandidate = row[resolvedRowIdKey]
                 const fallbackId = `${resolvedRowIdKey}-${index}`
                 const rowId = typeof rowIdCandidate === "string" ? rowIdCandidate : fallbackId
 
                 return (
-                  <tr key={rowId}>
+                  <tr key={rowId} onClick={() => toggleRowSelection(rowId)} aria-selected={selectedRowIds.includes(rowId)}>
                     {resolvedSelectionMode !== "none" ? (
                       <td className="selection-cell">
                         <input
@@ -140,14 +136,14 @@ const DataGrid = <TData extends Record<string, unknown>,>({
                       </td>
                     ) : null}
                     {resolvedColumns.map((column) => (
-                      <td key={`${rowId}-${column.key}`}>
+                      <td key={`${rowId}-${column.key}`} data-sorted={Boolean(sort?.field && sort?.field.toUpperCase() === column.header?.toUpperCase())}>
                         {column.render ? column.render(row) : String(row[column.key] ?? "")}
                       </td>
                     ))}
                   </tr>
                 )
               })}
-            </tbody>
+            </StyledTableBody>
           </table>
         ) : null}
         {hasNextPage ? <div ref={loadMoreRef} className="grid-load-sentinel" aria-hidden="true" /> : null}

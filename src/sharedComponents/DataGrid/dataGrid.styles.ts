@@ -191,31 +191,60 @@ border: 1px solid var(--app-border);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
 
+      &[data-sorted="true"] {
+        background-color: rgb(from var(--app-text) r g b / 0.10);
+      }
+    }
+    
     th {
       position: sticky;
-      top: 0;
-      background: var(--app-surface);
+      top: 1px;
+      background-color: var(--app-surface);
       z-index: 1;
-
+      text-transform: uppercase;
+      padding: 0;
+      
       .sort-button {
+        --_indicator-rotate: 0deg;
         background: transparent;
         border: 0;
+        inline-size: 100%;
+        block-size: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
         color: inherit;
         cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
+        gap: 0.75rem;
         font: inherit;
-        padding: 0;
+        padding: 1rem;
+        transform: none; //override default behavior of Button component
+        
+        &[data-sort-direction="asc"] {
+          --_indicator-rotate: 180deg;
+        }
+        &[data-sort-direction="desc"] {
+          --_indicator-rotate: 0deg;
+        }
 
+        &[data-sorted="true"] {
+          background-color: rgb(from var(--app-text) r g b / 0.10);
+        }
+        
         .sort-indicator {
-          display: inline-flex;
-          align-items: center;
+          position: relative;
+          transform: rotate(var(--_indicator-rotate));
+          transition: transform 250ms ease;
 
           svg {
-            inline-size: 0.8rem;
+            fill: currentColor;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -25%);
+            aspect-ratio: 1/1;
+            transform-origin: center;
           }
         }
       }
@@ -245,10 +274,10 @@ border: 1px solid var(--app-border);
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-template-areas: "data-grid-footer-left data-grid-footer-center data-grid-footer-right";
-    max-block-size: 3rem;
     background-color: var(--app-surface-muted);
     padding: 0.5rem;
     border-block-start: 1px solid var(--app-border);
+    block-size: 100%;
 
 
     .data-grid-footer-left-column {
@@ -300,7 +329,7 @@ border: 1px solid var(--app-border);
       display: flex;
       align-items: center; 
       justify-content: flex-end;
-      gap: 0.5rem;
+      block-size: 100%;
 
       .action-menu {
         position: relative;
@@ -372,4 +401,48 @@ border: 1px solid var(--app-border);
   }
 `
 
-export default StyledDataGrid
+const StyledTableBody = styled.tbody`
+--_background: var(--app-surface);
+--_offset: 1;
+
+@media (prefers-color-scheme: light) {
+  --_offset: -2;
+}
+
+   tr {
+    line-height: 2.5;
+    border: none;
+    
+    &:nth-of-type(4n) {
+      background-color: hsl(from var(--_background) h s calc(l + var(--_offset)));
+    }
+
+    &:nth-of-type(4n + 1) {
+      background-color: hsl(from var(--_background) h s calc(l + calc(var(--_offset) * 2)));
+    }
+
+    &:nth-of-type(4n + 2) {
+      background-color: hsl(from var(--_background) h s calc(l + calc(var(--_offset) * 3)));
+    }
+
+    &:nth-of-type(4n + 3) {
+      background-color: hsl(from var(--_background) h s calc(l + calc(var(--_offset) * 2)));
+    }
+    
+    &:hover {
+      background-color: var(--_background);
+      cursor: pointer;
+    }
+    &[aria-selected="true"] {
+      background-color: hsl(from var(--clr-primary) h s l / 0.33);
+      
+      &:hover {
+        background-color: hsl(from var(--clr-primary) h s l / 0.5);
+      }
+    }
+
+
+   }  
+`
+
+export { StyledDataGrid, StyledTableBody }
