@@ -1,9 +1,5 @@
-import SVGIcon from "../../SVG/SVGIcon"
-
-type SearchProps = {
-  searchValue: string
-  handleSearch: (value: string) => void
-}
+import SVGIcon from "../../../../SVG/SVGIcon"
+import type { SearchProps } from "./search.types"
 
 const Search = ({ searchValue, handleSearch }: SearchProps) => {
   return (

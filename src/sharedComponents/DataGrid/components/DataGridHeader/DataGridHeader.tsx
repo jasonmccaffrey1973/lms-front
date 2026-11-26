@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import Render from "../../../Render"
 import SVGIcon from "../../../SVG/SVGIcon"
-import Search from "../Search"
+import Search from "./Search/Search"
 import Button from "../../../Button/Button"
 import type { DataGridHeaderProps } from "./dataGridHeader.types"
 

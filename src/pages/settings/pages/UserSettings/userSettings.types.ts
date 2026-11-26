@@ -1,4 +1,4 @@
-import USER_SETTINGS_TABS from './userSettings.constants';
+import { USER_SETTINGS_TABS } from './userSettings.constants';
 
 interface UserTab {
   name: string;

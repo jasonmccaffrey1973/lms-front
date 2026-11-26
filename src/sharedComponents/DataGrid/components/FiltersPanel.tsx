@@ -1,4 +1,5 @@
 import type { DataGridFilter } from "../dataGrid.types"
+import FilterFacet from "./FilterFacet/FilterFacet"
 
 type FiltersPanelProps = {
   fields: string[]
@@ -7,7 +8,7 @@ type FiltersPanelProps = {
   clearFilters: () => void
 }
 
-const FiltersPanel = ({ fields, filters, setFilter, clearFilters }: FiltersPanelProps) => {
+const FiltersPanel = ({ fields, filters, clearFilters }: FiltersPanelProps) => {
   const filterMap = new Map(filters.map((item) => [item.field, item.value]))
 
   return (
@@ -21,14 +22,21 @@ const FiltersPanel = ({ fields, filters, setFilter, clearFilters }: FiltersPanel
           <p>No filterable fields available.</p>
         ) : (
           fields.map((field) => (
-            <label key={field}>
-              <span>{field}</span>
-              <input
-                type="text"
-                value={filterMap.get(field) ?? ""}
-                onChange={(event) => setFilter(field, event.target.value)}
-              />
-            </label>
+            // <label key={field}>
+            //   <span>{field}</span>
+            //   <input
+            //     type="text"
+            //     value={filterMap.get(field) ?? ""}
+            //     onChange={(event) => setFilter(field, event.target.value)}
+            //   />
+            // </label>
+            <FilterFacet 
+              key={field}
+              label={field}
+              options={filterMap.get(field) ? [{ label: filterMap.get(field)!, value: filterMap.get(field)! }] : []}
+              value={filterMap.get(field) ? [filterMap.get(field)!] : []}
+            />
+
           ))
         )}
       </div>

@@ -8,24 +8,29 @@ import type { KeyboardEvent } from "react"
  ** ================================================================================== */
 const useDataGridFooter = () => {
 
-const [showColumnMenu, setShowColumnMenu] = useState(false)
-const [showActionMenu, setShowActionMenu] = useState(false)
-const actionMenuRef = useRef<HTMLDivElement | null>(null)
-const actionTriggerRef = useRef<HTMLButtonElement | null>(null)
-const actionMenuListRef = useRef<HTMLUListElement | null>(null)
+  const [showColumnMenu, setShowColumnMenu] = useState(false)
+  const [showActionMenu, setShowActionMenu] = useState(false)
 
-/** ---------------------------------------------------------------------------------
- * Handles closing the action menu when clicking outside of it.
- * @param event - The mouse event that triggered the action menu to be closed.
- ** --------------------------------------------------------------------------------- */
-    useEffect(() => {
+  // --- Action menu refs ---
+  const actionMenuRef = useRef<HTMLDivElement | null>(null)
+  const actionTriggerRef = useRef<HTMLButtonElement | null>(null)
+  const actionMenuListRef = useRef<HTMLUListElement | null>(null)
+
+  // --- Column menu refs ---
+  const columnMenuRef = useRef<HTMLDivElement | null>(null)
+  const columnTriggerRef = useRef<HTMLButtonElement | null>(null)
+  const columnMenuListRef = useRef<HTMLUListElement | null>(null)
+
+  /** ---------------------------------------------------------------------------------
+   * Closes both menus when clicking outside their containers.
+   ** --------------------------------------------------------------------------------- */
+  useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      const container = actionMenuRef.current
-      if (!container) {
-        return
-      }
-      if (event.target instanceof Node && !container.contains(event.target)) {
+      if (actionMenuRef.current && event.target instanceof Node && !actionMenuRef.current.contains(event.target)) {
         setShowActionMenu(false)
+      }
+      if (columnMenuRef.current && event.target instanceof Node && !columnMenuRef.current.contains(event.target)) {
+        setShowColumnMenu(false)
       }
     }
 
@@ -33,125 +38,123 @@ const actionMenuListRef = useRef<HTMLUListElement | null>(null)
     return () => document.removeEventListener("mousedown", handleOutsideClick)
   }, [])
 
-  /** ---------------------------------------------------------------------------------
-   * Focuses the next or previous menu item in the action menu.
-   * @param direction - The direction to move focus (1 for next, -1 for previous).
-   * @param startFromEdge - Whether to start from the first or last item.
-   ** --------------------------------------------------------------------------------- */
-  const focusMenuItem = (direction: 1 | -1, startFromEdge = false) => {
-    const items = actionMenuListRef.current?.querySelectorAll<HTMLButtonElement>(".dropdown-item button") ?? []
-    if (!items.length) {
-      return
-    }
+  // ---------------------------------------------------------------------------------
+  // Shared focus helper — targets items inside the given list ref
+  // ---------------------------------------------------------------------------------
+  const focusMenuItemIn = (listRef: React.RefObject<HTMLUListElement | null>, direction: 1 | -1, startFromEdge = false) => {
+    const items = listRef.current?.querySelectorAll<HTMLButtonElement>(".dropdown-item button") ?? []
+    if (!items.length) return
 
     if (startFromEdge) {
-      const targetIndex = direction > 0 ? 0 : items.length - 1
-      items[targetIndex]?.focus()
+      items[direction > 0 ? 0 : items.length - 1]?.focus()
       return
     }
 
     const currentIndex = [...items].findIndex((item) => item === document.activeElement)
     const nextIndex =
       currentIndex === -1
-        ? direction > 0
-          ? 0
-          : items.length - 1
+        ? direction > 0 ? 0 : items.length - 1
         : (currentIndex + direction + items.length) % items.length
 
     items[nextIndex]?.focus()
   }
 
-  /** ---------------------------------------------------------------------------------
-   * Opens the action menu.
-   ** --------------------------------------------------------------------------------- */
-  const openActionMenu = () => setShowActionMenu(true)
-
-  /** ---------------------------------------------------------------------------------
-   * Closes the action menu.
-   ** --------------------------------------------------------------------------------- */
+  // ---------------------------------------------------------------------------------
+  // Action menu helpers
+  // ---------------------------------------------------------------------------------
+  const openActionMenu  = () => setShowActionMenu(true)
   const closeActionMenu = () => setShowActionMenu(false)
 
-  /** ---------------------------------------------------------------------------------
-   * Handles key down events on the action menu trigger button.
-   * @param event - The keyboard event.
-   ** --------------------------------------------------------------------------------- */
+  /** Handles key down events on the action menu trigger button. */
   const handleTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "ArrowDown") {
       event.preventDefault()
       openActionMenu()
-      requestAnimationFrame(() => focusMenuItem(1, true))
+      requestAnimationFrame(() => focusMenuItemIn(actionMenuListRef, 1, true))
       return
     }
-
     if (event.key === "ArrowUp") {
       event.preventDefault()
       openActionMenu()
-      requestAnimationFrame(() => focusMenuItem(-1, true))
+      requestAnimationFrame(() => focusMenuItemIn(actionMenuListRef, -1, true))
       return
     }
-
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
       setShowActionMenu((prev) => !prev)
-      if (!showActionMenu) {
-        requestAnimationFrame(() => focusMenuItem(1, true))
-      }
+      if (!showActionMenu) requestAnimationFrame(() => focusMenuItemIn(actionMenuListRef, 1, true))
     }
   }
 
-  /** ---------------------------------------------------------------------------------
-   * Handles key down events on the action menu items.
-   * @param event - The keyboard event.
-   ** --------------------------------------------------------------------------------- */
+  /** Handles key down events on the action menu items. */
   const handleMenuKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "ArrowDown") { event.preventDefault(); focusMenuItemIn(actionMenuListRef, 1); return }
+    if (event.key === "ArrowUp")   { event.preventDefault(); focusMenuItemIn(actionMenuListRef, -1); return }
+    if (event.key === "Home")      { event.preventDefault(); focusMenuItemIn(actionMenuListRef, 1, true); return }
+    if (event.key === "End")       { event.preventDefault(); focusMenuItemIn(actionMenuListRef, -1, true); return }
+    if (event.key === "Escape")    { event.preventDefault(); closeActionMenu(); actionTriggerRef.current?.focus(); return }
+    if (event.key === "Tab")       { closeActionMenu() }
+  }
+
+  // ---------------------------------------------------------------------------------
+  // Column menu helpers
+  // ---------------------------------------------------------------------------------
+  const openColumnMenu  = () => setShowColumnMenu(true)
+  const closeColumnMenu = () => setShowColumnMenu(false)
+  const toggleColumnMenu = () => setShowColumnMenu((prev) => !prev)
+
+  /** Handles key down events on the column menu trigger button. */
+  const handleColumnTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "ArrowDown") {
       event.preventDefault()
-      focusMenuItem(1)
+      openColumnMenu()
+      requestAnimationFrame(() => focusMenuItemIn(columnMenuListRef, 1, true))
       return
     }
-
     if (event.key === "ArrowUp") {
       event.preventDefault()
-      focusMenuItem(-1)
+      openColumnMenu()
+      requestAnimationFrame(() => focusMenuItemIn(columnMenuListRef, -1, true))
       return
     }
-
-    if (event.key === "Home") {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
-      focusMenuItem(1, true)
-      return
+      setShowColumnMenu((prev) => !prev)
+      if (!showColumnMenu) requestAnimationFrame(() => focusMenuItemIn(columnMenuListRef, 1, true))
     }
+  }
 
-    if (event.key === "End") {
-      event.preventDefault()
-      focusMenuItem(-1, true)
-      return
-    }
-
-    if (event.key === "Escape") {
-      event.preventDefault()
-      closeActionMenu()
-      actionTriggerRef.current?.focus()
-      return
-    }
-
-    if (event.key === "Tab") {
-      closeActionMenu()
-    }
+  /** Handles key down events on the column menu items. */
+  const handleColumnMenuKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "ArrowDown") { event.preventDefault(); focusMenuItemIn(columnMenuListRef, 1); return }
+    if (event.key === "ArrowUp")   { event.preventDefault(); focusMenuItemIn(columnMenuListRef, -1); return }
+    if (event.key === "Home")      { event.preventDefault(); focusMenuItemIn(columnMenuListRef, 1, true); return }
+    if (event.key === "End")       { event.preventDefault(); focusMenuItemIn(columnMenuListRef, -1, true); return }
+    if (event.key === "Escape")    { event.preventDefault(); closeColumnMenu(); columnTriggerRef.current?.focus(); return }
+    if (event.key === "Tab")       { closeColumnMenu() }
   }
 
   return {
-    showColumnMenu,
-    setShowColumnMenu,
+    // Action menu
     showActionMenu,
     setShowActionMenu,
     actionMenuRef,
     actionTriggerRef,
     actionMenuListRef,
     handleTriggerKeyDown,
-    handleMenuKeyDown
+    handleMenuKeyDown,
+    // Column menu
+    showColumnMenu,
+    setShowColumnMenu,
+    columnMenuRef,
+    columnTriggerRef,
+    columnMenuListRef,
+    handleColumnTriggerKeyDown,
+    handleColumnMenuKeyDown,
+    toggleColumnMenu,
+    openColumnMenu,
+    closeColumnMenu,
   }
-  
 }
 
 export default useDataGridFooter

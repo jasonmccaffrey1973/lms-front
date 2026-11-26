@@ -151,7 +151,8 @@ border: 1px solid var(--app-border);
         color: var(--clr-text-light);
 
         svg {
-          fill: currentColor;
+          fill: var(--app-text);
+
         }
 
         &:hover, &:focus-within {
@@ -204,9 +205,11 @@ border: 1px solid var(--app-border);
       z-index: 1;
       text-transform: uppercase;
       padding: 0;
+      font-weight: 500;
       
       .sort-button {
         --_indicator-rotate: 0deg;
+        position: relative;
         background: transparent;
         border: 0;
         inline-size: 100%;
@@ -220,6 +223,7 @@ border: 1px solid var(--app-border);
         font: inherit;
         padding: 1rem;
         transform: none; //override default behavior of Button component
+        transform-origin: center;
         
         &[data-sort-direction="asc"] {
           --_indicator-rotate: 180deg;
@@ -230,21 +234,24 @@ border: 1px solid var(--app-border);
 
         &[data-sorted="true"] {
           background-color: rgb(from var(--app-text) r g b / 0.10);
+          font-weight: 700;
         }
         
         .sort-indicator {
           position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 1em;
           transform: rotate(var(--_indicator-rotate));
+          transform-origin: center;
           transition: transform 250ms ease;
 
           svg {
             fill: currentColor;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -25%);
+            display: block;
+            inline-size: 1.25rem;
             aspect-ratio: 1/1;
-            transform-origin: center;
           }
         }
       }
@@ -286,22 +293,99 @@ border: 1px solid var(--app-border);
       align-items: center; 
       justify-content: flex-start;
 
-      .column-visibility-menu {
+      .column-menu {
         position: relative;
-      }
 
-      .column-visibility-popover {
-        position: absolute;
-        bottom: calc(100% + 0.25rem);
-        left: 0;
-        background: var(--app-surface);
-        border: 1px solid var(--app-border);
-        border-radius: 0.25rem;
-        padding: 0.5rem;
-        display: grid;
-        gap: 0.25rem;
-        min-width: 12rem;
-        z-index: 2;
+        .columns-menu-trigger {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.25rem;
+
+          svg {
+            width: 0.9rem;
+            aspect-ratio: 1 / 1;
+            fill: currentColor;
+          }
+        }
+
+        .dropdown-wrapper {
+          position: absolute;
+          z-index: 1000;
+          left: 0;
+          bottom: calc(100% + 0.25rem);
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          min-inline-size: 11rem;
+          background-color: var(--app-surface);
+          border: 1px solid var(--app-border);
+          box-shadow: var(--app-shadow);
+          transform-origin: bottom;
+          transition: transform 200ms ease, opacity 200ms ease, visibility 200ms ease;
+
+          &[aria-expanded="true"] {
+            transform: scaleY(1);
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+          }
+
+          &[aria-expanded="false"] {
+            transform: scaleY(0);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+          }
+        }
+
+        .dropdown-item button {
+          padding: 0;
+          border: 0;
+          border-radius: 0;
+          background: transparent;
+          text-align: left;
+          color: var(--app-text);
+          display: grid;
+          grid-template-columns: 2.75rem 1fr;
+          inline-size: 100%;
+          transition: background-color 250ms ease;
+
+          .checkbox-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--app-surface-muted);
+            block-size: 100%;
+            inline-size: 100%;
+            transition: background-color 250ms ease;
+            border-inline-end: 1px solid var(--app-border);
+            padding: 0.5rem;
+
+            svg {
+              aspect-ratio: 1 / 1;
+              width: 1rem;
+              fill: currentColor;
+            }
+          }
+
+          .name-wrapper {
+            white-space: nowrap;
+            padding: 0.66rem 0.75rem;
+            inline-size: 100%;
+          }
+
+          &:hover,
+          &:focus-visible {
+            outline: none;
+            cursor: pointer;
+            background: var(--clr-primary);
+            color: var(--clr-text-light);
+
+            .checkbox-wrapper {
+              background-color: var(--clr-primary);
+            }
+          }
+        }
       }
     }
 
@@ -343,6 +427,7 @@ border: 1px solid var(--app-border);
         svg {
           width: 0.9rem;
           aspect-ratio: 1 / 1;
+          fill: currentColor;
         }
       }
 
