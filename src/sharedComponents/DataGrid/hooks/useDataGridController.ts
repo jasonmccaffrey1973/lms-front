@@ -16,7 +16,7 @@ const useDataGridController = <TData extends Record<string, unknown>,>({
   const [sort, setSort] = useState<{ field: string; direction: DataGridSortDirection } | null>(null)
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
-  const { filters, setFilter, clearFilters, removeFilter, activeFilterCount } = useDataGridFilters()
+  const { filters, noneSelectedFields, setFieldFilters, setFacetNoneSelected, clearFilters, removeFilter, activeFilterCount } = useDataGridFilters()
   const { rows, totalCount, filteredCount, loading, error, hasNextPage, loadNextPage } = useDataGridQuery<TData>({
     initialData,
     pageSize,
@@ -102,6 +102,7 @@ const useDataGridController = <TData extends Record<string, unknown>,>({
 
   return {
     searchValue,
+    debouncedSearchValue,
     setSearchValue,
     clearSearch,
     rows: searchableRows,
@@ -114,7 +115,9 @@ const useDataGridController = <TData extends Record<string, unknown>,>({
     hasNextPage,
     loadMoreRef,
     filters,
-    setFilter,
+    noneSelectedFields,
+    setFieldFilters,
+    setFacetNoneSelected,
     clearFilters,
     removeFilter,
     activeFilterCount,

@@ -166,6 +166,20 @@ const StyledPageTemplate = styled.div`
             transition: transform 300ms ease-in-out, visibility 300ms ease-in-out;
             background-color: var(--app-surface);
 
+            &:has(.datagrid-filters-panel) {
+                inline-size: 24rem;
+                box-sizing: border-box;
+                overflow-x: hidden;
+
+                .datagrid-filters-panel,
+                .datagrid-filters-panel__fields {
+                    inline-size: 100%;
+                    min-inline-size: 0;
+                    box-sizing: border-box;
+                    overflow-x: clip;
+                }
+            }
+
             &[aria-hidden="false"] {
                 transform: translateX(0);
                 visibility: visible;

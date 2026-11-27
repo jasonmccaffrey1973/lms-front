@@ -3,13 +3,14 @@ import type { UserDataGridRow } from "../../sharedComponents/DataGrid/dataQuerie
 import useAdminUsers from "./useAdminUsers"
 
 const AdminUsers = () => {
-  const { fetchPage, columns, footerActions } = useAdminUsers()
+  const { fetchPage, fetchFacetOptions, columns, footerActions } = useAdminUsers()
   
   return (
     <DataGrid<UserDataGridRow>
       title="Users"
       initialData={[]}
       fetchPage={fetchPage}
+      fetchFacetOptions={fetchFacetOptions}
       filterableFields={["name", "email"]}
       columns={columns}
       selectionMode="multiple"

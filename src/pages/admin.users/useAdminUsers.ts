@@ -1,6 +1,7 @@
 import { useApolloClient } from "@apollo/client/react"
 import { useCallback, useMemo } from "react"
-import type { DataGridColumn, DataGridFetchPage, DataGridFooterAction, DataGridSort } from "../../sharedComponents/DataGrid/dataGrid.types"
+import type { DataGridColumn, DataGridFetchFacetOptions, DataGridFetchPage, DataGridFooterAction, DataGridSort } from "../../sharedComponents/DataGrid/dataGrid.types"
+import { DATA_GRID_FACETS_QUERY } from "../../sharedComponents/DataGrid/dataQueries/dataGridFacets.query"
 import {
   USERS_WITH_META_CONNECTION_QUERY,
   type SortDirection,
@@ -65,6 +66,36 @@ const useAdminUsers = () => {
     [apolloClient]
   )
 
+  const fetchFacetOptions = useCallback<DataGridFetchFacetOptions>(
+    async ({ field, search, filters, facetSearch, limit, offset }) => {
+      const response = await apolloClient.query({
+        query: DATA_GRID_FACETS_QUERY,
+        variables: {
+          fields: [field],
+          search: search || undefined,
+          filters: filters.length > 0 ? filters : undefined,
+          facetSearch: facetSearch || undefined,
+          limit,
+          offset,
+          resource: "users",
+        },
+        fetchPolicy: "network-only",
+      })
+
+      const facet = response.data?.dataGridFacets.find((item) => item.field === field)
+      if (!facet) {
+        throw new Error(`No facet data returned for ${field}.`)
+      }
+
+      return {
+        options: facet.options,
+        totalCount: facet.totalCount,
+        hasMore: facet.hasMore,
+      }
+    },
+    [apolloClient]
+  )
+
   const columns = useMemo<DataGridColumn<UserDataGridRow>[]>(
     () => [
       { key: "id", header: "ID", visible: false, sortable: false },
@@ -116,6 +147,7 @@ const useAdminUsers = () => {
 
   return {
     fetchPage,
+    fetchFacetOptions,
     columns,
     footerActions,
   }

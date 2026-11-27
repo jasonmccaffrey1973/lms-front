@@ -11,6 +11,7 @@ const useDataGrid = <TData extends Record<string, unknown>,>({
   initialData = [],
   pageSize = 50,
   fetchPage,
+  fetchFacetOptions,
   filterableFields,
   columns,
   rowIdKey = DEFAULT_ROW_ID_KEY as Extract<keyof TData, string>,
@@ -22,6 +23,7 @@ const useDataGrid = <TData extends Record<string, unknown>,>({
   const { setRightSidebarContent, openRightSideBar } = useRightSidebar()
   const {
     searchValue,
+    debouncedSearchValue,
     setSearchValue,
     rows,
     totalCount,
@@ -33,7 +35,9 @@ const useDataGrid = <TData extends Record<string, unknown>,>({
     hasNextPage,
     loadMoreRef,
     filters,
-    setFilter,
+    noneSelectedFields,
+    setFieldFilters,
+    setFacetNoneSelected,
     clearFilters,
     removeFilter,
     activeFilterCount,
@@ -164,10 +168,14 @@ const useDataGrid = <TData extends Record<string, unknown>,>({
       createElement(FiltersPanel, {
         fields: availableFilterFields,
         filters,
-        setFilter,
+        noneSelectedFields,
+        setFieldFilters,
+        setFacetNoneSelected,
+        search: debouncedSearchValue,
+        fetchFacetOptions,
         clearFilters,
       }),
-    [availableFilterFields, clearFilters, filters, setFilter]
+    [availableFilterFields, clearFilters, debouncedSearchValue, fetchFacetOptions, filters, noneSelectedFields, setFacetNoneSelected, setFieldFilters]
   )
 
   useEffect(() => {

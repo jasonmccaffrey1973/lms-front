@@ -32,6 +32,27 @@ type DataGridPage<TData> = {
 
 type DataGridFetchPage<TData> = (params: DataGridFetchParams) => Promise<DataGridPage<TData>>
 
+type DataGridFacetOption = {
+  value: string
+  label: string
+  count: number
+}
+
+type DataGridFacetOptionsPage = {
+  options: DataGridFacetOption[]
+  totalCount: number
+  hasMore: boolean
+}
+
+type DataGridFetchFacetOptions = (params: {
+  field: string
+  search: string
+  filters: DataGridFilter[]
+  facetSearch: string
+  limit: number
+  offset: number
+}) => Promise<DataGridFacetOptionsPage>
+
 type DataGridColumn<TData> = {
   key: Extract<keyof TData, string>
   header?: string
@@ -55,6 +76,7 @@ interface UseDataGridProps<TData> {
   initialData?: TData[]
   pageSize?: number
   fetchPage?: DataGridFetchPage<TData>
+  fetchFacetOptions?: DataGridFetchFacetOptions
   filterableFields?: Array<Extract<keyof TData, string>>
   selectionMode?: DataGridSelectionMode
   enableColumnVisibilityToggle?: boolean
@@ -76,6 +98,9 @@ export type {
   DataGridFetchParams,
   DataGridPage,
   DataGridFetchPage,
+  DataGridFacetOption,
+  DataGridFacetOptionsPage,
+  DataGridFetchFacetOptions,
   DataGridColumn,
   DataGridSelectionMode,
   DataGridFooterAction,

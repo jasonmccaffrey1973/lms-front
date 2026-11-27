@@ -1,15 +1,19 @@
-import type { DataGridFilter } from "../dataGrid.types"
+import Render from "../../Render"
+import type { DataGridFetchFacetOptions, DataGridFilter } from "../dataGrid.types"
 import FilterFacet from "./FilterFacet/FilterFacet"
 
 type FiltersPanelProps = {
   fields: string[]
   filters: DataGridFilter[]
-  setFilter: (field: string, value: string) => void
+  noneSelectedFields: string[]
+  setFieldFilters: (field: string, values: string[]) => void
+  setFacetNoneSelected: (field: string, selected: boolean) => void
+  search: string
+  fetchFacetOptions?: DataGridFetchFacetOptions
   clearFilters: () => void
 }
 
-const FiltersPanel = ({ fields, filters, clearFilters }: FiltersPanelProps) => {
-  const filterMap = new Map(filters.map((item) => [item.field, item.value]))
+const FiltersPanel = ({ fields, filters, noneSelectedFields, setFieldFilters, setFacetNoneSelected, search, fetchFacetOptions, clearFilters }: FiltersPanelProps) => {
 
   return (
     <section className="datagrid-filters-panel" aria-label="Data filters">
@@ -18,27 +22,23 @@ const FiltersPanel = ({ fields, filters, clearFilters }: FiltersPanelProps) => {
         Clear all
       </button>
       <div className="datagrid-filters-panel__fields">
-        {fields.length === 0 ? (
+        <Render if={fields.length === 0}>
           <p>No filterable fields available.</p>
-        ) : (
-          fields.map((field) => (
-            // <label key={field}>
-            //   <span>{field}</span>
-            //   <input
-            //     type="text"
-            //     value={filterMap.get(field) ?? ""}
-            //     onChange={(event) => setFilter(field, event.target.value)}
-            //   />
-            // </label>
+        </Render>
+        <Render if={fields.length > 0}>
+          {fields.map((field) => (
             <FilterFacet 
               key={field}
-              label={field}
-              options={filterMap.get(field) ? [{ label: filterMap.get(field)!, value: filterMap.get(field)! }] : []}
-              value={filterMap.get(field) ? [filterMap.get(field)!] : []}
+              name={field}
+              filters={filters}
+              noneSelected={noneSelectedFields.includes(field)}
+              setFieldFilters={setFieldFilters}
+              setFacetNoneSelected={setFacetNoneSelected}
+              search={search}
+              fetchFacetOptions={fetchFacetOptions}
             />
-
-          ))
-        )}
+          ))}
+        </Render>
       </div>
     </section>
   )
